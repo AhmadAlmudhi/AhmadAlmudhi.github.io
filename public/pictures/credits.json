@@ -1,0 +1,48 @@
+[
+ {
+  "file": "public/pictures/riyadh-skyline-dusk.jpg",
+  "media": "image",
+  "ref": "commons:61289940",
+  "title": "Riyadh Skyline showing the King Abdullah Financial District (KAFD) and the famous Kingdom Tower",
+  "creator": "B.alotaby",
+  "creatorUrl": null,
+  "date": "2016-04-03",
+  "license": "CC BY-SA 4.0",
+  "licenseCode": "by-sa",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "creditRequired": true,
+  "page": "https://commons.wikimedia.org/wiki/File:Riyadh_Skyline_showing_the_King_Abdullah_Financial_District_(KAFD)_and_the_famous_Kingdom_Tower_.jpg",
+  "via": "Wikimedia Commons",
+  "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Riyadh_Skyline_showing_the_King_Abdullah_Financial_District_%28KAFD%29_and_the_famous_Kingdom_Tower_.jpg/3840px-Riyadh_Skyline_showing_the_King_Abdullah_Financial_District_%28KAFD%29_and_the_famous_Kingdom_Tower_.jpg",
+  "width": 3840,
+  "height": 2560,
+  "bytes": 1875439,
+  "credit": "\"Riyadh Skyline showing the King Abdullah Financial District (KAFD) and the famous Kingdom…\" by B.alotaby, CC BY-SA 4.0, via Wikimedia Commons",
+  "notes": [
+   "Share-alike: an altered version (recoloured, combined with other pictures) must be shared under the same licence."
+  ],
+  "saved": "2026-10-30T00:57:37.706Z"
+ },
+ {
+  "file": "public/pictures/ksu-entrance-gate.jpg",
+  "media": "image",
+  "ref": "commons:45139389",
+  "title": "King Saud University Entrance Gate, Riyadh",
+  "creator": "Dr. Basil Al Bayati",
+  "creatorUrl": null,
+  "date": "2015-04-01",
+  "license": "CC0",
+  "licenseCode": "cc0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "creditRequired": false,
+  "page": "https://commons.wikimedia.org/wiki/File:King_Saud_University_Entrance_Gate,_Riyadh.jpg",
+  "via": "Wikimedia Commons",
+  "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/King_Saud_University_Entrance_Gate%2C_Riyadh.jpg/1920px-King_Saud_University_Entrance_Gate%2C_Riyadh.jpg",
+  "width": 1920,
+  "height": 1788,
+  "bytes": 589347,
+  "credit": "\"King Saud University Entrance Gate, Riyadh\" by Dr. Basil Al Bayati, CC0, via Wikimedia Commons",
+  "notes": [],
+  "saved": "2026-10-30T00:57:38.850Z"
+ }
+]

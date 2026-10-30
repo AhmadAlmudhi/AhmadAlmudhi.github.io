@@ -23,11 +23,13 @@ export function PlaceholderShot({
 }) {
   return (
     <div className={`placeholder-shot placeholder-shot--${project.kind} ${className}`} role="img" aria-label={`${project.title}: placeholder, screenshot to come`}>
-      <span className="placeholder-shot__kind">
-        {KIND_LABEL[project.kind]}
-        {project.company ? ` for ${project.company}` : ""}
+      <span className="placeholder-shot__head">
+        <span className="placeholder-shot__title">{project.title}</span>
+        <span className="placeholder-shot__kind">
+          {KIND_LABEL[project.kind]}
+          {project.company ? ` for ${project.company}` : ""}
+        </span>
       </span>
-      <span className="placeholder-shot__title">{project.title}</span>
       <span className="placeholder-shot__note">
         Placeholder{index > 0 ? `, screen ${index + 1}` : ""}. Screenshot to come.
       </span>

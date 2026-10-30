@@ -1,4 +1,5 @@
 import { projects } from "@/content";
+import { NextLink } from "@/components/nav/NextLink";
 
 // PRJ-1/4/11/12: featured first. Each project drives the stage, which holds its screenshot while the
 // text passes. Placeholders say so on the page until the real projects arrive.
@@ -29,6 +30,7 @@ export function Projects() {
           </li>
         ))}
       </ul>
+      <NextLink after="projects" />
     </section>
   );
 }

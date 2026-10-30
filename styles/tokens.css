@@ -8,7 +8,7 @@
 [data-theme="light"] {
   color-scheme: light;
   --bg: #ff7a1f;
-  --surface: #ff8633;
+  --surface: #ff9244;
   --ink: #050f16;
   --muted: #5a2306;
   --accent: #050f16;
@@ -22,7 +22,7 @@
   /* The fixed half of the split stage. */
   --stage: #050f16;
   --stage-ink: #ff7a1f;
-  --stage-muted: #d9a07a;
+  --stage-muted: #b3aba3;
   --stage-surface: #0e1c26;
 
   /* The three figure tiles: unequal lightness so neighbours never vibrate. */
@@ -40,14 +40,14 @@
   color-scheme: dark;
   --bg: #050f16;
   --surface: #0e1c26;
-  --ink: #f3ece4;
-  --muted: #b9aa9c;
+  --ink: #ebe9e6;
+  --muted: #b3aba3;
   --accent: #ff7a1f;
   --accent-ink: #050f16;
 
   --sheet: #0e1c26;
-  --sheet-ink: #f3ece4;
-  --sheet-muted: #b9aa9c;
+  --sheet-ink: #ebe9e6;
+  --sheet-muted: #b3aba3;
 
   --stage: #ff7a1f;
   --stage-ink: #050f16;
@@ -57,7 +57,7 @@
   --tile-1: #ff7a1f;
   --tile-1-ink: #050f16;
   --tile-2: #0e1c26;
-  --tile-2-ink: #f3ece4;
+  --tile-2-ink: #ebe9e6;
   --tile-3: #5a2306;
   --tile-3-ink: #ffffff;
 
@@ -70,13 +70,13 @@
     color-scheme: dark;
     --bg: #050f16;
     --surface: #0e1c26;
-    --ink: #f3ece4;
-    --muted: #b9aa9c;
+    --ink: #ebe9e6;
+    --muted: #b3aba3;
     --accent: #ff7a1f;
     --accent-ink: #050f16;
     --sheet: #0e1c26;
-    --sheet-ink: #f3ece4;
-    --sheet-muted: #b9aa9c;
+    --sheet-ink: #ebe9e6;
+    --sheet-muted: #b3aba3;
     --stage: #ff7a1f;
     --stage-ink: #050f16;
     --stage-muted: #5a2306;
@@ -84,7 +84,7 @@
     --tile-1: #ff7a1f;
     --tile-1-ink: #050f16;
     --tile-2: #0e1c26;
-    --tile-2-ink: #f3ece4;
+    --tile-2-ink: #ebe9e6;
     --tile-3: #5a2306;
     --tile-3-ink: #ffffff;
     --theme-color: #050f16;

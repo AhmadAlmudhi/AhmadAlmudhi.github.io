@@ -92,9 +92,9 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 
 | ID | Requirement | Priority |
 |---|---|---|
-| NAV-1 | **Mobile — bottom navigation dock** (thumb zone): shows current section name, ‹ Previous / Next › buttons, and a center button that opens a **Section Index sheet** listing all sections. The dock is an opaque bar attached to the bottom edge, one tone step from the page ground: no blur, not a floating pill | Must |
+| NAV-1 | **Mobile — bottom navigation dock** (thumb zone): shows current section name, ‹ Previous / Next › buttons, and a center button that opens a **Section Index sheet** listing all sections. The dock is an opaque bar attached to the bottom edge: no blur, not a floating pill. It slides away while the reader scrolls down, so it never covers what is being read (design skill, layout.md §7), and returns on any upward scroll, at the top and at the end of the page; the header's Sections button keeps every section within two taps meanwhile | Must |
 | NAV-2 | **Desktop (≥ 1024px) — sticky side rail** listing all sections with an animated active indicator (a change of ink or ground, or a bar of 4 px or more) and the position as plain text ("3 of 7"). No hairline progress line | Must |
-| NAV-3 | **Top header** (all sizes): name/monogram (tap = back to top), Resume PDF button, theme toggle; compact on mobile, collapses into a slim bar while scrolling. Opaque, on the same outer margins as the page; never covers content | Must |
+| NAV-3 | **Top header** (all sizes): name/monogram (tap = back to top), Sections (opens the index), Resume PDF button, theme toggle; compact on mobile, collapses into a slim bar while scrolling. Opaque, on the same outer margins as the page; never covers content | Must |
 | NAV-4 | Active section is tracked automatically while scrolling (IntersectionObserver) and reflected in dock/rail | Must |
 | NAV-5 | URL hash updates while scrolling using `replaceState` (no history spam); tapping a nav item uses `pushState` so the **browser/OS Back button returns to the previous section** | Must |
 | NAV-6 | Opening a project or certificate pushes a history entry, so **Android back gesture / browser Back closes the overlay** instead of leaving the site | Must |
@@ -161,7 +161,7 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 ### 6.6 Certifications
 | ID | Requirement | Priority |
 |---|---|---|
-| CRT-1 | Certificates laid out from the dealt section blueprint (not a bento grid or a row of identical cards): image, certificate name, issuer, issue date, expiry (if any), credential ID. Images in `public/certificates/` (`pspo-i.png`, `psm-i.png`, rendered from the Scrum.org PDFs and cropped to the certificate edges) | Must |
+| CRT-1 | Certificates laid out from the dealt section blueprint (not a bento grid or a row of identical cards): image, certificate name, issuer, issue date, expiry (if any), credential ID. Images in `public/certificates/` (`pspo-i.webp`, `psm-i.webp`, rendered from the Scrum.org PDFs and cropped to the certificate edges) | Must |
 | CRT-2 | Tap opens the certificate image in the **lightbox** (zoom, swipe to next/previous certificate) | Must |
 | CRT-3 | "Verify" button linking to the issuer's credential URL when available. Scrum.org shows the holder's name and date only after the visitor enters the holder's email, so show the `verifyNote` hint plus a copy-email button beside "Verify" | Must |
 | CRT-4 | Status as plain text: Active / Expired (computed from expiry date; both current certificates never expire) | Should |
@@ -387,7 +387,7 @@ type SkillGroup = {
 | Asset | Guideline |
 |---|---|
 | **Project screenshots** | PNG source at 2× resolution; consistent aspect ratio per project type (phone ≈ 9:19.5, desktop ≈ 16:10); clean demo data; sensitive info redacted; 3–6 per project; the build pipeline converts to AVIF/WebP |
-| **Certificate images** | High-res export (≤ 2400 px long edge), cropped to the certificate edges, straight (not a photo at an angle); PNG or JPG. Done: `public/certificates/pspo-i.png` and `psm-i.png` (≈ 2250 × 1711), rendered from the PDFs in `docs/content_files/` |
+| **Certificate images** | High-res export (≤ 2400 px long edge), cropped to the certificate edges, straight (not a photo at an angle); PNG or JPG. Done: `public/certificates/pspo-i.webp` and `psm-i.webp` (≈ 2250 × 1711, WebP), rendered from the PDFs in `docs/content_files/` |
 | **Resume PDF** | < 1 MB, text-selectable (not scanned), content consistent with the site, named `FirstName-LastName-Resume.pdf`. Done: `public/resume/Ahmad-Almudhi-Resume.pdf` (24 KB), copied from `docs/content_files/Ahmad_Almudhi-Resume.pdf` |
 | **Placeholder screenshots** | Until real screenshots exist (PRJ-12): screenshot entries without `src`, drawn as HTML title cards at the real ratios in the page's palette and type. Replaced by adding `src`, `width` and `height` for each real, redacted screenshot in `public/projects/<slug>/` |
 | **Logos (optional)** | SVG company/issuer logos, used monochrome to keep the design consistent |
@@ -454,7 +454,7 @@ next.config.ts          # output: 'export'
   schema.ts             # Zod schemas
 /public
   /projects/<slug>/*.png        # real screenshots; placeholders are drawn in HTML until then
-  /certificates/pspo-i.png psm-i.png
+  /certificates/pspo-i.webp psm-i.webp
   /resume/Ahmad-Almudhi-Resume.pdf
   robots.txt                    # Disallow: /resume/ only
 /lib                    # date/duration utils, active-section hook, history/hash sync
@@ -558,7 +558,7 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 | Bad Wi-Fi during an interview | PWA offline cache; open the site once before the interview |
 | Confidential data in screenshots | Redaction checklist; a plain-text "Confidential (NDA)" note instead of links |
 | Spam from public email/phone | Client-side assembly of contact details; no phone in structured data |
-| Interviewer gets lost on an unfamiliar device | Always-visible dock with section name + Prev/Next + index sheet; tested with real users |
+| Interviewer gets lost on an unfamiliar device | Dock with section name + Prev/Next + index sheet, back on any upward scroll; a Sections button always in the header; tested with real users |
 | Content goes stale | Single content source, "Last updated" date in footer |
 | Public repo exposes contact details and assets | Contact info is public on the site anyway; keep the resume PDF free of home address; never commit anything I wouldn't show on the site |
 | Unredacted screenshot committed by mistake (stays in Git history even after deletion) | Keep original screenshots outside the repo; commit only redacted exports; review images in each pull request |

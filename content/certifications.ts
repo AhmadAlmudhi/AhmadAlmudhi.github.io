@@ -16,7 +16,7 @@ export const certifications = z.array(Certification).parse([
     verifyUrl: "https://www.scrum.org/certificates/1341720",
     verifyNote,
     image: {
-      src: "/certificates/pspo-i.png",
+      src: "/certificates/pspo-i.webp",
       width: 2248,
       height: 1711,
       alt: "Scrum.org certificate: Professional Scrum Product Owner I, awarded to Ahmad Almudhi on August 11, 2026",
@@ -34,7 +34,7 @@ export const certifications = z.array(Certification).parse([
     verifyUrl: "https://www.scrum.org/certificates/1345408",
     verifyNote,
     image: {
-      src: "/certificates/psm-i.png",
+      src: "/certificates/psm-i.webp",
       width: 2249,
       height: 1711,
       alt: "Scrum.org certificate: Professional Scrum Master I, awarded to Ahmad Almudhi on August 28, 2026",

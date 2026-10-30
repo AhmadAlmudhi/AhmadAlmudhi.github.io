@@ -3,6 +3,8 @@ import { profile, projects } from "@/content";
 import { Stage } from "@/components/stage/Stage";
 import { PhoneFrame } from "@/components/ui/PhoneFrame";
 import { ProjectShot } from "@/components/ui/ProjectShot";
+import { Email } from "@/components/ui/Email";
+import { pictures } from "@/content/pictures";
 
 // Hero blueprint "Menu column, sticky photograph": a paper sheet set like a card on the left, the
 // stage on the right holding the one app that replaced two. HERO-1/2/3/6.
@@ -12,17 +14,6 @@ export function Hero({ children }: { children?: React.ReactNode }) {
     <section id="summary" className="summary" aria-labelledby="summary-title">
       <div className="hero">
         <div className="hero__sheet">
-          <div className="hero__top">
-            <a className="link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
-              LinkedIn
-            </a>
-            <span className="monogram" aria-hidden="true">
-              {profile.initials}
-            </span>
-            <a className="link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
-          </div>
           <div className="hero__body">
             <h1 id="summary-title" className="hero__name display">
               <span className="line">
@@ -37,7 +28,7 @@ export function Hero({ children }: { children?: React.ReactNode }) {
               </span>
             </h1>
             <p className="hero__title lead">
-              {profile.title} in {profile.location.split(",")[0]}
+              {profile.title} in {profile.location.split(",")[0]}. {profile.tagline}
             </p>
             <p className="hero__summary">{profile.summary}</p>
             <div className="hero__actions">
@@ -54,6 +45,21 @@ export function Hero({ children }: { children?: React.ReactNode }) {
               </a>
             </div>
           </div>
+          <ul className="hero__links" aria-label="Elsewhere">
+            <li>
+              <a className="link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <Email className="link" />
+            </li>
+            <li>
+              <a className="link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
+            </li>
+          </ul>
         </div>
         <Stage
           className="hero__stage"
@@ -62,12 +68,22 @@ export function Hero({ children }: { children?: React.ReactNode }) {
             {
               key: "hero",
               content: (
-                <figure className="stage-figure">
+                <figure className="hero-picture">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
+                  <img
+                    className="hero-picture__photo"
+                    src={pictures.riyadh.src}
+                    width={pictures.riyadh.width}
+                    height={pictures.riyadh.height}
+                    alt={pictures.riyadh.alt}
+                    fetchPriority="high"
+                    decoding="async"
+                  />
                   <PhoneFrame>
                     <ProjectShot project={lead} shot={lead.screenshots[0]} priority />
                   </PhoneFrame>
-                  <figcaption className="stage-caption">
-                    {lead.title}. {lead.tagline}
+                  <figcaption className="sr-only">
+                    {lead.title}, {lead.tagline}, in front of {pictures.riyadh.alt}
                   </figcaption>
                 </figure>
               ),
