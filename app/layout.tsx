@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
+import { Castoro } from "next/font/google";
+import { preload } from "react-dom";
 import { profile } from "@/content";
 import { NavProvider } from "@/lib/nav";
 import { Header } from "@/components/nav/Header";
@@ -12,18 +13,18 @@ import { ServiceWorker } from "@/components/pwa/ServiceWorker";
 import { Analytics } from "@/components/pwa/Analytics";
 import "./globals.css";
 
-// Clash Grotesk, self-hosted (fetched by scripts/fetch-fonts.mjs; see .gitignore for why).
-const clash = localFont({
-  src: [
-    { path: "./fonts/ClashGrotesk-Regular.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/ClashGrotesk-Medium.woff2", weight: "500", style: "normal" },
-  ],
-  variable: "--font-clash",
+// The identity's typeface: Castoro (Tiro Typeworks, OFL), the closest match to the name in Ahmad's
+// theme image. next/font downloads it at build and serves it from this site.
+const castoro = Castoro({
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-castoro",
   display: "swap",
 });
 
 const description = `${profile.title} in ${profile.location}. Flutter apps, web development and product ownership (PSPO I, PSM I).`;
-const ogImage = { url: "/og.png", width: 1200, height: 630, alt: `${profile.fullName}, ${profile.title}` };
+const ogImage = { url: "/og.jpg", width: 1200, height: 630, alt: `${profile.fullName}` };
 
 // PRD §10.4: GitHub Pages sends no custom headers, so the policy rides in a <meta> tag. Next's static
 // export inlines its bootstrap scripts, hence 'unsafe-inline' for scripts; everything loads from
@@ -41,7 +42,6 @@ const csp = [
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
-  "upgrade-insecure-requests",
 ].join("; ");
 
 export const metadata: Metadata = {
@@ -73,23 +73,24 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false, email: false, address: false },
 };
 
+// One identity, one set of colours: no light and dark themes.
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ff7a1f" },
-    { media: "(prefers-color-scheme: dark)", color: "#050f16" },
-  ],
-  colorScheme: "light dark",
+  themeColor: "#dfcdb7",
+  colorScheme: "light",
   viewportFit: "cover",
 };
 
-// Runs before the first paint: picks the saved or system theme so the wrong one never flashes
-// (GLB-1), and marks that scripting works so motion may hide content before revealing it.
-// `?theme=light|dark` forces a theme for that view only (design QA screenshots).
-const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');try{var q=new URLSearchParams(location.search).get('theme');var s=q||localStorage.getItem('theme');var t=s==='light'||s==='dark'?s:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');d.dataset.theme=t;var c=t==='dark'?'#050f16':'#ff7a1f';document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){m.setAttribute('content',c)})}catch(e){}})();`;
+// Runs before the first paint: marks that scripting works, so motion may hide content before
+// revealing it (without it, everything simply shows).
+const bootScript = `document.documentElement.classList.add('js');`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // The paper and the band are CSS backgrounds, found only once the stylesheet is parsed; the hero's
+  // band is the first screen's largest paint, so both start loading with the HTML.
+  preload("/theme/band.webp", { as: "image", fetchPriority: "high" });
+  preload("/theme/paper.webp", { as: "image" });
   return (
-    <html lang="en" className={clash.variable} suppressHydrationWarning>
+    <html lang="en" className={castoro.variable}>
       <head>
         {process.env.NODE_ENV === "production" && <meta httpEquiv="Content-Security-Policy" content={csp} />}
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />

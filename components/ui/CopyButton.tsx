@@ -9,7 +9,7 @@ export function CopyButton({
   value,
   label,
   done,
-  className = "",
+  className = "action",
 }: {
   /** Computed on click, so values assembled in the browser (the email) never sit in the HTML. */
   value: () => string;
@@ -21,7 +21,7 @@ export function CopyButton({
   return (
     <button
       type="button"
-      className={`action ${className}`}
+      className={className}
       data-copied={copied}
       onClick={async () => {
         try {

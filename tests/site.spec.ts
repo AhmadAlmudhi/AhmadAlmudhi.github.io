@@ -6,7 +6,7 @@ test.describe("the page", () => {
   test("says who and what on the first screen, and is never indexed", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Ahmad\s*Almudhi/);
-    await expect(page.getByText("Software Engineer in Riyadh.")).toBeVisible();
+    await expect(page.getByText(/Software engineer specializing in Flutter/)).toBeVisible();
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await expect(page.getByRole("link", { name: /Download resume/ }).first()).toBeVisible();
   });
@@ -29,31 +29,38 @@ test.describe("navigation and history (PRD §5.2)", () => {
     await expect(page.getByRole("heading", { name: "Certifications", level: 2 })).toBeInViewport();
   });
 
-  test("the section index jumps, and Back returns to the previous section (NAV-5)", async ({ page }) => {
+  test("a section jump lands, and Back returns to the previous section (NAV-5)", async ({ page }, info) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Sections" }).first().click();
-    await page.getByRole("dialog", { name: "Sections" }).getByRole("button", { name: "Skills" }).click();
+    if (isPhone(info.project.name)) {
+      await page.getByRole("button", { name: "Sections" }).first().click();
+      await page.getByRole("dialog", { name: "Sections" }).getByRole("button", { name: "Skills" }).click();
+    } else {
+      await page.getByRole("banner").getByRole("link", { name: "Skills" }).click();
+    }
     await expect(page).toHaveURL(/#skills$/);
     await expect(page.getByRole("heading", { name: "Skills", level: 2 })).toBeInViewport();
     await page.goBack();
     await expect(page).not.toHaveURL(/#skills$/);
   });
 
-  test("the dock moves between sections on phones (NAV-1)", async ({ page }, info) => {
+  test("the dock walks every section with Next and never hides (NAV-1)", async ({ page }, info) => {
     test.skip(!isPhone(info.project.name), "phones only");
     await page.goto("/");
-    await page.getByRole("button", { name: /^Next section: Experience/ }).click();
-    await expect(page).toHaveURL(/#experience$/);
+    const dock = page.getByRole("navigation", { name: "Sections" });
+    for (const id of ["experience", "projects", "skills", "education", "certifications", "contact"]) {
+      await dock.getByRole("button", { name: /^Next section/ }).click();
+      await expect(page).toHaveURL(new RegExp(`#${id}$`));
+      await expect(dock).toBeInViewport();
+      await expect(page.locator(`#${id}`)).toBeInViewport();
+    }
+    await expect(dock.getByRole("button", { name: "No next section" })).toBeDisabled();
   });
 });
 
 test.describe("project overlays (PRJ-5..7, NAV-6)", () => {
-  test("opens a project, its lightbox, and Back steps out one level at a time", async ({ page }, info) => {
+  test("opens a project, its lightbox, and Back steps out one level at a time", async ({ page }) => {
     await page.goto("/#projects");
-    const open = isPhone(info.project.name)
-      ? page.getByRole("button", { name: "Open project" }).first()
-      : page.getByRole("button", { name: /^Open Muvi booking app/ });
-    await open.click();
+    await page.getByRole("button", { name: "View project" }).first().click();
     const detail = page.getByRole("dialog", { name: "Muvi booking app" });
     await expect(detail).toBeVisible();
     await expect(page).toHaveURL(/#projects\/muvi-booking-app$/);
@@ -86,7 +93,7 @@ test.describe("project overlays (PRJ-5..7, NAV-6)", () => {
 
   test("certificates open full screen and close with Esc (CRT-2)", async ({ page }) => {
     await page.goto("/#certifications");
-    await page.getByRole("link", { name: "View certificate" }).first().click();
+    await page.getByRole("button", { name: /View the PSPO I certificate/ }).click();
     const lightbox = page.getByRole("dialog", { name: "Certificates" });
     await expect(lightbox).toBeVisible();
     await expect(lightbox.getByRole("img", { name: /Professional Scrum Product Owner I/ })).toBeVisible();
@@ -95,20 +102,21 @@ test.describe("project overlays (PRJ-5..7, NAV-6)", () => {
   });
 });
 
-test.describe("the read-as lens", () => {
-  test("mutes the other side's highlights and states the split", async ({ page }) => {
+test.describe("the record (EXP-1, EDU-1)", () => {
+  test("a finished role shows its length in full words; the current one shows none", async ({ page }) => {
     await page.goto("/#experience");
-    await expect(page.getByText(/five engineering, five product/)).toBeVisible();
-    // keyboard, as a radio group should work: focus the checked option, arrow to the next
-    await page.getByRole("radio", { name: "Both" }).focus();
-    await page.keyboard.press("ArrowRight");
-    await expect(page.getByRole("radio", { name: "Engineer" })).toBeChecked();
-    await expect(page.getByText(/Engineering work: 5 of 10 highlights/)).toBeVisible();
-    const product = page.locator('.highlights [data-side="product"]').first();
-    const engineering = page.locator('.highlights [data-side="engineering"]').first();
-    const ink = await engineering.evaluate((el) => getComputedStyle(el).color);
-    // retried until the colour transition settles
-    await expect(product).not.toHaveCSS("color", ink);
+    const muvi = page.locator(".role").filter({ hasText: "Muvi Cinemas" });
+    await expect(muvi.getByText("02/2025 – Present")).toBeVisible();
+    await expect(muvi.locator(".role__duration")).toHaveCount(0);
+    await expect(muvi.locator(".highlights li")).toHaveCount(6);
+    await expect(page.locator(".role").filter({ hasText: "VEGA Styles" }).locator(".role__duration")).toHaveText("4 years");
+  });
+
+  test("education reads exactly as the CV", async ({ page }) => {
+    await page.goto("/#education");
+    await expect(page.getByRole("heading", { name: "Flutter Development Bootcamp (200 hours)" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Software Engineering, Bachelor's degree" })).toBeVisible();
+    await expect(page.getByText("04/2023 – 06/2023")).toBeVisible();
   });
 });
 
@@ -139,12 +147,12 @@ test.describe("hardening (PRD §10, GLB-2/4)", () => {
   });
 
   test("link previews and the app manifest are real files with the right types", async ({ request, page }) => {
-    const og = await request.get("/og.png");
-    expect(og.headers()["content-type"]).toBe("image/png");
+    const og = await request.get("/og.jpg");
+    expect(og.headers()["content-type"]).toBe("image/jpeg");
     const manifest = await (await request.get("/manifest.webmanifest")).json();
     expect(manifest.icons.length).toBeGreaterThanOrEqual(3);
     await page.goto("/");
-    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /\/og\.png$/);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /\/og\.jpg$/);
     await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveAttribute("content", /default-src 'self'/);
   });
 

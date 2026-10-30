@@ -29,12 +29,6 @@ jobs:
 
       - run: npm ci
 
-      # Clash Grotesk is fetched from Fontshare, never committed (see scripts/fetch-fonts.mjs).
-      - uses: actions/cache@v6
-        with:
-          path: app/fonts
-          key: clash-grotesk-v2
-
       - name: Lint
         run: npm run lint
 

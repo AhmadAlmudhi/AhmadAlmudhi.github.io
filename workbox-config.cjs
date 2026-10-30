@@ -4,7 +4,7 @@
 // cached as it loads.
 module.exports = {
   globDirectory: "out/",
-  globPatterns: ["**/*.{html,txt,js,css,woff2,pdf,webmanifest}", "opt/*.avif", "{favicon,icon-192,icon-512,apple-touch-icon}.png"],
+  globPatterns: ["**/*.{html,txt,js,css,woff2,pdf,webmanifest}", "opt/*.avif", "theme/*.webp", "{favicon,icon-192,icon-512,apple-touch-icon}.png"],
   globIgnores: ["sw.js", "404/**"],
   swDest: "out/sw.js",
   maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,

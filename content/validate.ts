@@ -1,12 +1,11 @@
 import { z } from "zod";
-import { Certification, Education, Experience, Picture, Profile, Project, SkillGroup } from "./schema";
+import { Certification, Education, Experience, Profile, Project, SkillGroup } from "./schema";
 import { profile } from "./profile";
 import { experience } from "./experience";
 import { projects } from "./projects";
 import { skillGroups } from "./skills";
 import { education } from "./education";
 import { certifications } from "./certifications";
-import { pictures } from "./pictures";
 
 /**
  * PRD §11: validates every content file against its schema when the page is built (app/page.tsx, a
@@ -20,7 +19,6 @@ export function validateContent() {
   z.array(SkillGroup).parse(skillGroups);
   z.array(Education).parse(education);
   z.array(Certification).parse(certifications);
-  z.record(z.string(), Picture).parse(pictures);
 
   const slugs = new Set(projects.map((p) => p.slug));
   for (const job of experience) {

@@ -1,94 +1,63 @@
-import { ArrowDownToLine } from "lucide-react";
-import { profile, projects } from "@/content";
-import { Stage } from "@/components/stage/Stage";
-import { PhoneFrame } from "@/components/ui/PhoneFrame";
-import { ProjectShot } from "@/components/ui/ProjectShot";
+import { ArrowDownToLine, Mail } from "lucide-react";
+import { profile } from "@/content";
+import { Divider } from "@/components/ui/Ornament";
 import { Email } from "@/components/ui/Email";
-import { pictures } from "@/content/pictures";
-import { Picture } from "@/components/ui/Picture";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/BrandIcons";
 
-// Hero blueprint "Menu column, sticky photograph": a paper sheet set like a card on the left, the
-// stage on the right holding the one app that replaced two. HERO-1/2/3/6.
-export function Hero({ children }: { children?: React.ReactNode }) {
-  const lead = projects.find((p) => p.kind === "mobile") ?? projects[0];
+// The identity's banner (Ahmad's theme image) as the first screen: the name in gold between the two
+// dividers, the Najdi towers at both edges, the palm groves below, and the green band carrying the
+// actions. HERO-1/2/3/6.
+export function Hero() {
   return (
-    <section id="summary" className="summary" aria-labelledby="summary-title">
-      <div className="hero">
-        <div className="hero__sheet">
-          <div className="hero__body">
-            <h1 id="summary-title" className="hero__name display">
-              <span className="line">
-                <span data-line style={{ "--i": 0 } as React.CSSProperties}>
-                  {profile.firstName}
-                </span>
+    <section id="summary" className="hero" aria-labelledby="summary-title">
+      <div className="hero__scene">
+        {/* eslint-disable @next/next/no-img-element -- static export; the theme's own pictures */}
+        <img className="hero__tower hero__tower--left" src="/theme/tower-left.webp" width={320} height={397} alt="" fetchPriority="high" />
+        <img className="hero__tower hero__tower--right" src="/theme/tower-right.webp" width={320} height={397} alt="" fetchPriority="high" />
+        <img className="hero__land" src="/theme/landscape.webp" width={1396} height={141} alt="" />
+        {/* eslint-enable @next/next/no-img-element */}
+        <div className="hero__body">
+          <Divider className="hero__divider" />
+          <h1 id="summary-title" className="hero__name">
+            <span className="line">
+              <span data-line className="gold-text" style={{ "--i": 0 } as React.CSSProperties}>
+                {profile.fullName}
               </span>
-              <span className="line">
-                <span data-line style={{ "--i": 1 } as React.CSSProperties}>
-                  {profile.lastName}
-                </span>
-              </span>
-            </h1>
-            <p className="hero__title lead">
-              {profile.title} in {profile.location.split(",")[0]}. {profile.tagline}
-            </p>
-            <p className="hero__summary">{profile.summary}</p>
-            <div className="hero__actions">
-              <a
-                className="button"
-                href={profile.links.resumePdf}
-                download={profile.links.resumePdf.split("/").pop()}
-              >
-                Download resume
-                <ArrowDownToLine size={18} strokeWidth={1.75} aria-hidden="true" />
-              </a>
-              <a className="link" href="#contact">
-                Contact me
-              </a>
-            </div>
-          </div>
-          <ul className="hero__links" aria-label="Elsewhere">
-            <li>
-              <a className="link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
-                LinkedIn
-              </a>
-            </li>
-            <li>
-              <Email className="link" label="Email" />
-            </li>
-            <li>
-              <a className="link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
-                GitHub
-              </a>
-            </li>
-          </ul>
+            </span>
+          </h1>
+          <Divider className="hero__divider" />
+          <p className="hero__summary">{profile.summary}</p>
         </div>
-        <Stage
-          className="hero__stage"
-          label={`${lead.title}, the app ${profile.firstName} rebuilt`}
-          layers={[
-            {
-              key: "hero",
-              content: (
-                <figure className="hero-picture">
-                  <Picture
-                    className="hero-picture__photo"
-                    {...pictures.riyadh}
-                    sizes="(min-width: 64em) 50vw, 100vw"
-                    priority
-                  />
-                  <PhoneFrame>
-                    <ProjectShot project={lead} shot={lead.screenshots[0]} priority />
-                  </PhoneFrame>
-                  <figcaption className="sr-only">
-                    {lead.title}, {lead.tagline}, in front of {pictures.riyadh.alt}
-                  </figcaption>
-                </figure>
-              ),
-            },
-          ]}
-        />
       </div>
-      {children}
+
+      <div className="band hero__band">
+        <div className="hero__actions">
+          <a className="button button--gold" href={profile.links.resumePdf} download={profile.links.resumePdf.split("/").pop()}>
+            <ArrowDownToLine size={18} strokeWidth={1.75} aria-hidden="true" />
+            Download resume
+          </a>
+          <a className="button button--outline" href="#contact">
+            Contact me
+          </a>
+        </div>
+        <ul className="hero__links" aria-label="Elsewhere">
+          <li>
+            <Email className="hero__link" label="Email" icon={<Mail size={18} strokeWidth={1.75} aria-hidden="true" />} />
+          </li>
+          <li>
+            <a className="hero__link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
+              <LinkedInIcon />
+              <span>LinkedIn</span>
+            </a>
+          </li>
+          <li>
+            <a className="hero__link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
+              <GitHubIcon />
+              <span>GitHub</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </section>
   );
 }

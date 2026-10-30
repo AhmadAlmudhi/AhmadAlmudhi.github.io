@@ -1,41 +1,28 @@
 import { profile } from "@/content";
-import { pictures } from "@/content/pictures";
 import { formatDay } from "@/lib/dates";
-import { FitText } from "@/components/ui/FitText";
-import { Picture } from "@/components/ui/Picture";
+import { Divider } from "@/components/ui/Ornament";
 
-// Blueprint "Name across the last photograph": Riyadh at dusk, its sky the page's own orange, with the
-// name fitted along its foot. The small print sits on a plain band below, never on the picture (CON-7).
+// CON-7: the page closes the way it opened — the name between the dividers, the towers and the palm
+// groves of the theme — over a last green band with the small print.
 export function Footer() {
   const year = profile.lastUpdated.slice(0, 4);
-  const shown = [pictures.riyadh, pictures.ksu];
   return (
     <footer className="footer">
-      <div className="footer__picture">
-        <Picture {...pictures.riyadh} sizes="100vw" />
-        <p className="footer__name" aria-hidden="true">
-          <FitText below="0px">{profile.fullName}</FitText>
-        </p>
+      <div className="footer__scene">
+        {/* eslint-disable @next/next/no-img-element -- static export; the theme's own pictures */}
+        <img className="footer__tower footer__tower--left" src="/theme/tower-left.webp" width={320} height={397} alt="" loading="lazy" />
+        <img className="footer__tower footer__tower--right" src="/theme/tower-right.webp" width={320} height={397} alt="" loading="lazy" />
+        <img className="footer__land" src="/theme/landscape.webp" width={1396} height={141} alt="" loading="lazy" />
+        {/* eslint-enable @next/next/no-img-element */}
+        <div className="footer__sign">
+          <Divider />
+          <p className="footer__name gold-text">{profile.fullName}</p>
+          <Divider />
+        </div>
       </div>
-      <div className="footer__band">
+      <div className="band footer__band">
         <p>
-          © {year} {profile.fullName}. Built with Next.js and set in Clash Grotesk. Last updated{" "}
-          {formatDay(profile.lastUpdated)}.
-        </p>
-        <p className="credits">
-          Pictures:{" "}
-          {shown.map((p, i) => (
-            <span key={p.src}>
-              <a className="link" href={p.page} target="_blank" rel="noopener noreferrer">
-                “{p.title}”
-              </a>{" "}
-              by {p.creator},{" "}
-              <a className="link" href={p.licenceUrl} target="_blank" rel="noopener noreferrer">
-                {p.licence}
-              </a>
-              , via Wikimedia Commons{i < shown.length - 1 ? "; " : "."}
-            </span>
-          ))}
+          © {year} {profile.fullName}. Last updated {formatDay(profile.lastUpdated)}.
         </p>
       </div>
     </footer>

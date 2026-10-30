@@ -22,7 +22,6 @@ export const certifications: Certification[] = [
       alt: "Scrum.org certificate: Professional Scrum Product Owner I, awarded to Ahmad Almudhi on August 11, 2026",
     },
     featured: true,
-    side: "product",
   },
   {
     id: "psm-i",
@@ -41,6 +40,5 @@ export const certifications: Certification[] = [
       alt: "Scrum.org certificate: Professional Scrum Master I, awarded to Ahmad Almudhi on August 28, 2026",
     },
     featured: true,
-    side: "product",
   },
 ];

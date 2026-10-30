@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { SectionId } from "@/content/schema";
 import { sections } from "@/content";
 
@@ -85,6 +85,9 @@ function scrollToSection(id: SectionId, smooth: boolean) {
 export function NavProvider({ children }: { children: React.ReactNode }) {
   const [active, setActive] = useState<SectionId>(ids[0]);
   const [indexOpen, setIndexOpen] = useState(false);
+  // The section a tap is travelling to. While the page scrolls there, sections passing the middle
+  // of the screen don't count, and a second tap (Next, Next) counts on from the target.
+  const target = useRef<SectionId | null>(null);
   const hash = useSyncExternalStore(subscribeHash, () => location.hash, () => "");
   const overlay = useMemo(() => parseHash(hash).overlay, [hash]);
 
@@ -96,6 +99,7 @@ export function NavProvider({ children }: { children: React.ReactNode }) {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           const id = entry.target.id as SectionId;
+          if (target.current && id !== target.current) continue;
           setActive(id);
           if (!overlayOpen() && parseHash(location.hash).section !== id) {
             history.replaceState(history.state, "", `#${id}`);
@@ -140,20 +144,31 @@ export function NavProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  const settle = useRef<number>(undefined);
   const goTo = useCallback((id: SectionId) => {
+    target.current = id;
     history.pushState({ section: id }, "", `#${id}`);
     emit();
     setActive(id);
     scrollToSection(id, true);
+    // the jump is over when scrolling ends (or, where scrollend is missing, after a second)
+    window.clearTimeout(settle.current);
+    const done = () => {
+      window.clearTimeout(settle.current);
+      window.removeEventListener("scrollend", done);
+      target.current = null;
+    };
+    window.addEventListener("scrollend", done, { once: true });
+    settle.current = window.setTimeout(done, 1200);
   }, []);
 
   const index = ids.indexOf(active);
   const goNext = useCallback(() => {
-    const i = ids.indexOf(active);
+    const i = ids.indexOf(target.current ?? active);
     if (i < ids.length - 1) goTo(ids[i + 1]);
   }, [active, goTo]);
   const goPrev = useCallback(() => {
-    const i = ids.indexOf(active);
+    const i = ids.indexOf(target.current ?? active);
     if (i > 0) goTo(ids[i - 1]);
   }, [active, goTo]);
 

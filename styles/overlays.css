@@ -38,13 +38,13 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background: var(--sheet);
-  color: var(--sheet-ink);
+  background: var(--paper) url("/theme/paper.webp") repeat;
+  color: var(--ink);
   overscroll-behavior: contain;
 }
 
 .detail::backdrop {
-  background: rgb(5 15 22 / 0.6);
+  background: rgb(19 33 26 / 0.6);
 }
 
 .detail__inner {
@@ -59,11 +59,12 @@
   align-items: center;
   justify-content: space-between;
   min-height: 3.5rem;
-  background: var(--sheet);
+  background: var(--paper) url("/theme/paper.webp") repeat;
 }
 
 .detail__crumb {
-  color: var(--sheet-muted);
+  color: var(--ink-soft);
+  font-style: italic;
 }
 
 .detail__grid {
@@ -72,6 +73,7 @@
 }
 
 .detail__title {
+  color: var(--gold);
   font-size: var(--step-head);
   line-height: 1;
   letter-spacing: -0.025em;
@@ -83,14 +85,15 @@
 
 .detail__role {
   margin-top: 0.5rem;
-  color: var(--sheet-muted);
+  color: var(--ink-soft);
+  font-style: italic;
 }
 
 .detail__note {
   margin-top: 1.25rem;
   padding-left: 1rem;
-  border-left: 4px solid currentColor; /* a 4px bar, the page's one mark for an aside */
-  color: var(--sheet-muted);
+  border-left: 3px solid var(--gold); /* taste-skill-ignore: the aside's gold bar */
+  color: var(--ink-soft);
 }
 
 .detail__block {
@@ -99,12 +102,29 @@
 
 .detail__head {
   margin-bottom: 0.6rem;
-  font-size: var(--step-body);
-  font-weight: 500;
+  color: var(--gold-ink);
+  font-size: var(--step-lead);
 }
 
-.detail .tag {
-  background: var(--bg);
+.detail .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0;
+  margin: 0;
+  padding: 0;
+  color: var(--ink-soft);
+  font-style: italic;
+  list-style: none;
+}
+
+.detail .tags li + li::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin: 0 0.7rem 0.15em;
+  background: var(--gold);
+  transform: rotate(45deg);
 }
 
 .detail__links {
@@ -129,8 +149,8 @@
   width: 100%;
   padding: clamp(1.25rem, 3vw, 2.5rem);
   border: 0;
-  background: var(--stage);
-  color: var(--stage-ink);
+  background: var(--green) url("/theme/band.webp") center / cover;
+  color: var(--gold-light);
   cursor: zoom-in;
   transition: transform var(--t-press) var(--ease-out);
 }
@@ -151,7 +171,7 @@
 
 .detail__caption {
   margin-top: 0.5rem;
-  color: var(--sheet-muted);
+  color: var(--ink-soft);
   font-size: var(--step-small);
 }
 
@@ -203,8 +223,8 @@
   padding: 0;
   border: 0;
   overflow: hidden;
-  background: rgb(5 15 22 / calc(0.96 * var(--fade, 1)));
-  color: #ebe9e6;
+  background: rgb(19 33 26 / calc(0.97 * var(--fade, 1)));
+  color: var(--cream);
 }
 
 .lightbox[open] {
@@ -260,12 +280,6 @@
   -webkit-user-drag: none;
 }
 
-.lightbox__node {
-  --bg: #ff7a1f;
-  --ink: #050f16;
-  --muted: #5a2306;
-  --stage-surface: #0e1c26;
-}
 
 .lightbox__node .phone {
   height: min(70svh, 44rem);
@@ -278,7 +292,7 @@
 .lightbox__count,
 .lightbox__caption {
   font-size: var(--step-small);
-  color: #b3aba3;
+  color: var(--cream-soft);
 }
 
 .lightbox__caption {
