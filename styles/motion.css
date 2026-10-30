@@ -1,0 +1,249 @@
+/* The motion layer (design-taste-frontend motion.md, PRD §8). Every hidden or moving state lives
+   inside prefers-reduced-motion: no-preference, so reduced motion — and no script — is simply the
+   finished page. Transform, opacity and clip-path only. */
+
+/* ---------- rolling figures: the resting state is the value ---------- */
+
+.roll {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.roll__col {
+  position: relative;
+  display: inline-block;
+  height: 1em;
+  overflow: clip;
+  line-height: 1;
+}
+
+.roll__sizer {
+  visibility: hidden;
+}
+
+.roll__strip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  transform: translateY(calc(var(--d) * -1em));
+}
+
+.roll__strip::before {
+  content: "0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";
+  display: block;
+  white-space: pre;
+  line-height: 1;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ---------- the signature move: the name rises on load, settled by 1.2s ---------- */
+
+  .js .hero__name [data-line] {
+    transform: translateY(105%);
+    animation: load-line 800ms var(--ease-expo) forwards;
+    animation-delay: calc(100ms + var(--i) * var(--stagger-line));
+  }
+
+  .js .hero__title,
+  .js .hero__summary,
+  .js .hero__actions {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: load-rise 500ms var(--ease-out) forwards;
+  }
+
+  .js .hero__title {
+    animation-delay: 380ms;
+  }
+
+  .js .hero__summary {
+    animation-delay: 440ms;
+  }
+
+  .js .hero__actions {
+    animation-delay: 500ms;
+  }
+
+  .js .hero-picture {
+    clip-path: inset(0 0 100% 0);
+    animation: load-open 1000ms var(--ease-in-out) 150ms forwards;
+  }
+
+  .js .hero-picture__photo {
+    transform: scale(1.08);
+    animation: load-settle 1100ms var(--ease-expo) 100ms forwards;
+  }
+
+  /* ---------- section entrances: once, in reading order ---------- */
+
+  html.reveal [data-reveal] {
+    transition:
+      opacity 700ms var(--ease-out) calc(var(--i, 0) * var(--stagger-item)),
+      translate 900ms var(--ease-expo) calc(var(--i, 0) * var(--stagger-item)),
+      color var(--t-ui) ease;
+  }
+
+  html.reveal [data-reveal]:not(.is-in) {
+    opacity: 0;
+    translate: 0 24px;
+  }
+
+  html.reveal .tile[data-reveal] {
+    transition:
+      opacity 450ms var(--ease-out) calc(var(--i, 0) * 50ms),
+      translate 700ms var(--ease-expo) calc(var(--i, 0) * 50ms);
+  }
+
+  /* the figures roll up from zero as their tile arrives */
+  .roll__strip {
+    transition: transform 1100ms var(--ease-expo) calc(250ms + var(--c) * var(--stagger-item));
+  }
+
+  html.reveal .tile[data-reveal]:not(.is-in) .roll__strip {
+    transform: none;
+  }
+
+  /* ---------- the stage: a new picture wipes up from the foot (work blueprint) ---------- */
+
+  .split__stage .stage__layer[data-on="true"] .stage-figure:not(.stage-figure--photo) {
+    animation: stage-wipe 900ms var(--ease-expo) both;
+  }
+
+  .split__stage .stage__layer[data-on="true"] .stage-figure--photo img {
+    animation: stage-settle 1300ms var(--ease-soft) both;
+  }
+
+  .split__stage .stage__layer[data-on="true"] .stage-card > * {
+    animation: load-rise 600ms var(--ease-out) both;
+  }
+
+  .split__stage .stage__layer[data-on="true"] .stage-card > :nth-child(2) {
+    animation-delay: 80ms;
+  }
+
+  .split__stage .stage__layer[data-on="true"] .stage-card > :nth-child(3) {
+    animation-delay: 160ms;
+  }
+
+  /* ---------- bars and "Show more" open to their real height ---------- */
+
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  .bar::details-content,
+  .more::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size var(--t-ui) var(--ease-out),
+      content-visibility var(--t-ui) allow-discrete;
+  }
+
+  .bar[open]::details-content,
+  .more[open]::details-content {
+    block-size: auto;
+  }
+}
+
+/* ---------- scroll-linked: locked to the scrollbar, linear, small ---------- */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* EXP-4: the spine draws as the record is read */
+    .roles {
+      view-timeline-name: --roles;
+    }
+
+    .roles::before {
+      animation: spine-draw linear both;
+      animation-timeline: --roles;
+      animation-range: entry 15% cover 65%;
+    }
+
+    /* the last photograph drifts a few percent as it passes (the page's moving picture) */
+    .footer__picture {
+      view-timeline-name: --footer;
+    }
+
+    .footer__picture img {
+      inset: -6% 0;
+      height: 112%;
+      animation: photo-drift linear both;
+      animation-timeline: --footer;
+      animation-range: entry 0% exit 100%;
+    }
+  }
+}
+
+@keyframes load-line {
+  to {
+    transform: none;
+  }
+}
+
+@keyframes load-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes load-open {
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes load-settle {
+  to {
+    transform: none;
+  }
+}
+
+@keyframes stage-wipe {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes stage-settle {
+  from {
+    transform: scale(1.06);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes spine-draw {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes photo-drift {
+  from {
+    transform: translateY(-5%);
+  }
+
+  to {
+    transform: translateY(5%);
+  }
+}
