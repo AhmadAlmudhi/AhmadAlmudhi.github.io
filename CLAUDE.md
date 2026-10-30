@@ -35,12 +35,15 @@ to match. Cite PRD requirement IDs in commit messages and PR descriptions.
 - **Fonts:** Clash Grotesk's licence (ITF FFL) allows self-hosting but forbids distribution through a
   repository, so `app/fonts/` is gitignored and `scripts/fetch-fonts.mjs` downloads the official files
   from Fontshare (`predev`/`prebuild` hooks; CI caches them). Never commit font files.
-- Installed: `motion`, `zod`, `lucide-react`, `qrcode.react`. Planned (PRD §13.1), added when a milestone
-  needs them: `workbox-cli`, `@playwright/test`, `@lhci/cli`; `embla-carousel-react` only if native
-  scroll snap falls short. Overlays are native `<dialog>` (no Radix). `sharp` comes with Next.
+- Installed: `zod`, `lucide-react`, `qrcode.react`, `@playwright/test` (dev). Planned (PRD §13.1):
+  `workbox-cli`, `@lhci/cli`. Overlays are native `<dialog>` (no Radix); the lightbox's swipe, pinch and
+  double-tap zoom are plain pointer events; the card → detail morph uses `document.startViewTransition`
+  (`components/overlays/useOpenProject.ts`). `sharp` comes with Next.
+- Tests: `npm test` runs Playwright (`tests/`) against the built `out/` served by `scripts/serve.mjs`,
+  driving the installed Chrome (`channel: "chrome"`), desktop and phone. Build first.
   Initial JS budget is ≤ 150 KB gzipped, so check before adding anything else.
-- CI (`.github/workflows/deploy.yml`): every PR runs lint, typecheck, the design lint and the build; a
-  push to `main` also deploys `out/` to Pages. Wait for green checks before merging.
+- CI (`.github/workflows/deploy.yml`): every PR runs lint, typecheck, the design lint, the build and the
+  Playwright tests; a push to `main` also deploys `out/` to Pages. Wait for green checks before merging.
 
 ## Static export: hard constraints
 
