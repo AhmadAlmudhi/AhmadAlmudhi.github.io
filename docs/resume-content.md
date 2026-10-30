@@ -36,31 +36,22 @@ Content for the interactive resume site.
 ### Summary
 > Software engineer specializing in Flutter, with additional experience across web development. Co-founded a clothing brand, making product decisions based on customer demand. PSPO I, PSM I certified.
 
-### Hero numbers
-| Number | Label |
-|---|---|
-| 2 → 1 | Native apps replaced by one Flutter app |
-| 23 | Branches monitored by my dashboard |
-| 12 | Collections shipped |
-
 ### Site copy written from these facts (confirm or change)
 The design needed a few lines of copy. Each one restates facts above; nothing new is claimed.
 
 | Where | Copy |
 |---|---|
-| Hero, under the name | Software Engineer in Riyadh. I build Flutter apps and own their backlog. (`profile.tagline`) |
-| Numbers heading | In numbers |
-| Experience, the "read as" control | Read my experience as: Both / Engineer / Product owner. Its sentence is computed from the highlights (five engineering, five product). Which highlight counts as which is set by `side` in `content/experience.ts`. |
-| Education | A short first-person letter in `components/sections/Education.tsx`: the degree and dates, the 200-hour Tuwaiq bootcamp, Flutter as the main tool since, the backlog work at Muvi and the August 2026 certificates. |
-| Contact | Write to me about a role, a product or a Flutter app. |
+| Hero | The name and the summary above, nothing else (the tagline and the "In numbers" figures were removed, 30 Oct 2026) |
+| Education | Exactly the CV's lines (see Education below); no paragraph |
+| Contact | Feel free to contact me at any time. |
 
 ---
 
 ## Experience
-Newest first. Durations are calculated by the site (shown here as of Oct 2026).
+Newest first. Dates as on the CV. The site shows a duration only for past roles, calculated as end month minus start month in full words; the current role shows none.
 
 ### Frontend Developer — Muvi Cinemas
-**02/2025 – Present** · 1 yr 9 mos
+**02/2025 – Present** (no duration shown)
 - Rebuilt the cinema booking app from scratch in Flutter, replacing two native apps with one cross-platform product.
 - Reconstructed undocumented product requirements by tracing the existing app's behavior and gathering intended logic from IT and business stakeholders.
 - Built and prioritized my own backlog from those requirements, writing user stories to define behavior across each user flow.
@@ -71,14 +62,14 @@ Newest first. Durations are calculated by the site (shown here as of Oct 2026).
 Skill tags: Flutter, Dart, BLoC, REST API integration, Requirements gathering, User stories, Backlog management, Stakeholder management
 
 ### Co-Founder — VEGA Styles
-**05/2021 – 05/2025** · 4 yrs 1 mo
+**05/2021 – 05/2025** · 4 years
 - Shipped 12 collections across online and in-person channels, deciding what to produce next based on customer demand, past sales, and co-founders' input.
 - Used samples to catch problems early, changing fabric, color, and print specs before committing to full production.
 
 Skill tags: Prioritization, Prototyping, Stakeholder management
 
 ### Angular Developer — Jameel
-**03/2022 – 09/2022** · 7 mos · Tamheer program
+**03/2022 – 09/2022** · 6 months · Tamheer program
 - Improved an operations dashboard used to monitor captain activity, redesigning table layouts and surfacing more data per view.
 - Reduced clicks needed for common monitoring tasks, making it faster for the operations team to spot issues during a shift.
 
@@ -116,11 +107,13 @@ Paws, Battuta, baloot-calculator and tv-shows get no placeholder: there are no f
 
 ## Education
 
-### Flutter Development Bootcamp
-**Tuwaiq Academy** — Saudi Federation for Cybersecurity, Programming & Drones
-04/2023 – 06/2023 · 200 hours
+As on the CV:
 
-### Bachelor's degree, Software Engineering
+### Flutter Development Bootcamp (200 hours)
+**Tuwaiq Academy** — Saudi Federation for Cybersecurity, Programming & Drones
+04/2023 – 06/2023
+
+### Software Engineering, Bachelor's degree
 **King Saud University**
 09/2017 – 01/2021
 
@@ -147,8 +140,7 @@ Images: `public/certificates/pspo-i.webp` and `public/certificates/psm-i.webp`, 
 - No "open to work" badge.
 - No custom domain.
 - Email only on the site; phone only in the PDF. The phone stays in the PDF (recruiters need it); it never appears in the site's HTML, and `robots.txt` keeps the PDF out of search engines.
-- Design: the `design-taste-frontend` skill decides every visual question; the PRD was updated to match (v1.3).
-- Accent colour and fonts: dealt by the design skill in Phase 1.
+- Identity: your theme image (`docs/content_files/my_theme.png`) decides colours, type and ornament (30 Oct 2026, PRD v1.4); the design skill decides the rest. One theme, no light/dark.
 - Projects: placeholders until you add the real ones, after everything else is finished.
 
 ---

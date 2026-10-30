@@ -6,7 +6,6 @@ export const profile: Profile = {
   lastName: "Almudhi",
   initials: "AA",
   title: "Software Engineer",
-  tagline: "I build Flutter apps and own their backlog.",
   summary:
     "Software engineer specializing in Flutter, with additional experience across web development. Co-founded a clothing brand, making product decisions based on customer demand. PSPO I, PSM I certified.",
   location: "Riyadh, Saudi Arabia",

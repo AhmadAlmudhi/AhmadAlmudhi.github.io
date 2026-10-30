@@ -4,9 +4,10 @@
 |---|---|
 | **Product** | Personal interactive resume website |
 | **Owner** | Ahmad Almudhi |
-| **Version** | 1.3 — live at ahmadalmudhi.github.io; English only; not indexed by search engines |
+| **Version** | 1.4 — live at ahmadalmudhi.github.io; English only; not indexed by search engines |
 | **Date** | 30 October 2026 |
 | **Status** | Built (phases 1–5 merged and live, 30 Oct 2026); waiting for the real projects (phase 6) |
+| **Changes in 1.4** | Ahmad's own identity (`docs/content_files/my_theme.png`) replaces the dealt palette and type: Castoro in gold on parchment, a green band with gold rules, the eight-point star ornament, Najdi mud-brick towers and palm groves, one theme only (no light/dark). Removed at his request: the tagline, the "In numbers" stats, the "read as" lens, "Show more" on roles, "Next: …" links, the side rail, the theme toggle and the found photographs. Experience and Education follow the CV (MM/YYYY dates; durations in full words, end month minus start month, none for the current role); Skills are the CV's two groups; certificates sit in frames; the dock is always on screen |
 | **Changes in 1.3** | Visual and motion rules aligned with the `design-taste-frontend` skill, which now decides every visual question (§7, §8 and the affected requirements); projects start as placeholders; resume PDF and certificate images added; robots.txt keeps the PDF out of search |
 
 ---
@@ -20,7 +21,7 @@ A single-page, mobile-first website that presents my professional profile — su
 
 The site contains **no personal photo**. It is typography-led, with project screenshots and certificate images as the main visuals.
 
-**Design authority:** the visual design follows the `design-taste-frontend` skill (`.agents/skills/design-taste-frontend/`): its art-direction draw, house rules and gates. Where this document and the skill disagree on how something looks or moves, the skill wins; this document still decides what the site does.
+**Design authority:** the identity comes from Ahmad's theme image (`docs/content_files/my_theme.png`, decided 30 Oct 2026): its colours, its typeface, its gold name between star dividers, its green band and its towers and palm groves. Everything else visual follows the `design-taste-frontend` skill (`.agents/skills/design-taste-frontend/`): its house rules, motion and gates, except where the identity needs one of its devices (the gold name, the divider and band rules, the landscape's fade into the paper), which are marked in the source and allowed in the gate. This document still decides what the site does.
 
 ---
 
@@ -43,7 +44,7 @@ The site contains **no personal photo**. It is typography-led, with project scre
 - No backend / contact form (direct links instead).
 - No heavy 3D/WebGL scenes (cost to mobile performance outweighs value).
 - No skill "percentage bars" (widely seen as unprofessional and meaningless).
-- No ornament the design skill bans: gradients, glass/blur, resting shadows, hairline rules, eyebrow labels, monospace, 01/02/03 numbering, emoji, custom cursors, preloaders.
+- No ornament the design skill bans (glass/blur, resting shadows, eyebrow labels, monospace, 01/02/03 numbering, emoji, custom cursors, preloaders), apart from the identity's own devices listed under Design authority.
 
 ---
 
@@ -92,15 +93,15 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 
 | ID | Requirement | Priority |
 |---|---|---|
-| NAV-1 | **Mobile — bottom navigation dock** (thumb zone): shows current section name, ‹ Previous / Next › buttons, and a center button that opens a **Section Index sheet** listing all sections. The dock is an opaque bar attached to the bottom edge: no blur, not a floating pill. It slides away while the reader scrolls down, so it never covers what is being read (design skill, layout.md §7), and returns on any upward scroll, at the top and at the end of the page; the header's Sections button keeps every section within two taps meanwhile | Must |
-| NAV-2 | **Desktop (≥ 1024px) — sticky side rail** listing all sections with an animated active indicator (a change of ink or ground, or a bar of 4 px or more) and the position as plain text ("3 of 7"). No hairline progress line | Must |
-| NAV-3 | **Top header** (all sizes): name/monogram (tap = back to top), Sections (opens the index), Resume PDF button, theme toggle; compact on mobile, collapses into a slim bar while scrolling. Opaque, on the same outer margins as the page; never covers content | Must |
+| NAV-1 | **Mobile — bottom navigation dock** (thumb zone): shows current section name, ‹ Previous / Next › buttons, and a center button that opens a **Section Index sheet** listing all sections. The dock is an opaque bar attached to the bottom edge: no blur, not a floating pill. Since 1.4 it stays on screen at all times (hiding it on scroll-down made it vanish right after a tap on Next); the page keeps a bottom padding of the dock's height so the last content always scrolls clear of it, and on phones the first screen ends exactly at the dock. Quick repeated taps on Next or Previous count on from the section being travelled to | Must |
+| NAV-2 | **Desktop — every section in the header** (≥ 1200 px): the section names as links, the current one in gold with a filled diamond. Between 1024 and 1200 px the header's Sections button opens the index. (Replaces the 1.3 side rail, which sat on the hero's left tower and was unreadable over the green bands) | Must |
+| NAV-3 | **Top header** (all sizes): the full name in gold (tap = back to top; no monogram), Sections (opens the index; replaced by the section links on wide screens), Resume PDF. Opaque parchment, on the same outer margins as the page | Must |
 | NAV-4 | Active section is tracked automatically while scrolling (IntersectionObserver) and reflected in dock/rail | Must |
 | NAV-5 | URL hash updates while scrolling using `replaceState` (no history spam); tapping a nav item uses `pushState` so the **browser/OS Back button returns to the previous section** | Must |
 | NAV-6 | Opening a project or certificate pushes a history entry, so **Android back gesture / browser Back closes the overlay** instead of leaving the site | Must |
-| NAV-7 | Every section ends with a plain "Next: [Section]" link (no arrow glyph; at most one arrow on the page, on the primary action) | Should |
+| NAV-7 | ~~"Next: [Section]" link at the end of each section~~ — removed in 1.4 at Ahmad's request (the dock's Next does the job) | — |
 | NAV-8 | Deep links work on first load (e.g., sending `/#projects` to a recruiter) | Must |
-| NAV-9 | Scroll-progress bar at the top of the viewport, 4 px or thicker (never a hairline), or dropped if the dock/rail position already does the job | Could |
+| NAV-9 | ~~Scroll-progress bar~~ — dropped: the dock's "3 of 7" and the header's current section already do the job | — |
 | NAV-10 | Keyboard shortcuts on desktop: `J`/`K` next/previous section, `1–7` jump to section, `Esc` closes overlays | Could |
 | NAV-11 | "Back to top" affordance after scrolling past the hero | Should |
 
@@ -111,21 +112,21 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 ### 6.1 Hero / Summary
 | ID | Requirement | Priority |
 |---|---|---|
-| HERO-1 | Full name, professional title, 2–3 sentence summary, location. The first screen's one `h1` says who and what (name with title); headline ≤ 2 lines at every width | Must |
-| HERO-2 | Typographic hero (no photo): name reveal (lines rise from behind a mask on load, settled by 1.2 s, readable on first paint), initials monogram, set on a flat colour field from the dealt palette. No gradient mesh, no grain, no WebGL | Must |
-| HERO-3 | Primary action: **Download Resume (PDF)** as the one real button; **Contact me** as a plain text link | Must |
-| HERO-4 | Quick-stats of 2–4 highlight numbers defined in the content file (e.g., "23 branches", "12 collections"), set as large type (not tiles or cards); digits roll up once on first view ("rolling figures") | Should |
+| HERO-1 | Full name and the CV's summary (the summary says what he does; the separate title and tagline were removed in 1.4 because all three said the same thing). One `h1`, the name, on one line at every width | Must |
+| HERO-2 | The theme image's banner (no photo of Ahmad): the name in gold Castoro between two star dividers, on parchment, flanked by Najdi mud-brick towers over a palm-grove landscape cut from the theme image. The dividers draw out from their stars and the name rises from behind a mask on load, settled by 1.2 s. No WebGL | Must |
+| HERO-3 | On the green band under the banner: **Download resume** (gold, the one primary button) and **Contact me** (outlined) | Must |
+| HERO-4 | ~~Quick-stats ("In numbers")~~ — removed in 1.4 at Ahmad's request | — |
 | HERO-5 | ~~Availability badge~~ — removed (not needed) | — |
-| HERO-6 | Quick links row: LinkedIn, GitHub, Email | Must |
+| HERO-6 | Quick links on the band beside the buttons: Email, LinkedIn, GitHub, each with its icon | Must |
 
 ### 6.2 Experience
 | ID | Requirement | Priority |
 |---|---|---|
-| EXP-1 | Vertical timeline, newest first: role, company, location, start–end dates, **auto-computed duration** (e.g., "1 yr 8 mos") | Must |
+| EXP-1 | Vertical timeline, newest first: role, company (and note), dates as on the CV (`02/2025 – Present`), and for past roles an **auto-computed duration in full words**, end month minus start month ("4 years", "6 months", "1 year 2 months"). The current role shows no duration | Must |
 | EXP-2 | 3–5 impact-focused bullets per role (metrics where possible) | Must |
-| EXP-3 | Skill tags per role: filled, one tone step from the ground, sentence case, no outline | Must |
+| EXP-3 | Skills per role as a line of italic names separated by small gold diamonds | Must |
 | EXP-4 | Timeline spine (a bar of 4 px or more, never a hairline) "draws" as the user scrolls, linked to the scrollbar; entries arrive heading → text → tags, staggered, once | Should |
-| EXP-5 | Long entries collapse with "Show more" (animated height) | Should |
+| EXP-5 | ~~"Show more" on long entries~~ — removed in 1.4: every point of every role is shown | — |
 | EXP-6 | Links from an experience entry to related projects | Could |
 
 ### 6.3 Projects (showcase section)
@@ -133,8 +134,8 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 |---|---|---|
 | PRJ-1 | Project card: title, one-line pitch, my role, skill tags, cover screenshot. No resting shadow; separated from the ground by a tone step | Must |
 | PRJ-2 | **Screenshots by project type**: each project declares its type (mobile app / web / dashboard). Mobile-app screenshots sit in a plain rounded-rectangle phone frame drawn in CSS (no notch, buttons or glare). Web and dashboard screenshots are shown unframed: no browser chrome, square corners, on a surface tone. No shadows, no image mock-ups | Must |
-| PRJ-3 | **Mobile layout:** horizontally swipeable project row with scroll snap, one card at 75–80% of the width with the next one showing; within a card, screenshots cycle in place on swipe/tap (slide or crossfade, with a plain "2 of 5" count). No tilted or fanned stacks | Must |
-| PRJ-4 | **Desktop layout:** scroll-driven showcase — project text passes on one side while the screenshot held on the other side crossfades between shots as the user scrolls (sticky stage, about one screen per step, three screens at most per project; no scroll-jacking; native scroll speed) | Should |
+| PRJ-3 | **Layout:** one column of cards below 1024 px (a sideways row read as clipped), two columns from there; each card's screenshots sit on a green panel with a gold fillet and cycle in place on tap with a plain "2 of 5" count. No tilted or fanned stacks | Must |
+| PRJ-4 | ~~Desktop scroll-driven showcase~~ — dropped in 1.4 with the split stage; the card grid serves every width | — |
 | PRJ-5 | Tapping a card opens a **Project Detail overlay** via shared-element transition (the card morphs into the overlay). Full-screen sheet on mobile, centered modal on desktop | Must |
 | PRJ-6 | Detail content: overview, problem, my role & contributions, key features, tech stack, impact/results, screenshot gallery, links (Live demo, GitHub, Case study) — each link optional | Must |
 | PRJ-7 | **Screenshot lightbox:** full screen, swipe between images, pinch-to-zoom / double-tap zoom, captions, image counter, close via swipe-down, ✕, Esc, or Back | Must |
@@ -147,21 +148,21 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 ### 6.4 Skills
 | ID | Requirement | Priority |
 |---|---|---|
-| SKL-1 | Skills grouped into categories (e.g., Languages, Frameworks, Databases, Cloud & DevOps, Tools, Soft skills) | Must |
-| SKL-2 | Skills set as text (the layout comes from the dealt section blueprint, not a row of identical cards); tags are filled tone steps with no outline; brand logos only where they add information, never icons in tinted squares; optional level as words (Expert / Proficient / Familiar) — **no percentage bars** | Must |
+| SKL-1 | The CV's two groups, **Product** and **Technical**, with the CV's skills, on a green band | Must |
+| SKL-2 | Skills set as flowing lines of text separated by gold diamonds (no cards, no tags, no icons); no note of where a skill was used; **no percentage bars** | Must |
 | SKL-3 | Groups arrive row by row (50–90 ms stagger), once | Should |
-| SKL-4 | Tapping a skill shows where it was used (count of projects/roles) and can filter Projects | Could |
+| SKL-4 | ~~Tapping a skill shows where it was used~~ — dropped in 1.4 at Ahmad's request | — |
 
 ### 6.5 Education
 | ID | Requirement | Priority |
 |---|---|---|
-| EDU-1 | Degree, institution, location, dates, GPA/honors (optional), relevant coursework (optional) | Must |
+| EDU-1 | Exactly as the CV: program or degree (with the note, e.g. "(200 hours)"), dates, institution (with its note). No paragraphs, no picture | Must |
 | EDU-2 | Graduation/capstone project with link to its entry in Projects (optional) | Could |
 
 ### 6.6 Certifications
 | ID | Requirement | Priority |
 |---|---|---|
-| CRT-1 | Certificates laid out from the dealt section blueprint (not a bento grid or a row of identical cards): image, certificate name, issuer, issue date, expiry (if any), credential ID. Images in `public/certificates/` (`pspo-i.webp`, `psm-i.webp`, rendered from the Scrum.org PDFs and cropped to the certificate edges) | Must |
+| CRT-1 | Each certificate in a frame (green moulding, parchment mat, gold star at the top) that matches the identity, with name, issuer, issue date, status and credential ID. Images in `public/certificates/` (`pspo-i.webp`, `psm-i.webp`, rendered from the Scrum.org PDFs and cropped to the certificate edges) | Must |
 | CRT-2 | Tap opens the certificate image in the **lightbox** (zoom, swipe to next/previous certificate) | Must |
 | CRT-3 | "Verify" button linking to the issuer's credential URL when available. Scrum.org shows the holder's name and date only after the visitor enters the holder's email, so show the `verifyNote` hint plus a copy-email button beside "Verify" | Must |
 | CRT-4 | Status as plain text: Active / Expired (computed from expiry date; both current certificates never expire) | Should |
@@ -177,15 +178,15 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 | CON-4 | **Save contact (vCard)** button — adds me to the interviewer's phone contacts in one tap | Should |
 | CON-5 | **Share / QR mode:** button that shows a large QR code of the site URL + "Copy link" — so an in-person interviewer can open it on their own phone | Should |
 | CON-6 | WhatsApp quick-chat link | Could |
-| CON-7 | Footer as a designed close (not link columns): name, © year, "Built with …" note, last-updated date, in the text face at a readable size | Should |
+| CON-7 | Footer as a designed close: the banner again (name between star dividers, towers and palm groves), then a green band with © year and the last-updated date. The Contact section opens with "Feel free to contact me at any time." (no role or product named) | Should |
 
 ### 6.8 Global
 | ID | Requirement | Priority |
 |---|---|---|
-| GLB-1 | Light & dark themes; defaults to system preference; toggle persists; no flash of wrong theme on load | Must |
+| GLB-1 | ~~Light & dark themes~~ — replaced in 1.4: one theme, the identity's colours, at every system setting (`color-scheme: light`) | — |
 | GLB-2 | Custom 404 page in the same design | Should |
 | GLB-3 | Print stylesheet (or redirect "Print" to the PDF) | Could |
-| GLB-4 | Installable as an app (PWA) with my monogram icon; **works offline** after first visit, including images and the PDF | Should |
+| GLB-4 | Installable as an app (PWA) with the gold star icon on green; **works offline** after first visit, including images and the PDF | Should |
 | GLB-5 | Privacy-friendly analytics: visits, section views, resume downloads, outbound link clicks | Should |
 | GLB-6 | Optional `?ref=company-name` tracking param to know which recruiter's link was opened | Could |
 
@@ -193,19 +194,19 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 
 ## 7. Design System & Visual Direction
 
-**Source of truth:** the `design-taste-frontend` skill. Its run deals the art direction (composition, type system, palette, section blueprints) with `draw.mjs` (sector `personal-portfolio`), and its gates (`lint.mjs`, `inspect.mjs` at 1440 / 768 / 390 px) check the house rules. This section summarises the rules; the skill's `SKILL.md` and `references/` hold the detail.
+**Source of truth:** colours, type and ornament come from Ahmad's theme image (`docs/content_files/my_theme.png`); the `design-taste-frontend` skill's house rules, motion and gates (`lint.mjs`, `inspect.mjs` at 1440 / 768 / 390 px) cover the rest. The draw's palette and type no longer apply. The gate runs with `--allow gradient-text,font-not-dealt,palette-cream,covered-text` (the gold name, Castoro, the cream text on the band, and text passing under the fixed dock mid-scroll).
 
 **Personality:** modern, calm, confident, precise. Premium through scale, space and substance — not decoration. Restraint is not emptiness: type set large, whole fields of colour, and every section carrying its full content.
 
 | Element | Direction |
 |---|---|
-| **Typography** | Typography carries the design (no photo). The type system dealt by the draw: one or two faces at most, five sizes at most, display ≥ 4× body; display tracking −0.02 to −0.05 em, leading 0.85–1.05; body 16–20 px at 45–75 characters per line. Every headline ≤ 2 lines at every width. Fluid sizes with `clamp()`. Self-hosted with `next/font` |
-| **Color** | The dealt palette, as roles: ground, surface, ink, muted, one accent (+ accent ink). Ground 70–90 % of the page; the accent on the primary action and at most one other recurring thing (< 5 % of any screen). Running text in full ink. Both themes designed deliberately, not inverted. No violet/indigo, no cream ground with terracotta |
+| **Typography** | One face, **Castoro** (Tiro Typeworks, OFL; regular and italic), the closest match to the name in the theme image, self-hosted with `next/font/google`. The name and headings in gold; body 20 px at 45–75 characters per line; italic for companies, places and skill lines. Every headline ≤ 2 lines at every width. Fluid sizes with `clamp()` |
+| **Color** | Sampled from the theme image: parchment ground `#dfcdb7` (with a faint paper grain), deep green `#1c2c23` for ink and bands, gold `#8a5f18` for headings and ornaments on parchment, light gold `#d6bd8a` and bright gold `#c9a24f` on green, cream `#efe4d2` for text on green. One theme only |
 | **Layout** | One 12-column grid with one pair of tight, equal outer margins (16–32 px); large things run to the edges and only text measure is constrained (no reflex 1200 px container; cap the layout around 1760–1920 px). Sections 120–240 px apart on desktop, 72–112 px on phones. Neighbouring sections never share a layout; no card grids, no bento. Every section opens with a heading; no blank stretch taller than half a screen |
-| **Surfaces** | Separated by a tone step, never by a 1 px line or a shadow. No glass or backdrop blur anywhere. Shadows only on what truly floats: the index sheet, modals, the lightbox, toasts |
-| **Radius** | One value for the whole page, decided once from the draw: square or fully round. Pictures square (the CSS phone frame of PRJ-2 is the one exception) |
-| **Icons** | Lucide (outline) for controls only: copy, theme, close, chevrons. No icon-topped cards, no icons in tinted squares, no emoji |
-| **Imagery** | Mobile-app screenshots in a plain rounded-rectangle CSS phone frame; web and dashboard screenshots unframed and square on a surface tone; certificates square and uncropped beyond their own edges. Two aspect ratios for most pictures; no shadows; no frames other than the phone |
+| **Surfaces** | Parchment sections and green bands; the bands carry the theme's two gold rules inside both edges. No glass or backdrop blur. Shadows only on what truly floats (sheet, modals, lightbox, toasts) and the name's embossed edge |
+| **Radius** | 2 px everywhere (nearly square). Pictures square (the CSS phone frame of PRJ-2 is the one exception) |
+| **Icons** | Lucide (outline) for controls (copy, close, chevrons, download, mail) plus the LinkedIn and GitHub marks. The eight-point star from the theme image is the one ornament. No icon-topped cards, no emoji |
+| **Imagery** | The theme image's towers and landscape (cut by `scripts/cut-theme.mjs`); mobile-app screenshots in a plain rounded-rectangle CSS phone frame and web/dashboard screenshots unframed, both on green panels; certificates in their frames. No found photographs |
 | **Labels** | No eyebrow labels, no tiny letter-spaced capitals, no pill badges, no monospace outside code, no 01 / 02 / 03 numbering (plain "3 of 7" where a count helps), no styled accent word in a headline |
 | **Tokens** | All colors, spacing, the radius, durations and easings defined as design tokens (CSS variables), named after the skill's roles (`--bg`, `--surface`, `--ink`, `--muted`, `--accent`, `--accent-ink`; motion tokens from the skill's `references/motion.md` §4) |
 
@@ -214,9 +215,8 @@ Every button, link, tag, card and input defines: **default, hover (desktop, behi
 - Buttons: flat, one fill colour; press scale ≈ 0.97 (140 ms); colour shift on hover (180 ms).
 - Links: underline colour fades in on hover; offset clears the descenders.
 - Copy buttons: icon morphs to a checkmark, toast slides in.
-- Theme toggle: sun/moon icon morph.
 - Nav active indicator: slides between items (shared layout animation).
-- Focus: a visible 2 px outline in the accent, offset from the element.
+- Focus: a visible 2 px gold outline, offset from the element.
 - Images: blur-up placeholder → sharp image fade-in, on a ground-coloured container (no grey skeleton boxes).
 
 ---
@@ -237,7 +237,7 @@ Follows the design skill's `references/motion.md`; its tokens are the source of 
 | **No scroll-jacking** | Native scroll speed; scroll-linked effects only *react* to scroll. Optional Lenis smoothing on desktop only (lerp 0.1–0.14), off for touch and reduced motion. No custom cursor |
 | **Performance** | Animate only `transform`, `opacity` and `clip-path`. Target 60 fps on mid-range Android. Loops pause off screen |
 | **Reduced motion** | If `prefers-reduced-motion` is on: the finished state is shown; keep opacity/colour changes, drop travel, scale, parallax and roll-ups |
-| **Signature moments** | One signature move: the hero name reveal. Supporting moments: the project card → detail morph (a UI transition) and the experience timeline drawing with the scrollbar. Nothing moves across text being read |
+| **Signature moments** | One signature move: the hero's dividers drawing out from their stars as the name rises. Supporting moments: the project card → detail morph (a UI transition) and the experience timeline drawing with the scrollbar. Nothing moves across text being read |
 
 ---
 
@@ -245,10 +245,10 @@ Follows the design skill's `references/motion.md`; its tokens are the source of 
 
 | Breakpoint | Width | Layout |
 |---|---|---|
-| Base (mobile) | < 640 px | Its own composition, not the desktop squeezed: single column; margins 16–20 px; bottom dock navigation; swipe rows; full-screen overlays; pictures first at full width; safe-area insets respected (notch / home indicator) |
+| Base (mobile) | < 640 px | Its own composition, not the desktop squeezed: single column; margins 16–20 px; bottom dock navigation; the banner and its band fill the first screen; full-screen overlays; pictures first at full width; safe-area insets respected (notch / home indicator) |
 | `sm` | ≥ 640 px | Larger type; line breaks re-authored |
-| `md` (tablet) | ≥ 768 px | Section layouts per the dealt blueprints' tablet behaviour; overlays become large sheets |
-| `lg` (laptop) | ≥ 1024 px | Side rail navigation replaces dock; scroll-driven project showcase; centered modals; hover effects enabled |
+| `md` (tablet) | ≥ 768 px | Larger type in the same centred column; project panels go landscape; the contact buttons two by two; overlays become large sheets |
+| `lg` (laptop) | ≥ 1024 px | The dock goes; the towers flank the name; two-column project cards; centered modals; hover effects enabled. From 1200 px the header lists every section |
 | `xl` | ≥ 1280 px | Type keeps scaling with `clamp()`; layout capped around 1760–1920 px; outer margins stay tight and equal |
 
 **Test matrix:** iPhone SE (375 px), iPhone 16 (393 px), Pixel (412 px), iPad (portrait & landscape), 1366×768 laptop, 1440×900, 1920×1080. Browsers: iOS Safari, Android Chrome, desktop Chrome, Safari, Edge, Firefox (latest 2 versions).
@@ -274,16 +274,16 @@ Follows the design skill's `references/motion.md`; its tokens are the source of 
 - Semantic landmarks and heading order; skip-to-content link.
 - Full keyboard navigation; visible focus rings; focus trapped in overlays and restored on close.
 - Meaningful `alt` text for every screenshot and certificate.
-- Color contrast ≥ 4.5:1 for text in both themes.
+- Color contrast ≥ 4.5:1 for all text.
 - Respect reduced-motion preference (see §8).
 - Screen-reader announcements for "Copied" toasts and section changes.
 
 ### 10.3 SEO & Link Sharing
 - Title, meta description, canonical URL.
-- **Open Graph / Twitter card image** generated at build (name + title + monogram) so links look professional in LinkedIn, WhatsApp, email and Slack previews.
+- **Open Graph / Twitter card image** cut from the theme image (`public/og.jpg`, the name between the dividers over the landscape) so links look professional in LinkedIn, WhatsApp, email and Slack previews.
 - **Not indexed by search engines (decided):** `<meta name="robots" content="noindex, nofollow">` on every page. `robots.txt` must **not** block crawlers from the pages: link-preview bots (LinkedIn, WhatsApp, Slack) need to fetch the page to show the preview image, and search engines must be able to read the page to see the `noindex` tag. The one exception is `Disallow: /resume/`: a PDF can't carry a `noindex` tag on GitHub Pages (no custom headers), and the PDF holds the phone number. Link previews don't need the PDF.
 - No `sitemap.xml` and no JSON-LD structured data (no value when the site isn't indexed).
-- Favicon and app icons from the monogram.
+- Favicon and app icons: the gold star on green (`scripts/make-icons.mjs`).
 
 ### 10.4 Privacy & Security
 - Email and phone not present as plain text in the static HTML (assembled client-side) to reduce scraping/spam. (The repository is public, so these values are still visible in the source on GitHub — see §16.)
@@ -313,7 +313,6 @@ type Profile = {
   phone?: string;         // omitted = phone not shown on the site
   siteUrl: string;        // used for the QR code and link previews
   links: { linkedin: string; github: string; resumePdf: string; whatsapp?: string };
-  stats?: { value: string; label: string }[];  // 2–4 hero highlight numbers
   sectionOrder: SectionId[];
 };
 
@@ -324,7 +323,7 @@ type Experience = {
   location?: string;
   start: string;          // "2023-02"
   end?: string;           // undefined = "Present"
-  highlights: string[];   // impact bullets
+  highlights: string[];   // impact bullets, all shown
   skills: string[];       // skill ids
   relatedProjects?: string[];
 };
@@ -375,8 +374,9 @@ type Education = {
 };
 
 type SkillGroup = {
-  category: string;
-  skills: { id: string; name: string; level?: "Expert" | "Proficient" | "Familiar"; icon?: string }[];
+  id: string;
+  category: string;       // "Product" | "Technical", as on the CV
+  skills: string[];
 };
 ```
 
@@ -409,11 +409,11 @@ type SkillGroup = {
 | **Lightbox zoom** | Custom lightbox on a native `<dialog>` with pointer events (swipe, pinch, double-tap, swipe-down to close) — built | Pinch/double-tap zoom on screenshots and certificates, no library weight |
 | **Smooth scrolling** | **Lenis** — desktop only, optional | Polished wheel scrolling on laptops; mobile keeps native scrolling |
 | **Icons** | **Lucide** for controls (+ Simple Icons for tech/brand logos where they inform) | Consistent, tree-shakeable |
-| **Fonts** | Clash Grotesk (dealt by the design skill), self-hosted with `next/font/local`. Its licence (ITF FFL) allows self-hosting but not distribution through a repository, so `scripts/fetch-fonts.mjs` downloads it from Fontshare before `dev` and `build` and `app/fonts/` is gitignored | Zero layout shift, no external requests at runtime, works offline and under the CSP |
-| **Art direction & design QA** | **`design-taste-frontend` skill** (vendored in `.agents/skills/`, MIT): `draw.mjs` deals the direction, `lint.mjs` scans source, `inspect.mjs` renders the built `out/` in Chrome at 1440 / 768 / 390 and measures the house rules | Decisions instead of defaults; rules checked rather than hoped for |
+| **Fonts** | Castoro (OFL), downloaded by `next/font/google` at build and served from the site | Zero layout shift, no external requests at runtime, works offline and under the CSP |
+| **Art direction & design QA** | **`design-taste-frontend` skill** (vendored in `.agents/skills/`, MIT): `lint.mjs` scans source, `inspect.mjs` renders the built `out/` in Chrome at 1440 / 768 / 390 and measures the house rules | Decisions instead of defaults; rules checked rather than hoped for |
 | **Images** | Build-time optimization script with **sharp** (`scripts/optimize-images.mjs`) and a `<Picture>` component | Next.js's on-demand image optimizer needs a server, so a script writes AVIF/WebP at several widths before the build; each picture loads on a ground of its own average colour |
 | **Content validation** | **Zod** | Fails the build on invalid/missing content |
-| **OG images** | `next/og` (rendered at build) or a designed static `og-image.png` | Branded link-preview image |
+| **OG images** | Static `public/og.jpg` cut from the theme image by `scripts/cut-theme.mjs` | Branded link-preview image |
 | **Offline / PWA** | **Workbox** (`generateSW` run on the exported `out` folder) + web app manifest | Precache pages, images and PDF for offline interviews; works with any static host |
 | **QR code** | `qrcode.react` | Share/QR mode |
 | **Quality** | ESLint + Prettier (or Biome), **Playwright** (e2e + mobile viewports), **Lighthouse CI**, the design skill's `lint.mjs` | Guard performance, accessibility and design budgets on every push |
@@ -445,7 +445,7 @@ next.config.ts          # output: 'export'
   opengraph-image.tsx   # generated link-preview image
   not-found.tsx
 /components
-  /nav                  # Header, BottomDock, SideRail, SectionIndexSheet
+  /nav                  # Header (with the wide-screen section links), Dock, IndexSheet
   /sections             # Hero, Experience, Projects, Skills, Education, Certifications, Contact
   /ui                   # Button, Tag, Card, Toast, CopyButton, PhoneFrame, Lightbox
   /motion               # Reveal, Stagger, CountUp, presets (durations, springs)
@@ -519,6 +519,7 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 | **3. Showcases** | Projects (with placeholders): phone frames, mobile swipe row, desktop scroll showcase, detail overlay, lightbox. Certifications + lightbox |
 | **4. Motion polish** | Signature animations, micro-interactions for all elements, reduced-motion variants |
 | **5. Hardening** | Done 30 Oct 2026: Lighthouse mobile performance 0.97, accessibility 1, best practices 1, CLS 0 (LCP 2.6 s simulated, bound by the web font; kept `font-display: swap`); initial JS 149 KB gz; OG image and monogram icons; designed 404; PWA with offline after one visit (tested); CSP and referrer policy via `<meta>`; analytics built and off until a provider is chosen. Still to do by Ahmad: real-device testing on his phone |
+| **5b. Identity (1.4)** | Done 30 Oct 2026: redesign to Ahmad's theme image and his list of changes (see the 1.4 change note); Lighthouse mobile performance 0.96, accessibility 1, best practices 1, CLS 0 (LCP 2.8 s simulated: the JS bundle's download and evaluation under throttling; observed LCP is the first paint); initial JS 147 KB gz; design gate 0 FAIL at 1440/768/390 with the identity allow-list |
 | **6. Real projects** | **Next, with Ahmad's material.** Replace every placeholder project and screenshot with the real content and redacted screenshots; re-run the design gate with `--have product-ui` |
 | **7. Launch** | Done: live at `https://ahmadalmudhi.github.io`, HTTPS enforced, repo README written. Left for Ahmad: open the site once on his phone (offline cache) and keep the QR one tap away; add the link to LinkedIn, GitHub and the PDF resume once the real projects are in |
 
@@ -543,7 +544,7 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 - [ ] A push to `main` tests, builds and deploys to GitHub Pages automatically; a failing test or Lighthouse budget blocks the deploy.
 - [ ] The site loads at its final URL over HTTPS, and the custom 404 page is served for unknown paths.
 - [ ] Every interactive element has hover (desktop), pressed, and focus-visible states.
-- [ ] The design skill's gate passes on the built `out/`: `lint.mjs` and `inspect.mjs` report 0 FAIL at 1440, 768 and 390 px, and the last critique round is written down (`references/critique.md` §4).
+- [ ] The design skill's gate passes on the built `out/`: `lint.mjs` and `inspect.mjs` (with the identity allow-list, §7) report 0 FAIL at 1440, 768 and 390 px, and the last critique round is written down (`references/critique.md` §4).
 - [ ] No placeholder project or screenshot remains (`placeholder: true` count is zero).
 - [ ] `robots.txt` disallows only `/resume/`; the phone number appears nowhere in the site's HTML.
 
@@ -558,7 +559,7 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 | Bad Wi-Fi during an interview | PWA offline cache; open the site once before the interview |
 | Confidential data in screenshots | Redaction checklist; a plain-text "Confidential (NDA)" note instead of links |
 | Spam from public email/phone | Client-side assembly of contact details; no phone in structured data |
-| Interviewer gets lost on an unfamiliar device | Dock with section name + Prev/Next + index sheet, back on any upward scroll; a Sections button always in the header; tested with real users |
+| Interviewer gets lost on an unfamiliar device | Dock with section name + Prev/Next + index sheet, always on screen; a Sections button in the header (every section listed on wide screens); tested with real users |
 | Content goes stale | Single content source, "Last updated" date in footer |
 | Public repo exposes contact details and assets | Contact info is public on the site anyway; keep the resume PDF free of home address; never commit anything I wouldn't show on the site |
 | Unredacted screenshot committed by mistake (stays in Git history even after deletion) | Keep original screenshots outside the repo; commit only redacted exports; review images in each pull request |
@@ -572,11 +573,11 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 
 1. ~~**Language**~~ **Decided:** English only.
 2. ~~**URL**~~ **Decided:** `https://ahmadalmudhi.github.io` (repo `AhmadAlmudhi.github.io`), no custom domain.
-3. ~~**Brand**~~ **Decided:** accent colour and fonts are dealt by the design skill's draw in Phase 1.
+3. ~~**Brand**~~ **Decided (30 Oct 2026):** Ahmad's theme image is the identity (colours, Castoro, ornaments, towers); it replaced the draw's accent and fonts in 1.4.
 4. ~~**Section order**~~ **Decided:** Experience before Education.
 5. ~~**Search visibility**~~ **Decided:** not indexed (`noindex`), link-only.
 6. **Projects:** Which projects to include, and which are confidential (screenshots only, no links)? **Decided for now:** placeholders (PRJ-12) until I add the real content and screenshots after everything else is finished.
 7. ~~**Phone visibility**~~ **Decided:** email only on the site; phone only in the resume PDF.
 8. **Analytics:** Do I want per-recruiter tracking links (`?ref=`)?
 9. ~~**Resume PDF**~~ **Done:** `public/resume/Ahmad-Almudhi-Resume.pdf`.
-10. ~~**Design conflicts**~~ **Decided (30 Oct 2026):** the design skill wins on every visual decision; this document was updated to match (v1.3).
+10. ~~**Design conflicts**~~ **Decided (30 Oct 2026):** the design skill wins on every visual decision; this document was updated to match (v1.3). **Superseded the same day (v1.4):** Ahmad's theme image decides the identity; the skill decides the rest.

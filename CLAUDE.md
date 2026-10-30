@@ -4,7 +4,7 @@
 
 ## The project
 
-Ahmad Almudhi's interactive resume: a single-page, mobile-first, typography-led site (no personal photo)
+Ahmad Almudhi's interactive resume: a single-page, mobile-first site (no personal photo) in his own identity
 that replaces the PDF in interviews (handed over on a phone) and in remote hiring (link sent to recruiters).
 Static export, hosted on GitHub Pages at `https://ahmadalmudhi.github.io` from the public repo
 `AhmadAlmudhi/AhmadAlmudhi.github.io` (remote `origin`; Pages source: GitHub Actions). English only.
@@ -14,16 +14,18 @@ Not indexed by search engines.
 
 | File | What it decides |
 |---|---|
-| `docs/PRD-Interactive-Resume.md` (v1.3) | Scope, requirement IDs (`NAV-1`, `PRJ-5`, …) with Must/Should/Could, NFRs, content model (§11), stack (§13), milestones (§14), definition of done (§15) |
+| `docs/PRD-Interactive-Resume.md` (v1.4) | Scope, requirement IDs (`NAV-1`, `PRJ-5`, …) with Must/Should/Could, NFRs, content model (§11), stack (§13), milestones (§14), definition of done (§15) |
 | `docs/resume-content.md` | Every word of content. Never invent content, metrics, projects or proof |
-| `docs/content_files/` | Source files: resume PDF and the two Scrum.org certificate PDFs. Originals only; derived assets live in `public/` |
+| `docs/content_files/` | Source files: resume PDF, the two Scrum.org certificate PDFs and `my_theme.png` (the identity). Originals only; derived assets live in `public/` |
+| `docs/content_files/my_theme.png` | **The identity:** colours, typeface, the gold name between star dividers, the green band, the towers and palm groves |
 | `.agents/skills/design-taste-frontend/SKILL.md` | Art direction, house rules, the build run and the gates. Read it whole before any visual work, plus the reference file it points to for the step at hand |
 | `node_modules/next/dist/docs/` | Docs for the installed Next.js 16.4.3. Check here before using any Next API |
 
-**Precedence (decided 30 Oct 2026):** the design skill decides every visual and motion question,
-always. The PRD decides what is built and how it behaves (features, navigation, a11y, perf, content);
-v1.3 was aligned with the skill. If you find a remaining conflict, follow the skill and update the PRD
-to match. Cite PRD requirement IDs in commit messages and PR descriptions.
+**Precedence (decided 30 Oct 2026, v1.4):** Ahmad's theme image decides the identity (colours, type,
+ornament, imagery). The design skill decides every other visual and motion question. The PRD decides
+what is built and how it behaves (features, navigation, a11y, perf, content). If you find a remaining
+conflict, follow that order and update the PRD to match. Cite PRD requirement IDs in commit messages and
+PR descriptions.
 
 ## Stack and commands
 
@@ -32,21 +34,24 @@ to match. Cite PRD requirement IDs in commit messages and PR descriptions.
   config), ESLint 9 flat config (ignores `.agents/`, `.claude/`, `.taste-skill/`). Path alias `@/*` → repo root.
 - `npm run dev` · `npm run build` (writes `out/`) · `npm run lint` · `npm run typecheck` · `npm start`
   (serves `out/`; `next start` does not serve a static export).
-- **Fonts:** Clash Grotesk's licence (ITF FFL) allows self-hosting but forbids distribution through a
-  repository, so `app/fonts/` is gitignored and `scripts/fetch-fonts.mjs` downloads the official files
-  from Fontshare (`predev`/`prebuild` hooks; CI caches them). Never commit font files.
+- **Font:** Castoro (OFL, regular + italic), the identity's face, loaded with `next/font/google` in
+  `app/layout.tsx`: downloaded at build and served from the site. One face only.
+- **Theme assets:** `npm run theme` (`scripts/cut-theme.mjs` + `scripts/make-icons.mjs`) cuts
+  `public/theme/` (towers, landscape, band texture, paper grain), `public/og.jpg` and the star icons
+  (`public/favicon.png`, `apple-touch-icon.png`, `icon-*.png`) from `my_theme.png`. The outputs are
+  committed; rerun only if the theme image changes.
 - Installed: `zod` (build-time only), `lucide-react`, `qrcode.react` (lazy), and dev: `@playwright/test`,
   `workbox-cli`, `@lhci/cli`. Overlays are native `<dialog>` (no Radix); the lightbox's swipe, pinch and
   double-tap zoom are plain pointer events; the card → detail morph uses `document.startViewTransition`
-  (`components/overlays/useOpenProject.ts`). `sharp` comes with Next.
+  (`components/overlays/useOpenProject.ts`, which also opens the framed certificates). `sharp` comes with Next.
 - Tests: `npm test` runs Playwright (`tests/`) against the built `out/` served by `scripts/serve.mjs`,
   driving the installed Chrome (`channel: "chrome"`), desktop and phone. Build first.
   Initial JS budget is ≤ 150 KB gzipped, so check before adding anything else.
-- Build pipeline: `prebuild` fetches fonts and writes responsive AVIF/WebP into `public/opt/`
+- Build pipeline: `prebuild` writes responsive AVIF/WebP of the certificates into `public/opt/`
   (`scripts/optimize-images.mjs`, gitignored); `postbuild` writes the Workbox service worker into `out/`
   (`workbox-config.cjs`).
 - CI (`.github/workflows/deploy.yml`): every PR runs lint, typecheck, the design lint, the build, the
-  Playwright tests, the initial-JS budget (`scripts/check-js-budget.mjs`, 150 KB gz, currently ~149 KB:
+  Playwright tests, the initial-JS budget (`scripts/check-js-budget.mjs`, 150 KB gz, currently ~147 KB:
   think twice before adding client code) and Lighthouse (`lighthouserc.cjs`: a11y and best practices 1,
   performance ≥ 0.9, CLS < 0.05); a push to `main` also deploys `out/` to Pages. Wait for green checks.
 
@@ -63,9 +68,9 @@ to match. Cite PRD requirement IDs in commit messages and PR descriptions.
 - Deep links are hash-based (`/#projects`, `/#projects/<slug>`), so there are no dynamic routes.
 - Content files are plain typed data; `content/validate.ts` parses them with Zod from `app/page.tsx` at
   build. Never import Zod (or call `.parse`) from anything a client component imports.
-- Brand images are route handlers in folders named `*.png` with `dynamic = "force-static"`
-  (`app/og.png/`, icons; renderer `lib/brand.tsx`), so they export as real `.png` files — metadata
-  image conventions (`opengraph-image.tsx`) export extension-less and Pages would serve them as octet-stream.
+- Brand images are static files in `public/` (`og.jpg`, the star icons), cut from the theme image.
+  Don't use metadata image conventions (`opengraph-image.tsx`): they export extension-less and Pages
+  would serve them as octet-stream.
 - Overlay code loads when the page is idle (`components/overlays/Overlays.tsx`); the QR library loads
   when its sheet opens.
 - No response headers on Pages: CSP and Referrer-Policy go in `<meta>` tags (`app/layout.tsx`, production
@@ -79,19 +84,23 @@ to match. Cite PRD requirement IDs in commit messages and PR descriptions.
 ## Architecture (PRD §13.3)
 
 `app/` (layout with the boot script, page composing sections in configured order) ·
-`components/{nav,sections,stage,ui}` · `content/*.ts` + `content/schema.ts` (Zod, parsed on import:
+`components/{nav,sections,overlays,motion,pwa,ui}` · `content/*.ts` + `content/schema.ts` (Zod, parsed on import:
 bad content fails the build) · `lib/nav.tsx` (active section, hash/history store, overlays, shortcuts),
 `lib/dates.ts`, `lib/client.ts` (`useHydrated`, `useClientValue` — use these, not setState-in-effect,
-which the React lint rules reject) · `styles/` (`tokens.css` roles, `base.css`, `frame.css`,
-`sections.css`, imported by `app/globals.css`) · `public/{projects/<slug>,certificates,resume}` ·
+which the React lint rules reject) · `styles/` (`tokens.css` identity colours, `base.css` ornaments,
+band and buttons, `frame.css` header/dock/sheet, `sections.css`, `overlays.css`, `motion.css`, imported by
+`app/globals.css`) · `public/{theme,projects/<slug>,certificates,resume}` ·
 `scripts/` · `.github/workflows/deploy.yml`.
 
-The mobile dock hides while scrolling down and returns on scroll up (skill layout.md §7); the header's
-Sections button is always there. Display lines fitted to the width use `components/ui/FitText.tsx`.
+The page is one centred column: the banner (hero), parchment sections under centred gold headings
+(`SectionHead` and `Divider`/`Star` in `components/ui/Ornament.tsx`), green bands for Skills and
+Contact, and the banner again as the footer. On phones and tablets (< 64em) the hero fills the space
+between header and dock, so the first screen ends on the band.
 
-The page is the dealt split stage: `components/stage/Stage.tsx` is the fixed half on desktop (≥ 64em).
-Blocks in the reading half carry `data-stage="<key>"`; the stage crossfades to the layer with that key
-(layers are built in `app/page.tsx`). The stage also carries the desktop rail and the section bar.
+The dock (< 64em) is always on screen; don't bring back hide-on-scroll (it vanished right after a
+tap on Next). `goTo` in `lib/nav.tsx` records the target while the smooth scroll runs: sections passing
+by don't steal the active state, and quick repeated Next/Previous taps count on from the target. From
+75em the header lists every section (NAV-2); below that its Sections button opens the index.
 
 Navigation behaviour (PRD §5.2) is the core of the interview use case:
 - Scrolling updates the hash with `replaceState`. Tapping a nav item uses `pushState`, so Back returns to
@@ -99,7 +108,7 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
 - Opening a project or certificate overlay pushes a history entry, so Back (Android gesture included)
   closes the overlay instead of leaving the site.
 - Deep links work on first load. The mobile bottom dock (Prev / section index / Next) and the desktop
-  side rail (≥ 1024px) are both Must.
+  header section links are both Must.
 
 ## Content rules
 
@@ -109,8 +118,10 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
 
 - Section order comes from one `sectionOrder` array: Hero, Experience, Projects, Skills, Education,
   Certifications, Contact.
-- Durations are computed, never hard-coded. A value computed at build goes stale between deploys, so
-  compute it in the browser after hydration (with the build value as fallback) or schedule a rebuild.
+- Dates are shown as on the CV (`MM/YYYY`). Durations are computed (end month minus start month, in
+  full words: "4 years", "6 months"), only for past roles; the current role shows none.
+- Experience shows every highlight (no "Show more"); Education is exactly the CV's lines; Skills are the
+  CV's two groups (Product, Technical) with no note of where each was used.
 - **Projects are placeholders until Ahmad adds the real ones, after everything else is finished**
   (PRJ-12). Placeholders are the four Muvi projects listed in `resume-content.md`, using only facts from
   the Experience section. Each has `placeholder: true` and a small visible "Placeholder" note. A
@@ -127,13 +138,10 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
   certificate edges, WebP for weight). Both are Scrum.org and never expire; verify URLs are in `resume-content.md`.
   Scrum.org asks for the holder's email, so show the `verifyNote` hint and a copy-email button next to
   "Verify" (CRT-3).
-- Skill levels are words only (Expert / Proficient / Familiar). No percentage bars.
-- Found pictures of Ahmad's world (Riyadh at dusk, the King Saud University gate) live in
-  `public/pictures/` with their records in `content/pictures.ts` (and `credits.json`); the footer credits
-  every one. They show places, never his work. Add new ones with the skill's `assets.mjs --get`.
-- The live thing is the "read as" lens: each experience highlight, skill group and certificate carries
-  `side: "engineering" | "product"`; the lens sets `data-lens` on `<html>` and CSS mutes the other side.
-  Copy written from the facts is listed in `docs/resume-content.md` for Ahmad to confirm.
+- No percentage bars. No found photographs (Ahmad removed them); the only pictures are the theme
+  image's cuts, the certificates and, later, the project screenshots.
+- Removed at Ahmad's request, don't bring back: the tagline (the summary says it), the "In numbers"
+  stats, the "read as" lens, "Next: (section)" links, the light/dark themes and their toggle.
 - Commit only redacted screenshots. Originals stay outside the repo (Git history is public and permanent).
 
 ## Design: the `design-taste-frontend` skill
@@ -145,59 +153,46 @@ Working files land in `.taste-skill/` (gitignored).
 
 - This is a **page**, not an app screen: follow "The run" in SKILL.md, not `references/app-screens.md`.
   Sector `personal-portfolio`. Pass `--have product-ui` only once real project screenshots exist.
-- Order: inventory → argument → `draw.mjs --options 3`, then `--direction <id>` → the idea sentence + one
-  live thing → full copy deck → build still → gate → look/critique (≤ 3 rounds) → motion → report.
-- The draw deals the accent colour and fonts. Self-host the dealt faces with `next/font/google` or
-  `next/font/local` (Fontshare faces). Never use CDN `<link>` tags: they break offline/PWA and the CSP.
+- The run's draw was done in Phase 1 and its palette and type are superseded by the identity; later
+  visual work goes: build still → gate → look/critique (≤ 3 rounds) → motion → report.
+- The identity replaces the draw's palette and fonts (decided 30 Oct 2026). Never use CDN `<link>`
+  tags for fonts: they break offline/PWA and the CSP.
+- The identity's own devices are allowed and marked `/* taste-skill-ignore: … */` in the CSS: the gold
+  name (gradient text with an embossed edge), the divider and band rules, the gold fillets and frames,
+  the landscape's fade into the paper, outlined secondary buttons.
 - Gate on what ships: `node <skill>/scripts/lint.mjs app components styles`, then after `npm run build`
   serve `out/` at its root (`python3 -m http.server 4321 --directory out`; passing `out/index.html`
-  breaks the absolute `/_next/` paths) and run `node <skill>/scripts/inspect.mjs http://127.0.0.1:4321/`.
-  Headless Chrome follows the OS theme, so inspect both: append `?theme=light` or `?theme=dark` (the boot
-  script honours it for that view only). Overlay shadows carry `/* taste-skill-ignore */`. Aim for 0 FAIL at
+  breaks the absolute `/_next/` paths) and run `node <skill>/scripts/inspect.mjs http://127.0.0.1:4321/
+  --allow gradient-text,font-not-dealt,palette-cream,covered-text` (the gold name, Castoro, cream text on
+  green, and text passing under the fixed dock mid-scroll). Overlay shadows carry `/* taste-skill-ignore */`. Aim for 0 FAIL at
   1440/768/390, then open every screenshot it saves. Until real projects arrive, the picture-floor
   check may still fail; say so instead of padding with unrelated pictures.
 - House rules apply everywhere: headlines ≤ 2 lines at every width; one `h1` saying who and what; a
   heading on every section; equal outer margins; no eyebrows or tiny tracked-caps labels; no monospace
-  (drop the boilerplate Geist Mono); no 01/02/03 numbering; no 1px rules or outlined boxes; no gradients;
-  no shadows on resting elements; no glass; no violet/indigo; no cream + terracotta; no emoji; ≤ 2
-  typefaces; no styled accent word.
+  (drop the boilerplate Geist Mono); no 01/02/03 numbering; no gradients or shadows beyond the
+  identity's devices above; no glass; no emoji; one typeface; no styled accent word.
 - Don't copy the resume PDF's look: its spaced-caps section labels ("S U M M A R Y") and hairline rules
   are exactly what the house rules ban.
 - No scroll scenes: the skill ships no `library/scenes.json`, and its scenes load GSAP from a CDN.
   The motion layer is CSS (`styles/motion.css`, the skill's tokens and recipes) plus one small script:
-  - the signature move is the hero's masked name rise on load (pure CSS under `.js`, settled by 1.2s);
+  - the signature move: the hero's dividers draw out from their stars as the name rises from its mask
+    (pure CSS under `.js`, settled by 1.2s);
   - section entrances are choreographed in `components/motion/Reveals.tsx` (`GROUPS` lists what
     arrives together, 70ms apart, four steps at most). It marks what is already on screen as shown,
     then sets `html.reveal`, which alone lets CSS hide the rest — so nothing is ever hidden before
     hydration. To add an entrance, add a selector to `GROUPS`; don't put `data-reveal` in markup;
-  - stats roll up digit by digit (digits drawn by CSS `content`, real figure in `sr-only` text);
-  - scroll-linked (CSS scroll timelines in `@supports`): the experience spine draws, the footer
-    photo drifts; the stage wipes in each new picture; `<details>` open with `interpolate-size`.
+  - scroll-linked (CSS scroll timelines in `@supports`): the experience spine draws; `<details>` open
+    with `interpolate-size`.
 - Content must be visible without JS. Hidden start states apply only under JS and
   `prefers-reduced-motion: no-preference`. A Motion `initial={{ opacity: 0 }}` on server-rendered content
   breaks this. Reveals play once; no preloader; the first screen is readable on first paint.
-
-### How the former PRD ↔ skill conflicts were settled (PRD v1.3)
-
-| Topic | Decision |
-|---|---|
-| Hero background (HERO-2) | Flat colour field from the palette; the masked name reveal carries the motion. No gradient mesh, no grain |
-| Header and dock (NAV-1/3) | Opaque bars one tone step from the ground, attached to the edge, on the page margins. No blur, no floating pill |
-| Surfaces (§7) | Tone steps only; shadows only on floating layers (sheet, modal, lightbox, toast) |
-| Radius (§7) | One value, square or fully round, decided from the draw; pictures square |
-| Screenshots (PRJ-2) | Mobile apps: plain rounded-rectangle CSS phone frame. Web/dashboard: unframed, square, on a surface tone |
-| Project stack (PRJ-3) | Screenshots cycle in place with a "2 of 5" count; no tilted/fanned stack |
-| Tilt / spotlight (PRJ-8) | Dropped |
-| Stats and certificates | Stats as large type with rolling figures; certificates per the dealt blueprint; no bento |
-| Progress (NAV-2/9) | Plain "3 of 7" position; any bar ≥ 4px; no hairlines |
-| Tags and badges | Filled tone-step tags, sentence case, no outline; status and NDA notes as plain text, not pills |
-| Motion (§8) | The skill's durations, curves and staggers; one signature move (the name reveal) |
 
 ## Done means (PRD §15)
 
 Lint, typecheck and static-export build pass. The skill's gate is clean (or remaining FAILs are explained).
 WCAG 2.2 AA: focus trapped in overlays and restored on close, visible focus, tap targets ≥ 44px,
-contrast ≥ 4.5:1 in both themes, reduced motion respected. No horizontal overflow at 375px. Lighthouse
-mobile Performance ≥ 95, Accessibility and Best Practices 100. LCP ≤ 2.0s, CLS < 0.05. Light and dark
-themes follow the system preference, persist the toggle, and never flash the wrong theme. Every
-interactive element has hover (desktop), pressed and focus-visible states.
+contrast ≥ 4.5:1, reduced motion respected. No horizontal overflow at 375px. Lighthouse mobile
+Performance ≥ 95, Accessibility and Best Practices 100. LCP ≤ 2.0s (the simulated figure is ~2.8s, bound
+by the JS bundle under throttling; observed LCP is the first paint), CLS < 0.05. One theme, the
+identity's, at every system setting. Every interactive element has hover (desktop), pressed and
+focus-visible states.

@@ -24,7 +24,7 @@ function saveContact() {
     `URL:${profile.links.linkedin}`,
     `URL:${profile.links.github}`,
     `ADR;TYPE=WORK:;;;${profile.location.split(",")[0]};;;${profile.location.split(",")[1]?.trim() ?? ""}`,
-    `NOTE:Interactive resume: ${profile.siteUrl}`,
+    `NOTE:Resume: ${profile.siteUrl}`,
     "END:VCARD",
   ];
   const blob = new Blob([lines.join("\r\n") + "\r\n"], { type: "text/vcard;charset=utf-8" });
@@ -84,16 +84,16 @@ function QrSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
         </div>
         <p className="qr__url">{profile.siteUrl.replace("https://", "")}</p>
         <div className="sheet__actions">
-          <CopyButton value={() => profile.siteUrl} label="Copy link" done="Link copied" />
+          <CopyButton value={() => profile.siteUrl} label="Copy link" done="Link copied" className="button button--green" />
           {canShare && (
             <button
               type="button"
-              className="action"
+              className="button button--outline-ink"
               onClick={() =>
                 navigator.share({ title: `${profile.fullName}, ${profile.title}`, url: profile.siteUrl }).catch(() => {})
               }
             >
-              <span>Share</span>
+              Share
             </button>
           )}
         </div>
@@ -107,25 +107,25 @@ export function ContactActions() {
   return (
     <ul className="contact__actions">
       <li>
-        <CopyButton value={emailAddress} label="Copy email" done="Email copied" />
+        <CopyButton value={emailAddress} label="Copy email" done="Email copied" className="button button--gold" />
       </li>
       <li>
-        <button type="button" className="action" onClick={saveContact}>
+        <button type="button" className="button button--outline" onClick={saveContact}>
           <UserPlus size={18} strokeWidth={1.75} aria-hidden="true" />
-          <span>Save contact</span>
+          Save contact
         </button>
       </li>
       <li>
-        <button type="button" className="action" onClick={() => setQr(true)} aria-haspopup="dialog">
+        <button type="button" className="button button--outline" onClick={() => setQr(true)} aria-haspopup="dialog">
           <QrCode size={18} strokeWidth={1.75} aria-hidden="true" />
-          <span>Show QR code</span>
+          QR code
         </button>
         <QrSheet open={qr} onClose={() => setQr(false)} />
       </li>
       <li>
-        <a className="action" href={profile.links.resumePdf} download={profile.links.resumePdf.split("/").pop()}>
+        <a className="button button--outline" href={profile.links.resumePdf} download={profile.links.resumePdf.split("/").pop()}>
           <ArrowDownToLine size={18} strokeWidth={1.75} aria-hidden="true" />
-          <span>Download resume</span>
+          Download resume
         </a>
       </li>
     </ul>

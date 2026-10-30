@@ -46,9 +46,6 @@ next-env.d.ts
 # claude code local settings
 /.claude/settings.local.json
 
-# Clash Grotesk (ITF Free Font License: self-host only, no repository distribution); fetched by scripts/fetch-fonts.mjs
-/app/fonts/
-
 # playwright
 /test-results/
 /playwright-report/

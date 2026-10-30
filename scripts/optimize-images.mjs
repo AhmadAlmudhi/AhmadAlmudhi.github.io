@@ -9,7 +9,7 @@ import sharp from "sharp";
 
 const ROOT = join(import.meta.dirname, "..", "public");
 const OUT = join(ROOT, "opt");
-const SOURCES = ["pictures", "certificates"];
+const SOURCES = ["certificates"];
 // Keep in step with WIDTHS in components/ui/Picture.tsx.
 const WIDTHS = [640, 1024, 1600, 2400];
 

@@ -1,4 +1,5 @@
-/* Base type, links, focus and the shared pieces every section uses. */
+/* Base type, links, focus, buttons and the identity's shared pieces: the paper, the gold ornaments
+   and the green band. */
 
 html {
   -webkit-text-size-adjust: 100%;
@@ -8,16 +9,14 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--paper) url("/theme/paper.webp") repeat;
   color: var(--ink);
   font-family: var(--font-text);
   font-size: var(--step-body);
-  font-weight: 400;
-  line-height: 1.45;
+  line-height: 1.55;
   font-kerning: normal;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  transition: background-color var(--t-ui) ease, color var(--t-ui) ease;
 }
 
 h1,
@@ -33,18 +32,14 @@ h4 {
 
 p {
   margin: 0;
-  max-width: 62ch;
+  max-width: 64ch;
   text-wrap: pretty;
-}
-
-p + p {
-  margin-top: 0.9em;
 }
 
 a {
   color: inherit;
-  text-underline-offset: 0.18em;
-  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.06em;
 }
 
 img {
@@ -54,12 +49,12 @@ img {
 }
 
 ::selection {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--green);
+  color: var(--cream);
 }
 
 :focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid var(--gold);
   outline-offset: 3px;
 }
 
@@ -86,8 +81,8 @@ img {
   left: var(--margin);
   z-index: 100;
   padding: 0.75rem 1rem;
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--green);
+  color: var(--cream);
   text-decoration: none;
   transform: translateY(-200%);
 }
@@ -96,97 +91,164 @@ img {
   transform: none;
 }
 
-/* ---------- type roles ---------- */
-
-.display {
-  font-size: var(--step-display);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  font-weight: 400;
-}
-
-.head {
-  font-size: var(--step-head);
-  line-height: 1;
-  letter-spacing: -0.025em;
-}
-
-.lead {
-  font-size: var(--step-lead);
-  line-height: 1.3;
-  letter-spacing: -0.005em;
-  max-width: 36ch;
-}
-
-.small {
-  font-size: var(--step-small);
-  line-height: 1.45;
-}
-
-.muted {
-  color: var(--muted);
-}
-
 .nums {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* ---------- controls ---------- */
+/* <Picture> wraps an <img> in <picture>; the wrapper takes no box, so layouts style the img. */
+.picture {
+  display: contents;
+}
+
+/* ---------- the ornaments (docs/content_files/my_theme.png) ---------- */
+
+.star {
+  display: block;
+  flex: none;
+  color: var(--gold);
+}
+
+/* ◆ ——— ✵ ——— ◆ */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: min(100%, 30rem);
+  color: var(--gold);
+}
+
+.divider__line {
+  flex: 1;
+  height: 2px;
+  background: currentColor; /* taste-skill-ignore: the identity's divider rule */
+}
+
+.divider__end {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+
+.divider .star {
+  width: 2.1rem;
+  height: 2.1rem;
+  color: currentColor;
+}
+
+.hero__divider .star {
+  width: clamp(2.2rem, 1.6rem + 1.4vw, 3rem);
+  height: clamp(2.2rem, 1.6rem + 1.4vw, 3rem);
+}
+
+/* ---------- the green band (the identity's band: texture, gold rules inside both edges) ---------- */
+
+.band {
+  position: relative;
+  background: var(--green) url("/theme/band.webp") center / cover;
+  color: var(--cream);
+}
+
+.band::before,
+.band::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--gold-light); /* taste-skill-ignore: the identity's band rules */
+  pointer-events: none;
+}
+
+.band::before {
+  top: 6px;
+}
+
+.band::after {
+  bottom: 6px;
+}
+
+/* ---------- buttons ---------- */
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6em;
+  gap: 0.55em;
   min-height: 3.25rem;
   padding: 0 1.5rem;
-  border: 0;
+  border: 1px solid transparent; /* taste-skill-ignore: keeps filled and outlined buttons the same size */
   border-radius: var(--radius);
-  background: var(--accent);
-  color: var(--accent-ink);
   font: inherit;
-  font-weight: 500;
+  font-size: var(--step-body);
+  letter-spacing: 0.01em;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
   transition:
     transform var(--t-press) var(--ease-out),
     background-color var(--t-hover) ease,
-    color var(--t-hover) ease;
+    color var(--t-hover) ease,
+    border-color var(--t-hover) ease;
 }
 
 .button:active {
   transform: scale(0.97);
 }
 
-.button:focus-visible {
-  outline-color: var(--accent);
-}
-
 .button svg {
+  flex: none;
   transition: transform var(--t-ui) var(--ease-out);
 }
 
+/* gold on the band: the one primary action */
+.button--gold {
+  background: var(--gold-bright);
+  color: var(--green-deep);
+}
+
+/* cream outline on the band */
+.button--outline {
+  border-color: var(--gold-light); /* taste-skill-ignore: outlined secondary button on the band */
+  background: transparent;
+  color: var(--cream);
+}
+
+/* on paper */
+.button--green {
+  background: var(--green);
+  color: var(--cream);
+}
+
+.button--outline-ink {
+  border-color: var(--gold); /* taste-skill-ignore: outlined secondary button on paper */
+  background: transparent;
+  color: var(--gold-ink);
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .button:hover {
-    background: var(--ink);
-    color: var(--bg);
+  .button--gold:hover {
+    background: var(--gold-light);
+  }
+
+  .button--outline:hover {
+    background: rgb(239 228 210 / 0.1);
+    border-color: var(--cream);
+  }
+
+  .button--green:hover {
+    background: var(--green-deep);
+  }
+
+  .button--outline-ink:hover {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--cream);
   }
 
   .button:hover svg {
-    transform: translateY(2px);
-  }
-}
-
-.link {
-  text-decoration: underline;
-  text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
-  transition: text-decoration-color var(--t-hover) ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .link:hover {
-    text-decoration-color: currentColor;
+    transform: translateY(1px);
   }
 }
 
@@ -216,44 +278,127 @@ img {
   }
 }
 
-.tag {
-  display: inline-block;
-  padding: 0.3em 0.65em;
-  background: var(--surface);
-  color: var(--ink);
-  font-size: var(--step-small);
-  line-height: 1.3;
+.link {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
+  transition: text-decoration-color var(--t-hover) ease;
 }
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0;
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* text actions: an icon and an underlined label */
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: var(--tap);
   padding: 0;
-  list-style: none;
+  border: 0;
+  background: none;
+  color: var(--gold-ink);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out);
 }
 
-/* ---------- sections ---------- */
+.action > span:last-child {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.06em;
+  transition: text-decoration-color var(--t-hover) ease;
+}
+
+.action:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .action:hover > span:last-child {
+    text-decoration-color: currentColor;
+  }
+}
+
+.action--inline {
+  min-height: 0;
+  vertical-align: baseline;
+}
+
+/* the copy button's icon turns into a check */
+.action__icon {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.action__icon svg {
+  position: absolute;
+  inset: 0;
+  transition:
+    transform var(--t-ui) var(--ease-out),
+    opacity var(--t-hover) ease;
+}
+
+.action__icon-b,
+[data-copied="true"] .action__icon-a {
+  opacity: 0;
+  transform: scale(0.4) rotate(-45deg);
+}
+
+[data-copied="true"] .action__icon-b {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- sections: a centred column under a centred ornament heading ---------- */
 
 .section {
+  width: min(100% - 2 * var(--margin), var(--column));
+  margin-inline: auto;
   padding-block: calc(var(--section) / 2);
 }
 
+.section--wide {
+  width: min(100% - 2 * var(--margin), 64rem);
+}
+
 .section-head {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  text-align: center;
+}
+
+.section-head__title {
+  color: var(--gold);
   font-size: var(--step-head);
-  line-height: 1;
-  letter-spacing: -0.025em;
-  margin-bottom: clamp(1.5rem, 1rem + 2vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
-.next-link {
-  display: inline-block;
-  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
-  font-size: var(--step-lead);
+.section-head .divider {
+  width: min(70%, 18rem);
 }
 
-/* <Picture> wraps an <img> in <picture>; the wrapper takes no box, so layouts style the img. */
-.picture {
-  display: contents;
+.section-head--on-band .section-head__title,
+.section-head--on-band .divider {
+  color: var(--gold-light);
+}
+
+.band--section {
+  padding-block: calc(var(--section) / 2 + 0.5rem);
+}
+
+.band__inner {
+  width: min(100% - 2 * var(--margin), var(--column));
+  margin-inline: auto;
 }

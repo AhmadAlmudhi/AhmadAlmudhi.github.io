@@ -12,17 +12,14 @@ import { useEffect } from "react";
  * motion, or a missed observer: the content is simply there.
  */
 const GROUPS = [
-  ".stats__title, .tile",
-  ".section-head, .skills__word, .projects__title",
-  ".lens",
+  ".section-head",
   ".role",
-  ".projects__row",
   ".card",
-  ".bar",
-  ".letter > *, .education .mobile-picture",
+  ".skill-group",
+  ".school",
   ".cert",
-  ".contact__lead, .contact__actions li, .contact__email",
-  ".footer__name",
+  ".contact__lead, .contact__email, .contact__actions li",
+  ".footer__sign",
 ];
 
 export function Reveals() {

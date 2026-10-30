@@ -12,7 +12,7 @@ export const education: Education[] = [
   },
   {
     id: "ksu",
-    degree: "Bachelor's degree, Software Engineering",
+    degree: "Software Engineering, Bachelor's degree",
     institution: "King Saud University",
     start: "2017-09",
     end: "2021-01",

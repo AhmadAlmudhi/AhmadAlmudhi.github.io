@@ -1,36 +1,38 @@
+import { MapPin } from "lucide-react";
 import { profile } from "@/content";
 import { Email } from "@/components/ui/Email";
-import { FitText } from "@/components/ui/FitText";
+import { SectionHead } from "@/components/ui/Ornament";
 import { ContactActions } from "@/components/ui/ContactActions";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/BrandIcons";
 
-// Blueprint "The email as display type": one screen in the inverse colours, the address fitted from
-// margin to margin. CON-1..5: email, copy, save contact, QR, resume. No phone on the site.
+// CON-1..5 on the identity's green band: one open invitation, the address set large, then the ways
+// to keep it (copy, contact card, QR code, the PDF). No phone on the site; it lives in the PDF.
 export function Contact() {
   return (
-    <section id="contact" className="contact" aria-labelledby="contact-title">
-      <div className="contact__top">
-        <h2 id="contact-title" className="contact__lead">
-          Write to me about a role, a product or a Flutter app.
-        </h2>
-        <ContactActions />
-      </div>
-      <p className="contact__email">
-        <FitText below="63.99em">
+    <section id="contact" className="band band--section contact" aria-labelledby="contact-title">
+      <div className="band__inner">
+        <SectionHead id="contact-title" title="Contact" className="section-head--on-band" />
+        <p className="contact__lead">Feel free to contact me at any time.</p>
+        <p className="contact__email">
           <Email subject="Hello Ahmad" />
-        </FitText>
-      </p>
-      <div className="contact__foot">
-        <p>{profile.location}</p>
+        </p>
+        <ContactActions />
         <ul className="contact__links">
           <li>
-            <a className="link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
-              LinkedIn
+            <a className="contact__link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
+              <LinkedInIcon />
+              <span>LinkedIn</span>
             </a>
           </li>
           <li>
-            <a className="link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
-              GitHub
+            <a className="contact__link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
+              <GitHubIcon />
+              <span>GitHub</span>
             </a>
+          </li>
+          <li className="contact__place">
+            <MapPin size={18} strokeWidth={1.75} aria-hidden="true" />
+            <span>{profile.location}</span>
           </li>
         </ul>
       </div>

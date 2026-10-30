@@ -1,48 +1,26 @@
-import { certifications, experience, skillGroups } from "@/content";
-import { NextLink } from "@/components/nav/NextLink";
+import { skillGroups } from "@/content";
+import { SectionHead } from "@/components/ui/Ornament";
 
-/** SKL-4: where each skill was used, from the roles' skill tags (and the Scrum certificates). */
-function usedIn(name: string) {
-  const roles = experience.filter((j) => j.skills.includes(name)).map((j) => j.company);
-  const certs = name === "Agile & Scrum" ? certifications.map((c) => c.shortName ?? c.name) : [];
-  return [...roles, ...certs];
-}
-
-// Blueprint "Giant word, filled bar rows": the word fills the reading column, then one filled bar
-// per category. Each bar names its skills; opening it says where each one was used (SKL-1/2/4).
+// SKL-1/2: the CV's two groups on the identity's green band, each skill set as a word in a grid,
+// marked with the dividers' gold diamond. No levels, no percentages, no "where used".
 export function Skills() {
   return (
-    <section id="skills" className="section skills" aria-labelledby="skills-title" data-stage="skills">
-      <h2 id="skills-title" className="skills__word">
-        Skills
-      </h2>
-      <div className="bars">
-        {skillGroups.map((g, i) => (
-          <details key={g.id} className="bar" data-side={g.side} open={i === 0}>
-            <summary className="bar__summary">
-              <span className="bar__text">
-                <span className="bar__name">{g.category}</span>
-                <span className="bar__skills">{g.skills.map((s) => s.name).join(", ")}</span>
-              </span>
-              <span className="bar__toggle" aria-hidden="true">
-                +
-              </span>
-            </summary>
-            <ul className="bar__panel">
-              {g.skills.map((s) => {
-                const where = usedIn(s.name);
-                return (
-                  <li key={s.id} className="bar__item">
-                    <span>{s.name}</span>
-                    <span className="bar__where">{where.length ? where.join(", ") : ""}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </details>
-        ))}
+    <section id="skills" className="band band--section" aria-labelledby="skills-title">
+      <div className="band__inner">
+        <SectionHead id="skills-title" title="Skills" className="section-head--on-band" />
+        <div className="skill-groups">
+          {skillGroups.map((g) => (
+            <div key={g.id} className="skill-group">
+              <h3 className="skill-group__title">{g.category}</h3>
+              <ul className="skill-group__list">
+                {g.skills.map((s) => (
+                  <li key={s.id}>{s.name}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
-      <NextLink after="skills" />
     </section>
   );
 }

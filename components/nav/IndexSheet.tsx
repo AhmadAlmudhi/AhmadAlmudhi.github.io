@@ -50,6 +50,7 @@ export function IndexSheet() {
                   goTo(s.id);
                 }}
               >
+                <span className="sheet__mark" aria-hidden="true" />
                 {s.label}
                 {s.id === active && <span className="sheet__here">You are here</span>}
               </button>

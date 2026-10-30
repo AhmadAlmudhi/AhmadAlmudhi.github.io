@@ -1,4 +1,3 @@
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const MONTHS_LONG = [
   "January",
   "February",
@@ -19,10 +18,15 @@ function parts(value: string) {
   return { y, m, d };
 }
 
-/** "2025-02" → "Feb 2025" */
+/** "2025-02" → "02/2025", the way the CV writes dates. */
 export function formatMonth(value: string) {
   const { y, m } = parts(value);
-  return `${MONTHS[m - 1]} ${y}`;
+  return `${String(m).padStart(2, "0")}/${y}`;
+}
+
+/** "02/2025 – Present" */
+export function formatRange(start: string, end?: string) {
+  return `${formatMonth(start)} – ${end ? formatMonth(end) : "Present"}`;
 }
 
 /** "2026-08-11" → "August 11, 2026"; "2026-08" → "August 2026" */
@@ -31,29 +35,24 @@ export function formatDay(value: string) {
   return d ? `${MONTHS_LONG[m - 1]} ${d}, ${y}` : `${MONTHS_LONG[m - 1]} ${y}`;
 }
 
-/** "Feb 2025 – Present" */
-export function formatRange(start: string, end?: string) {
-  return `${formatMonth(start)} – ${end ? formatMonth(end) : "Present"}`;
-}
-
 /**
- * Inclusive month count, the way resumes and LinkedIn count it: Feb 2025 to Oct 2026 is 21 months
- * ("1 yr 9 mos"). An open-ended range runs to the month of `today`.
+ * EXP-1: the length of a finished role, end minus start: May 2021 to May 2025 is exactly
+ * four years. A current role shows no length.
  */
-export function durationMonths(start: string, end: string | undefined, today: Date) {
+export function durationMonths(start: string, end: string) {
   const s = parts(start);
-  const e = end ? parts(end) : { y: today.getFullYear(), m: today.getMonth() + 1 };
-  return e.y * 12 + e.m - (s.y * 12 + s.m) + 1;
+  const e = parts(end);
+  return e.y * 12 + e.m - (s.y * 12 + s.m);
 }
 
-/** 21 → "1 yr 9 mos", 7 → "7 mos", 49 → "4 yrs 1 mo" */
+/** 48 → "4 years", 6 → "6 months", 14 → "1 year 2 months" */
 export function formatDuration(months: number) {
   const y = Math.floor(months / 12);
   const m = months % 12;
   const out: string[] = [];
-  if (y) out.push(`${y} ${y === 1 ? "yr" : "yrs"}`);
-  if (m) out.push(`${m} ${m === 1 ? "mo" : "mos"}`);
-  return out.join(" ") || "1 mo";
+  if (y) out.push(`${y} ${y === 1 ? "year" : "years"}`);
+  if (m) out.push(`${m} ${m === 1 ? "month" : "months"}`);
+  return out.join(" ") || "1 month";
 }
 
 /** ISO date for <time dateTime>. */

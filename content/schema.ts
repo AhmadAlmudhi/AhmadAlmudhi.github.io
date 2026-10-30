@@ -19,18 +19,12 @@ export const sectionIds = [
 export const SectionId = z.enum(sectionIds);
 export type SectionId = z.infer<typeof SectionId>;
 
-/** The two halves of the work: the live "read as" lens re-weights content by this. */
-export const Side = z.enum(["engineering", "product"]);
-export type Side = z.infer<typeof Side>;
-
 export const Profile = z.object({
   fullName: z.string(),
   firstName: z.string(),
   lastName: z.string(),
   initials: z.string().length(2),
   title: z.string(),
-  /** The hero's supporting sentence after "<title> in <city>." */
-  tagline: z.string(),
   summary: z.string(),
   location: z.string(),
   /** Split so the address never appears whole in the static HTML (PRD §10.4). */
@@ -54,9 +48,6 @@ export const Profile = z.object({
 });
 export type Profile = z.infer<typeof Profile>;
 
-export const Highlight = z.object({ text: z.string(), side: Side });
-export type Highlight = z.infer<typeof Highlight>;
-
 export const Experience = z.object({
   id: z.string(),
   company: z.string(),
@@ -65,7 +56,7 @@ export const Experience = z.object({
   location: z.string().optional(),
   start: yearMonth,
   end: yearMonth.optional(),
-  highlights: z.array(Highlight).min(1),
+  highlights: z.array(z.string()).min(1),
   skills: z.array(z.string()),
   relatedProjects: z.array(z.string()).optional(),
 });
@@ -126,7 +117,6 @@ export const Certification = z.object({
     tone: z.string().optional(),
   }),
   featured: z.boolean().optional(),
-  side: Side,
 });
 export type Certification = z.infer<typeof Certification>;
 
@@ -155,23 +145,6 @@ export type Skill = z.infer<typeof Skill>;
 export const SkillGroup = z.object({
   id: z.string(),
   category: z.string(),
-  side: Side,
   skills: z.array(Skill).min(1),
 });
 export type SkillGroup = z.infer<typeof SkillGroup>;
-
-/** A found picture of Ahmad's world, with its credit (content/pictures.ts). */
-export const Picture = z.object({
-  src: path,
-  width: z.number().int(),
-  height: z.number().int(),
-  alt: z.string(),
-  title: z.string(),
-  creator: z.string(),
-  licence: z.string(),
-  licenceUrl: z.url(),
-  page: z.url(),
-  /** Average colour (scripts/optimize-images.mjs --tones), the ground while the picture loads. */
-  tone: z.string().regex(/^#[0-9a-f]{6}$/),
-});
-export type Picture = z.infer<typeof Picture>;
