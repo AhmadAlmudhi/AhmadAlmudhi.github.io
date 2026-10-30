@@ -1298,3 +1298,36 @@ html[data-lens="product"] [data-side="engineering"] {
     height: 100svh;
   }
 }
+
+/* ---------- 404 (GLB-2) ---------- */
+
+.not-found {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 1.25rem;
+  min-height: calc(100svh - var(--dock-h));
+  padding: calc(var(--header-h) + var(--margin)) var(--margin) var(--section);
+}
+
+.not-found__code {
+  margin-left: -0.04em;
+  font-size: clamp(6rem, 2rem + 18vw, 18rem);
+  line-height: 0.85;
+}
+
+.not-found__title {
+  font-size: var(--step-head);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.not-found__text {
+  max-width: 46ch;
+}
+
+.qr__wait {
+  aspect-ratio: 1;
+  max-width: 22rem;
+  margin-inline: auto;
+}

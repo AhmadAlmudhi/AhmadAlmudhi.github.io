@@ -10,17 +10,21 @@ export const emailAddress = () => `${profile.email.user}@${profile.email.domain}
  * with the "@" drawn by CSS; the browser joins them into a real mailto link after hydration.
  * The halves stay in their own spans, so a display setting can break the line after the "@".
  */
-export function Email({ className = "", subject }: { className?: string; subject?: string }) {
+export function Email({ className = "", subject, label }: { className?: string; subject?: string; label?: string }) {
   const { user, domain } = profile.email;
   const ready = useHydrated();
   const href = `mailto:${emailAddress()}${subject ? `?subject=${encodeURIComponent(subject)}` : ""}`;
   return (
     <a className={`email ${className}`} href={ready ? href : "#contact"} aria-label={ready ? emailAddress() : undefined}>
-      <span className="email__user">
+      {label ?? (
+        <>
+          <span className="email__user">
         {user}
-        {ready ? "@" : <span className="email__at" />}
-      </span>
-      <span className="email__domain">{domain}</span>
+            {ready ? "@" : <span className="email__at" />}
+          </span>
+          <span className="email__domain">{domain}</span>
+        </>
+      )}
     </a>
   );
 }

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { certifications, experience, profile, projects, type SectionId } from "@/content";
+import { validateContent } from "@/content/validate";
 import { Hero } from "@/components/sections/Hero";
 import { Stats } from "@/components/sections/Stats";
 import { pictures } from "@/content/pictures";
@@ -14,6 +15,9 @@ import { Stage, type StageLayer } from "@/components/stage/Stage";
 import { StageCard } from "@/components/stage/StageCard";
 import { PhoneFrame } from "@/components/ui/PhoneFrame";
 import { ProjectShot } from "@/components/ui/ProjectShot";
+import { Picture } from "@/components/ui/Picture";
+
+validateContent(); // PRD §11: bad content fails the build
 
 // PRJ-12: the build lists every placeholder project still on the site. None may remain at launch.
 const placeholders = projects.filter((p) => p.placeholder).map((p) => p.slug);
@@ -87,15 +91,7 @@ function stageLayers(): StageLayer[] {
     key: "education",
     content: (
       <figure className="stage-figure stage-figure--photo">
-        {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
-        <img
-          src={pictures.ksu.src}
-          width={pictures.ksu.width}
-          height={pictures.ksu.height}
-          alt={pictures.ksu.alt}
-          loading="lazy"
-          decoding="async"
-        />
+        <Picture {...pictures.ksu} sizes="50vw" />
       </figure>
     ),
   });
@@ -105,16 +101,7 @@ function stageLayers(): StageLayer[] {
       key: `cert-${cert.id}`,
       content: (
         <figure className="stage-figure stage-figure--certificate">
-          {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
-          <img
-            data-stage-cert={cert.id}
-            src={cert.image.src}
-            width={cert.image.width}
-            height={cert.image.height}
-            alt={cert.image.alt}
-            loading="lazy"
-            decoding="async"
-          />
+          <Picture {...cert.image} sizes="44rem" data-stage-cert={cert.id} />
           <figcaption className="stage-caption">
             {cert.name} ({cert.shortName}), {cert.issuer}
           </figcaption>

@@ -1,7 +1,6 @@
-import { z } from "zod";
-import { Education } from "./schema";
+import type { Education } from "./schema";
 
-export const education = z.array(Education).parse([
+export const education: Education[] = [
   {
     id: "tuwaiq",
     degree: "Flutter Development Bootcamp",
@@ -18,4 +17,4 @@ export const education = z.array(Education).parse([
     start: "2017-09",
     end: "2021-01",
   },
-]);
+];

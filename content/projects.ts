@@ -1,11 +1,10 @@
-import { z } from "zod";
-import { Project } from "./schema";
+import type { Project } from "./schema";
 
 // PLACEHOLDERS (PRD PRJ-12). Ahmad replaces these with the real projects and screenshots after
 // everything else is finished. Until then each entry uses only facts already stated in the
 // Experience section, has `placeholder: true`, and its screenshots have no `src`, so the site draws
 // a designed title card at the real aspect ratio instead. None may remain at launch.
-export const projects = z.array(Project).parse([
+export const projects: Project[] = [
   {
     slug: "muvi-booking-app",
     title: "Muvi booking app",
@@ -78,4 +77,4 @@ export const projects = z.array(Project).parse([
     skills: ["Flutter"],
     screenshots: [{ alt: "Customer feedback platform, screenshot to come" }],
   },
-]);
+];

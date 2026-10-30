@@ -48,6 +48,8 @@ export const Profile = z.object({
     .min(2)
     .max(4),
   sectionOrder: z.array(SectionId).length(sectionIds.length),
+  /** GLB-5: privacy-friendly analytics. Omitted = none. `code` is the GoatCounter site name. */
+  analytics: z.object({ provider: z.literal("goatcounter"), code: z.string().regex(/^[a-z0-9-]+$/) }).optional(),
   lastUpdated: yearMonth,
 });
 export type Profile = z.infer<typeof Profile>;
@@ -116,7 +118,13 @@ export const Certification = z.object({
   credentialId: z.string().optional(),
   verifyUrl: url.optional(),
   verifyNote: z.string().optional(),
-  image: z.object({ src: path, width: z.number().int(), height: z.number().int(), alt: z.string() }),
+  image: z.object({
+    src: path,
+    width: z.number().int(),
+    height: z.number().int(),
+    alt: z.string(),
+    tone: z.string().optional(),
+  }),
   featured: z.boolean().optional(),
   side: Side,
 });
@@ -151,3 +159,19 @@ export const SkillGroup = z.object({
   skills: z.array(Skill).min(1),
 });
 export type SkillGroup = z.infer<typeof SkillGroup>;
+
+/** A found picture of Ahmad's world, with its credit (content/pictures.ts). */
+export const Picture = z.object({
+  src: path,
+  width: z.number().int(),
+  height: z.number().int(),
+  alt: z.string(),
+  title: z.string(),
+  creator: z.string(),
+  licence: z.string(),
+  licenceUrl: z.url(),
+  page: z.url(),
+  /** Average colour (scripts/optimize-images.mjs --tones), the ground while the picture loads. */
+  tone: z.string().regex(/^#[0-9a-f]{6}$/),
+});
+export type Picture = z.infer<typeof Picture>;

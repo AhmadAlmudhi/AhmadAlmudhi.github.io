@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ArrowDownToLine, QrCode, UserPlus, X } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
 import { profile } from "@/content";
 import { CopyButton } from "./CopyButton";
 import { emailAddress } from "./Email";
 import { toast } from "./Toast";
 import { useHydrated } from "@/lib/client";
+
+// The QR library loads only when the sheet first opens, keeping it out of the initial JS budget.
+const QRCodeSVG = lazy(() => import("qrcode.react").then((m) => ({ default: m.QRCodeSVG })));
 
 /** CON-4: a vCard built in the browser, so the email never sits in a static file. No phone. */
 function saveContact() {
@@ -66,15 +68,19 @@ function QrSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
           </button>
         </div>
         <div className="qr">
-          <QRCodeSVG
+          {open && (
+            <Suspense fallback={<div className="qr__wait" aria-hidden="true" />}>
+              <QRCodeSVG
             value={profile.siteUrl}
             size={512}
             level="M"
             marginSize={2}
             bgColor="#ffffff"
             fgColor="#050f16"
-            title={`QR code for ${profile.siteUrl}`}
-          />
+                title={`QR code for ${profile.siteUrl}`}
+              />
+            </Suspense>
+          )}
         </div>
         <p className="qr__url">{profile.siteUrl.replace("https://", "")}</p>
         <div className="sheet__actions">

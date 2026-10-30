@@ -1,11 +1,10 @@
-import { z } from "zod";
-import { Certification } from "./schema";
+import type { Certification } from "./schema";
 
 // Both never expire. Scrum.org's verify page asks for the holder's email before it shows the
 // name and date, so the site shows `verifyNote` and a copy-email button beside "Verify" (CRT-3).
 const verifyNote = "Scrum.org asks for my email before it shows my name and the date.";
 
-export const certifications = z.array(Certification).parse([
+export const certifications: Certification[] = [
   {
     id: "pspo-i",
     name: "Professional Scrum Product Owner I",
@@ -19,6 +18,7 @@ export const certifications = z.array(Certification).parse([
       src: "/certificates/pspo-i.webp",
       width: 2248,
       height: 1711,
+      tone: "#eaede5",
       alt: "Scrum.org certificate: Professional Scrum Product Owner I, awarded to Ahmad Almudhi on August 11, 2026",
     },
     featured: true,
@@ -37,9 +37,10 @@ export const certifications = z.array(Certification).parse([
       src: "/certificates/psm-i.webp",
       width: 2249,
       height: 1711,
+      tone: "#e5ebee",
       alt: "Scrum.org certificate: Professional Scrum Master I, awarded to Ahmad Almudhi on August 28, 2026",
     },
     featured: true,
     side: "product",
   },
-]);
+];

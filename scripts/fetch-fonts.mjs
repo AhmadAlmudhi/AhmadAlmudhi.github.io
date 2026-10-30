@@ -11,7 +11,13 @@ import { join } from "node:path";
 
 const ZIP_URL = "https://api.fontshare.com/v2/fonts/download/clash-grotesk";
 const OUT_DIR = join(import.meta.dirname, "..", "app", "fonts");
-const FILES = ["ClashGrotesk-Regular.woff2", "ClashGrotesk-Medium.woff2"];
+// woff2 for the page; ttf for next/og, which renders the link-preview image and the icons at build.
+const FILES = [
+  "ClashGrotesk-Regular.woff2",
+  "ClashGrotesk-Medium.woff2",
+  "ClashGrotesk-Regular.ttf",
+  "ClashGrotesk-Medium.ttf",
+];
 
 if (FILES.every((file) => existsSync(join(OUT_DIR, file)))) process.exit(0);
 

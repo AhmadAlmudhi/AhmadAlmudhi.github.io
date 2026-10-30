@@ -1,6 +1,6 @@
-import { Profile } from "./schema";
+import type { Profile } from "./schema";
 
-export const profile = Profile.parse({
+export const profile: Profile = {
   fullName: "Ahmad Almudhi",
   firstName: "Ahmad",
   lastName: "Almudhi",
@@ -24,5 +24,6 @@ export const profile = Profile.parse({
     { value: "12", label: "Collections shipped" },
   ],
   sectionOrder: ["summary", "experience", "projects", "skills", "education", "certifications", "contact"],
+  // analytics: { provider: "goatcounter", code: "<your-site>" },  // GLB-5: off until a provider is chosen
   lastUpdated: "2026-10-30",
-});
+};

@@ -35,15 +35,20 @@ to match. Cite PRD requirement IDs in commit messages and PR descriptions.
 - **Fonts:** Clash Grotesk's licence (ITF FFL) allows self-hosting but forbids distribution through a
   repository, so `app/fonts/` is gitignored and `scripts/fetch-fonts.mjs` downloads the official files
   from Fontshare (`predev`/`prebuild` hooks; CI caches them). Never commit font files.
-- Installed: `zod`, `lucide-react`, `qrcode.react`, `@playwright/test` (dev). Planned (PRD §13.1):
+- Installed: `zod` (build-time only), `lucide-react`, `qrcode.react` (lazy), and dev: `@playwright/test`,
   `workbox-cli`, `@lhci/cli`. Overlays are native `<dialog>` (no Radix); the lightbox's swipe, pinch and
   double-tap zoom are plain pointer events; the card → detail morph uses `document.startViewTransition`
   (`components/overlays/useOpenProject.ts`). `sharp` comes with Next.
 - Tests: `npm test` runs Playwright (`tests/`) against the built `out/` served by `scripts/serve.mjs`,
   driving the installed Chrome (`channel: "chrome"`), desktop and phone. Build first.
   Initial JS budget is ≤ 150 KB gzipped, so check before adding anything else.
-- CI (`.github/workflows/deploy.yml`): every PR runs lint, typecheck, the design lint, the build and the
-  Playwright tests; a push to `main` also deploys `out/` to Pages. Wait for green checks before merging.
+- Build pipeline: `prebuild` fetches fonts and writes responsive AVIF/WebP into `public/opt/`
+  (`scripts/optimize-images.mjs`, gitignored); `postbuild` writes the Workbox service worker into `out/`
+  (`workbox-config.cjs`).
+- CI (`.github/workflows/deploy.yml`): every PR runs lint, typecheck, the design lint, the build, the
+  Playwright tests, the initial-JS budget (`scripts/check-js-budget.mjs`, 150 KB gz, currently ~149 KB:
+  think twice before adding client code) and Lighthouse (`lighthouserc.cjs`: a11y and best practices 1,
+  performance ≥ 0.9, CLS < 0.05); a push to `main` also deploys `out/` to Pages. Wait for green checks.
 
 ## Static export: hard constraints
 
@@ -56,7 +61,15 @@ to match. Cite PRD requirement IDs in commit messages and PR descriptions.
   ISR, cookies, the default image loader. Route handlers need `export const dynamic = 'force-static'`.
 - Client components are prerendered, so touch `window`/`localStorage`/`navigator` only inside effects.
 - Deep links are hash-based (`/#projects`, `/#projects/<slug>`), so there are no dynamic routes.
-- No response headers on Pages: CSP and Referrer-Policy go in `<meta>` tags. `<meta name="robots"
+- Content files are plain typed data; `content/validate.ts` parses them with Zod from `app/page.tsx` at
+  build. Never import Zod (or call `.parse`) from anything a client component imports.
+- Brand images are route handlers in folders named `*.png` with `dynamic = "force-static"`
+  (`app/og.png/`, icons; renderer `lib/brand.tsx`), so they export as real `.png` files — metadata
+  image conventions (`opengraph-image.tsx`) export extension-less and Pages would serve them as octet-stream.
+- Overlay code loads when the page is idle (`components/overlays/Overlays.tsx`); the QR library loads
+  when its sheet opens.
+- No response headers on Pages: CSP and Referrer-Policy go in `<meta>` tags (`app/layout.tsx`, production
+  only; the CSP opens to GoatCounter only if `profile.analytics` is set). `<meta name="robots"
   content="noindex, nofollow">` on every page. `public/robots.txt` disallows only `/resume/`; never block
   the pages (link previews need them). No sitemap, no JSON-LD.
 - Images are pre-optimized by `scripts/optimize-images.mjs` (sharp → AVIF/WebP widths + blur placeholders).
@@ -89,6 +102,10 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
   side rail (≥ 1024px) are both Must.
 
 ## Content rules
+
+- Analytics (GLB-5) is built but off: set `analytics: { provider: "goatcounter", code: "<site>" }` in
+  `content/profile.ts` once Ahmad has a GoatCounter site. It counts visits, resume downloads, outbound
+  links, section views and `?ref=<company>` (GLB-6).
 
 - Section order comes from one `sectionOrder` array: Hero, Experience, Projects, Skills, Education,
   Certifications, Contact.

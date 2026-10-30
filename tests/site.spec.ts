@@ -129,3 +129,38 @@ test.describe("motion (PRD §8)", () => {
     await expect(heading).toHaveCSS("opacity", "1");
   });
 });
+
+test.describe("hardening (PRD §10, GLB-2/4)", () => {
+  test("unknown paths get the designed 404", async ({ page }) => {
+    const res = await page.goto("/no-such-page/");
+    expect(res?.status()).toBe(404);
+    await expect(page.getByRole("heading", { name: "This page is not on the site." })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Back to the resume" })).toHaveAttribute("href", "/");
+  });
+
+  test("link previews and the app manifest are real files with the right types", async ({ request, page }) => {
+    const og = await request.get("/og.png");
+    expect(og.headers()["content-type"]).toBe("image/png");
+    const manifest = await (await request.get("/manifest.webmanifest")).json();
+    expect(manifest.icons.length).toBeGreaterThanOrEqual(3);
+    await page.goto("/");
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /\/og\.png$/);
+    await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveAttribute("content", /default-src 'self'/);
+  });
+
+  test("after one visit the site and the resume work offline", async ({ page, context }, info) => {
+    test.skip(info.project.name !== "desktop", "one browser is enough");
+    await page.goto("/");
+    await page.evaluate(async () => {
+      const reg = await navigator.serviceWorker.ready;
+      if (!navigator.serviceWorker.controller) await new Promise((r) => navigator.serviceWorker.addEventListener("controllerchange", r, { once: true }));
+      return reg.active?.state;
+    });
+    await context.setOffline(true);
+    await page.reload();
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    const pdf = await page.evaluate(async () => (await fetch("/resume/Ahmad-Almudhi-Resume.pdf")).status);
+    expect(pdf).toBe(200);
+    await context.setOffline(false);
+  });
+});
