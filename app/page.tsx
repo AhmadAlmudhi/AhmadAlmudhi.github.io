@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
-import { certifications, education, experience, profile, projects, type SectionId } from "@/content";
+import { certifications, experience, profile, projects, type SectionId } from "@/content";
 import { Hero } from "@/components/sections/Hero";
+import { Stats } from "@/components/sections/Stats";
+import { pictures } from "@/content/pictures";
 import { Experience } from "@/components/sections/Experience";
 import { Projects } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
@@ -73,14 +75,20 @@ function stageLayers(): StageLayer[] {
     content: <StageCard figure="Product + engineering" caption="Two sets of skills, one person." />,
   });
 
-  const bootcamp = education.find((e) => e.note);
   layers.push({
     key: "education",
     content: (
-      <StageCard
-        figure={bootcamp?.note ?? education[0].institution}
-        caption={bootcamp ? `${bootcamp.degree}, ${bootcamp.institution}` : education[0].degree}
-      />
+      <figure className="stage-figure stage-figure--photo">
+        {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
+        <img
+          src={pictures.ksu.src}
+          width={pictures.ksu.width}
+          height={pictures.ksu.height}
+          alt={pictures.ksu.alt}
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
     ),
   });
 
@@ -113,7 +121,9 @@ export default function Page() {
   return (
     <>
       <main id="main">
-        <Hero />
+        <Hero>
+          <Stats />
+        </Hero>
         <div className="split">
           <div className="read" id="read">
             {middle.map((id) => (

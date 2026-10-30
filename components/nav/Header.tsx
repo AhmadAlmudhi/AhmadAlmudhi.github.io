@@ -12,6 +12,7 @@ export function Header() {
     <header className="header">
       <div className="header__inner">
         <a
+          aria-label={`${profile.fullName}, back to the top`}
           className="wordmark"
           href="#summary"
           onClick={(e) => {
@@ -23,7 +24,10 @@ export function Header() {
             });
           }}
         >
-          {profile.fullName}
+          <span className="monogram" aria-hidden="true">
+            {profile.initials}
+          </span>
+          <span className="wordmark__name">{profile.fullName}</span>
         </a>
         <nav className="header__actions" aria-label="Site">
           <button type="button" className="header__link header__sections" onClick={() => setIndexOpen(true)}>

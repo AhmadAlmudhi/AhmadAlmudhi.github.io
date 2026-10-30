@@ -15,7 +15,7 @@ Content for the interactive resume site.
 | Projects | ⏳ Placeholders on the site until you add them (after everything else is finished) | ⏳ Placeholder screenshots until you add the real ones |
 | Skills | ✅ Done (2 groups, 16 skills) | — |
 | Education | ✅ Done (2 entries) | — |
-| Certifications | ✅ Done (2, with verification links) | ✅ `public/certificates/pspo-i.png`, `psm-i.png` (from the PDFs in `docs/content_files/`) |
+| Certifications | ✅ Done (2, with verification links) | ✅ `public/certificates/pspo-i.webp`, `psm-i.webp` (from the PDFs in `docs/content_files/`) |
 | Resume PDF | — | ✅ `public/resume/Ahmad-Almudhi-Resume.pdf` (from `docs/content_files/Ahmad_Almudhi-Resume.pdf`) |
 | LinkedIn link | ✅ Done | — |
 
@@ -42,6 +42,17 @@ Content for the interactive resume site.
 | 2 → 1 | Native apps replaced by one Flutter app |
 | 23 | Branches monitored by my dashboard |
 | 12 | Collections shipped |
+
+### Site copy written from these facts (confirm or change)
+The design needed a few lines of copy. Each one restates facts above; nothing new is claimed.
+
+| Where | Copy |
+|---|---|
+| Hero, under the name | Software Engineer in Riyadh. I build Flutter apps and own their backlog. (`profile.tagline`) |
+| Numbers heading | In numbers |
+| Experience, the "read as" control | Read my experience as: Both / Engineer / Product owner. Its sentence is computed from the highlights (five engineering, five product). Which highlight counts as which is set by `side` in `content/experience.ts`. |
+| Education | A short first-person letter in `components/sections/Education.tsx`: the degree and dates, the 200-hour Tuwaiq bootcamp, Flutter as the main tool since, the backlog work at Muvi and the August 2026 certificates. |
+| Contact | Write to me about a role, a product or a Flutter app. |
 
 ---
 
@@ -124,7 +135,7 @@ Paws, Battuta, baloot-calculator and tv-shows get no placeholder: there are no f
 
 They never expire. Scrum.org's verify page asks for your email before it shows your name and date, so the site shows a hint and a copy-email button next to "Verify".
 
-Images: `public/certificates/pspo-i.png` and `public/certificates/psm-i.png`, rendered from `docs/content_files/Professional Scrum Product Owner I.pdf` and `Professional Scrum Master I.pdf` and cropped to the certificate edges.
+Images: `public/certificates/pspo-i.webp` and `public/certificates/psm-i.webp`, rendered from `docs/content_files/Professional Scrum Product Owner I.pdf` and `Professional Scrum Master I.pdf` and cropped to the certificate edges.
 
 ---
 

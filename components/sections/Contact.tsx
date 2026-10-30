@@ -1,35 +1,39 @@
 import { profile } from "@/content";
 import { Email } from "@/components/ui/Email";
+import { FitText } from "@/components/ui/FitText";
+import { ContactActions } from "@/components/ui/ContactActions";
 
-// CON-1/3: email, LinkedIn, GitHub and the resume PDF. No phone on the site (it lives in the PDF).
+// Blueprint "The email as display type": one screen in the inverse colours, the address fitted from
+// margin to margin. CON-1..5: email, copy, save contact, QR, resume. No phone on the site.
 export function Contact() {
   return (
     <section id="contact" className="contact" aria-labelledby="contact-title">
-      <h2 id="contact-title" className="section-head">
-        Contact
-      </h2>
-      <p className="lead">Write to me about a role, a product or a Flutter app.</p>
+      <div className="contact__top">
+        <h2 id="contact-title" className="contact__lead">
+          Write to me about a role, a product or a Flutter app.
+        </h2>
+        <ContactActions />
+      </div>
       <p className="contact__email">
-        <Email subject="Hello Ahmad" />
+        <FitText below="63.99em">
+          <Email subject="Hello Ahmad" />
+        </FitText>
       </p>
-      <ul className="contact__links">
-        <li>
-          <a className="link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
-            LinkedIn
-          </a>
-        </li>
-        <li>
-          <a className="link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
-        </li>
-        <li>
-          <a className="link" href={profile.links.resumePdf} download={profile.links.resumePdf.split("/").pop()}>
-            Resume (PDF)
-          </a>
-        </li>
-      </ul>
-      <p className="small">{profile.location}</p>
+      <div className="contact__foot">
+        <p>{profile.location}</p>
+        <ul className="contact__links">
+          <li>
+            <a className="link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a className="link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </div>
     </section>
   );
 }

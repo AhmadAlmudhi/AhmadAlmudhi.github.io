@@ -5,6 +5,7 @@ import { NavProvider } from "@/lib/nav";
 import { Header } from "@/components/nav/Header";
 import { Dock } from "@/components/nav/Dock";
 import { IndexSheet } from "@/components/nav/IndexSheet";
+import { Toaster } from "@/components/ui/Toast";
 import "./globals.css";
 
 // Clash Grotesk, self-hosted (fetched by scripts/fetch-fonts.mjs; see .gitignore for why).
@@ -68,6 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <Dock />
           <IndexSheet />
+          <Toaster />
         </NavProvider>
       </body>
     </html>

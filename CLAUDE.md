@@ -70,6 +70,9 @@ which the React lint rules reject) · `styles/` (`tokens.css` roles, `base.css`,
 `sections.css`, imported by `app/globals.css`) · `public/{projects/<slug>,certificates,resume}` ·
 `scripts/` · `.github/workflows/deploy.yml`.
 
+The mobile dock hides while scrolling down and returns on scroll up (skill layout.md §7); the header's
+Sections button is always there. Display lines fitted to the width use `components/ui/FitText.tsx`.
+
 The page is the dealt split stage: `components/stage/Stage.tsx` is the fixed half on desktop (≥ 64em).
 Blocks in the reading half carry `data-stage="<key>"`; the stage crossfades to the layer with that key
 (layers are built in `app/page.tsx`). The stage also carries the desktop rail and the section bar.
@@ -100,11 +103,17 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
 - Resume PDF: `public/resume/Ahmad-Almudhi-Resume.pdf` (copy of `docs/content_files/Ahmad_Almudhi-Resume.pdf`),
   linked with `download="Ahmad-Almudhi-Resume.pdf"`. It keeps the phone number (decided). If the source
   changes, copy it again.
-- Certificates: `public/certificates/pspo-i.png` and `psm-i.png` (rendered from the PDFs, cropped to the
-  certificate edges). Both are Scrum.org and never expire; verify URLs are in `resume-content.md`.
+- Certificates: `public/certificates/pspo-i.webp` and `psm-i.webp` (rendered from the PDFs, cropped to the
+  certificate edges, WebP for weight). Both are Scrum.org and never expire; verify URLs are in `resume-content.md`.
   Scrum.org asks for the holder's email, so show the `verifyNote` hint and a copy-email button next to
   "Verify" (CRT-3).
 - Skill levels are words only (Expert / Proficient / Familiar). No percentage bars.
+- Found pictures of Ahmad's world (Riyadh at dusk, the King Saud University gate) live in
+  `public/pictures/` with their records in `content/pictures.ts` (and `credits.json`); the footer credits
+  every one. They show places, never his work. Add new ones with the skill's `assets.mjs --get`.
+- The live thing is the "read as" lens: each experience highlight, skill group and certificate carries
+  `side: "engineering" | "product"`; the lens sets `data-lens` on `<html>` and CSS mutes the other side.
+  Copy written from the facts is listed in `docs/resume-content.md` for Ahmad to confirm.
 - Commit only redacted screenshots. Originals stay outside the repo (Git history is public and permanent).
 
 ## Design: the `design-taste-frontend` skill

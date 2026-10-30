@@ -29,6 +29,8 @@ export const Profile = z.object({
   lastName: z.string(),
   initials: z.string().length(2),
   title: z.string(),
+  /** The hero's supporting sentence after "<title> in <city>." */
+  tagline: z.string(),
   summary: z.string(),
   location: z.string(),
   /** Split so the address never appears whole in the static HTML (PRD §10.4). */
