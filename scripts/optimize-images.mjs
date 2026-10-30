@@ -9,7 +9,9 @@ import sharp from "sharp";
 
 const ROOT = join(import.meta.dirname, "..", "public");
 const OUT = join(ROOT, "opt");
-const SOURCES = ["certificates"];
+// certificates, and each project's screenshots (public/projects/<slug>/); output names come from the
+// file name alone, so screenshot files carry their project's slug
+const SOURCES = ["certificates", ...readdirSync(join(ROOT, "projects"), { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => `projects/${d.name}`)];
 // Keep in step with WIDTHS in components/ui/Picture.tsx.
 const WIDTHS = [640, 1024, 1600, 2400];
 

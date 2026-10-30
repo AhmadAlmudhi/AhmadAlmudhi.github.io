@@ -3,8 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowUpRight, Maximize2, X } from "lucide-react";
 import type { Project } from "@/content";
-import { PhoneFrame } from "@/components/ui/PhoneFrame";
-import { ProjectShot } from "@/components/ui/ProjectShot";
+import { ShotFrame, shotDevice } from "@/components/ui/ProjectShot";
 
 const LINKS: { key: keyof NonNullable<Project["links"]>; label: string }[] = [
   { key: "live", label: "Live demo" },
@@ -54,19 +53,10 @@ export function ProjectDialog({
     return () => d?.close();
   }, []);
 
-  const frame = (i: number, morph = false) => {
-    const shot = <ProjectShot project={project} shot={project.screenshots[i]} index={i} />;
-    const style = morph && !covered ? { viewTransitionName: "overlay-shot" } : undefined;
-    return project.kind === "mobile" ? (
-      <div style={style}>
-        <PhoneFrame>{shot}</PhoneFrame>
-      </div>
-    ) : (
-      <div className="wide-frame" style={style}>
-        {shot}
-      </div>
-    );
-  };
+  // the first picture is where the tapped card's picture lands in the morph
+  const frame = (i: number, morph = false) => (
+    <ShotFrame project={project} index={i} style={morph && !covered ? { viewTransitionName: "overlay-shot" } : undefined} />
+  );
 
   const links = LINKS.filter((l) => project.links?.[l.key]);
   return (
@@ -98,7 +88,7 @@ export function ProjectDialog({
               {project.role}
               {project.company ? ` at ${project.company}` : ""}
             </p>
-            {project.placeholder && (
+            {project.placeholder && project.company && (
               <p className="detail__note">
                 Placeholder. The real project, its screenshots and its links are still to come; what is written here
                 is taken from my experience at {project.company}.
@@ -144,7 +134,7 @@ export function ProjectDialog({
             <h3 className="sr-only">Screenshots</h3>
             <ul className="detail__shots">
               {project.screenshots.map((s, i) => (
-                <li key={i}>
+                <li key={i} className={`detail__item detail__item--${shotDevice(project, s)}`}>
                   <button
                     type="button"
                     className="detail__shot"

@@ -4,6 +4,7 @@ const KIND_LABEL: Record<Project["kind"], string> = {
   mobile: "Mobile app",
   web: "Web app",
   dashboard: "Dashboard",
+  multiplatform: "Web and mobile app",
   other: "Project",
 };
 

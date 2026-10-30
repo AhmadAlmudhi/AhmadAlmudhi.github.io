@@ -6,7 +6,7 @@
 | **Owner** | Ahmad Almudhi |
 | **Version** | 1.4 — live at ahmadalmudhi.github.io; English only; not indexed by search engines |
 | **Date** | 30 October 2026 |
-| **Status** | Built (phases 1–5 merged and live, 30 Oct 2026); waiting for the real projects (phase 6) |
+| **Status** | Built (phases 1–5 merged and live, 30 Oct 2026); first real project (Battuta) added, more may follow |
 | **Changes in 1.4** | Ahmad's own identity (`docs/content_files/my_theme.png`) replaces the dealt palette and type: Castoro in gold on parchment, a green band with gold rules, the eight-point star ornament, Najdi mud-brick towers and palm groves, one theme only (no light/dark). Removed at his request: the tagline, the "In numbers" stats, the "read as" lens, "Show more" on roles, "Next: …" links, the side rail, the theme toggle and the found photographs. Experience and Education follow the CV (MM/YYYY dates; durations in full words, end month minus start month, none for the current role); Skills are the CV's two groups; certificates sit in frames; the dock is always on screen |
 | **Changes in 1.3** | Visual and motion rules aligned with the `design-taste-frontend` skill, which now decides every visual question (§7, §8 and the affected requirements); projects start as placeholders; resume PDF and certificate images added; robots.txt keeps the PDF out of search |
 
@@ -133,7 +133,7 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 | ID | Requirement | Priority |
 |---|---|---|
 | PRJ-1 | Project card: title, one-line pitch, my role, skill tags, cover screenshot. No resting shadow; separated from the ground by a tone step | Must |
-| PRJ-2 | **Screenshots by project type**: each project declares its type (mobile app / web / dashboard). Mobile-app screenshots sit in a plain rounded-rectangle phone frame drawn in CSS (no notch, buttons or glare). Web and dashboard screenshots are shown unframed: no browser chrome, square corners, on a surface tone. No shadows, no image mock-ups | Must |
+| PRJ-2 | **Screenshots by project type**: each project declares its type (mobile app / web / dashboard / web and mobile app), and each screenshot may name its device (phone or desktop), so one project can show both. Mobile-app screenshots sit in a plain rounded-rectangle phone frame drawn in CSS (no notch, buttons or glare). Web and dashboard screenshots are shown unframed: no browser chrome, square corners, on a surface tone. No shadows, no image mock-ups | Must |
 | PRJ-3 | **Layout:** one column of cards below 1024 px (a sideways row read as clipped), two columns from there; each card's screenshots sit on a green panel with a gold fillet and cycle in place on tap with a plain "2 of 5" count. No tilted or fanned stacks | Must |
 | PRJ-4 | ~~Desktop scroll-driven showcase~~ — dropped in 1.4 with the split stage; the card grid serves every width | — |
 | PRJ-5 | Tapping a card opens a **Project Detail overlay** via shared-element transition (the card morphs into the overlay). Full-screen sheet on mobile, centered modal on desktop | Must |
@@ -143,7 +143,7 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 | PRJ-9 | Filter projects by technology (tags); also triggered from Skills section | Could |
 | PRJ-10 | "Confidential (NDA)" note, set as plain text in the text face (not a pill badge), for projects where code/links can't be shared | Should |
 | PRJ-11 | Featured flag to pin top projects first | Should |
-| PRJ-12 | **Placeholders until real projects arrive:** placeholder entries carry `placeholder: true`, show a small visible "Placeholder" note, use only facts already in the Experience section (no invented metrics, links or results), and show placeholder screenshots: a screenshot entry without `src` is drawn as a title card in HTML/CSS at the real ratio (phone ≈ 9:19.5, desktop ≈ 16:10), in the page's palette and type, saying the screenshot is to come — never a grey box. The build lists every remaining placeholder; none may remain at launch | Must |
+| PRJ-12 | **Done for now (30 Oct 2026):** the four Muvi placeholders were replaced by Battuta, Ahmad's own app, with six phone and three laptop screenshots taken in the live app. The placeholder mechanism stays for later projects. **Placeholders until real projects arrive:** placeholder entries carry `placeholder: true`, show a small visible "Placeholder" note, use only facts already in the Experience section (no invented metrics, links or results), and show placeholder screenshots: a screenshot entry without `src` is drawn as a title card in HTML/CSS at the real ratio (phone ≈ 9:19.5, desktop ≈ 16:10), in the page's palette and type, saying the screenshot is to come — never a grey box. The build lists every remaining placeholder; none may remain at launch | Must |
 
 ### 6.4 Skills
 | ID | Requirement | Priority |
@@ -332,7 +332,7 @@ type Project = {
   slug: string;
   title: string;
   tagline: string;
-  kind: "mobile" | "web" | "dashboard" | "other"; // mobile = plain CSS phone frame; others unframed
+  kind: "mobile" | "web" | "dashboard" | "multiplatform" | "other"; // mobile = plain CSS phone frame; others unframed
   role: string;
   featured?: boolean;
   confidential?: boolean;
@@ -343,7 +343,7 @@ type Project = {
   features?: string[];
   impact?: string[];
   skills: string[];
-  screenshots: { src: string; alt: string; caption?: string }[];
+  screenshots: { src: string; width: number; height: number; alt: string; caption?: string; device?: "phone" | "desktop"; tone?: string }[];
   links?: { live?: string; github?: string; caseStudy?: string; video?: string };
 };
 
@@ -520,7 +520,7 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 | **4. Motion polish** | Signature animations, micro-interactions for all elements, reduced-motion variants |
 | **5. Hardening** | Done 30 Oct 2026: Lighthouse mobile performance 0.97, accessibility 1, best practices 1, CLS 0 (LCP 2.6 s simulated, bound by the web font; kept `font-display: swap`); initial JS 149 KB gz; OG image and monogram icons; designed 404; PWA with offline after one visit (tested); CSP and referrer policy via `<meta>`; analytics built and off until a provider is chosen. Still to do by Ahmad: real-device testing on his phone |
 | **5b. Identity (1.4)** | Done 30 Oct 2026: redesign to Ahmad's theme image and his list of changes (see the 1.4 change note); Lighthouse mobile performance 0.96, accessibility 1, best practices 1, CLS 0 (LCP 2.8 s simulated: the JS bundle's download and evaluation under throttling; observed LCP is the first paint); initial JS 147 KB gz; design gate 0 FAIL at 1440/768/390 with the identity allow-list |
-| **6. Real projects** | **Next, with Ahmad's material.** Replace every placeholder project and screenshot with the real content and redacted screenshots; re-run the design gate with `--have product-ui` |
+| **6. Real projects** | Started 30 Oct 2026: Battuta (github.com/AhmadAlmudhi/Battuta) replaces all four placeholders, with six phone and three laptop screenshots taken in the live app using demo travels; no placeholder remains. More projects can follow the same way |
 | **7. Launch** | Done: live at `https://ahmadalmudhi.github.io`, HTTPS enforced, repo README written. Left for Ahmad: open the site once on his phone (offline cache) and keep the QR one tap away; add the link to LinkedIn, GitHub and the PDF resume once the real projects are in |
 
 ---

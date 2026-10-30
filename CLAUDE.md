@@ -65,7 +65,7 @@ PR descriptions.
 - Not available: Server Actions, route handlers that read the request, rewrites/redirects/headers, `proxy`,
   ISR, cookies, the default image loader. Route handlers need `export const dynamic = 'force-static'`.
 - Client components are prerendered, so touch `window`/`localStorage`/`navigator` only inside effects.
-- Deep links are hash-based (`/#projects`, `/#projects/<slug>`), so there are no dynamic routes.
+- Deep links are hash-based (`/#projects`, `/#projects/<slug>`, `/#projects/<slug>/<shot>`), so there are no dynamic routes.
 - Content files are plain typed data; `content/validate.ts` parses them with Zod from `app/page.tsx` at
   build. Never import Zod (or call `.parse`) from anything a client component imports.
 - Brand images are static files in `public/` (`og.jpg`, the star icons), cut from the theme image.
@@ -122,13 +122,15 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
   full words: "4 years", "6 months"), only for past roles; the current role shows none.
 - Experience shows every highlight (no "Show more"); Education is exactly the CV's lines; Skills are the
   CV's two groups (Product, Technical) with no note of where each was used.
-- **Projects are placeholders until Ahmad adds the real ones, after everything else is finished**
-  (PRJ-12). Placeholders are the four Muvi projects listed in `resume-content.md`, using only facts from
-  the Experience section. Each has `placeholder: true` and a small visible "Placeholder" note. A
-  screenshot without `src` renders as `PlaceholderShot`: a title card drawn in HTML at the real ratio
-  (phone ≈ 9:19.5, desktop ≈ 16:10) in the page's type and colours, never a grey box. To add a real one,
-  put the redacted image in `public/projects/<slug>/` and give the entry `src`, `width`, `height`. The
-  build logs the remaining placeholders; none may remain at launch.
+- **Projects:** only Battuta for now (Ahmad's app, github.com/AhmadAlmudhi/Battuta; decided 30 Oct
+  2026). Its copy comes from that repo's README and PRD and is listed in `resume-content.md` for him to
+  confirm. Screenshots live in `public/projects/<slug>/`, named `<slug>-<device>-<screen>.png` (the
+  optimizer names its outputs by file name), each with `width`, `height`, `device` ("phone" puts it in
+  the CSS phone frame, "desktop" unframed) and `tone`. Battuta's were taken in the live web app as a
+  guest with Playwright (390 × 844 at 3×, 1440 × 900 at 2×) using demo travels; Flutter web needs its
+  accessibility tree switched on (click `flt-semantics-placeholder`) before Playwright can find its
+  controls. A future project may start as a placeholder (`placeholder: true`, screenshots without
+  `src` draw a title card, PRJ-12); the build logs any that remain.
 - No phone on the site (`profile.phone` omitted). The email must not appear as plain text in the static
   HTML; assemble it client-side.
 - Resume PDF: `public/resume/Ahmad-Almudhi-Resume.pdf` (copy of `docs/content_files/Ahmad_Almudhi-Resume.pdf`),
@@ -167,6 +169,8 @@ Working files land in `.taste-skill/` (gitignored).
   green, and text passing under the fixed dock mid-scroll). Overlay shadows carry `/* taste-skill-ignore */`. Aim for 0 FAIL at
   1440/768/390, then open every screenshot it saves. Until real projects arrive, the picture-floor
   check may still fail; say so instead of padding with unrelated pictures.
+- The service worker precaches AVIF widths under 2000 px only (`workbox-config.cjs`); larger widths
+  serve big desktop screens and are cached when seen.
 - House rules apply everywhere: headlines ≤ 2 lines at every width; one `h1` saying who and what; a
   heading on every section; equal outer margins; no eyebrows or tiny tracked-caps labels; no monospace
   (drop the boilerplate Geist Mono); no 01/02/03 numbering; no gradients or shadows beyond the

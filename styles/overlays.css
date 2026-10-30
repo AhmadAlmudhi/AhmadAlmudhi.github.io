@@ -134,12 +134,28 @@
   margin-top: 1.5rem;
 }
 
+/* phone screenshots two to a row (three from 40em), desktop ones across the whole gallery */
 .detail__shots {
   display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1rem;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.detail__item {
+  grid-column: span 6;
+}
+
+.detail__item--phone {
+  grid-column: span 3;
+}
+
+@media (min-width: 40em) {
+  .detail__item--phone {
+    grid-column: span 2;
+  }
 }
 
 .detail__shot {
@@ -159,7 +175,23 @@
   transform: scale(0.99);
 }
 
-.detail__shot .phone {
+.detail__item--phone .detail__shot {
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.detail__shot .phone,
+.detail__shot > div:has(> .phone) {
+  width: 100%;
+  height: auto;
+}
+
+/* a lone phone shot (a project of phone screenshots only, or a placeholder) gets the whole row */
+.detail__item--phone:only-child {
+  grid-column: span 6;
+}
+
+.detail__item--phone:only-child .phone {
+  width: auto;
   height: min(62svh, 34rem);
 }
 
@@ -223,7 +255,7 @@
   padding: 0;
   border: 0;
   overflow: hidden;
-  background: rgb(19 33 26 / calc(0.97 * var(--fade, 1)));
+  background: rgb(19 33 26 / var(--fade, 1)); /* opaque at rest; fades as it is swiped away */
   color: var(--cream);
 }
 
