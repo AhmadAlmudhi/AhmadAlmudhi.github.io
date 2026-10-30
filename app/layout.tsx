@@ -53,7 +53,7 @@ export const viewport: Viewport = {
 // `?theme=light|dark` forces a theme for that view only (design QA screenshots).
 const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');try{var q=new URLSearchParams(location.search).get('theme');var s=q||localStorage.getItem('theme');var t=s==='light'||s==='dark'?s:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');d.dataset.theme=t;var c=t==='dark'?'#050f16':'#ff7a1f';document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){m.setAttribute('content',c)})}catch(e){}})();`;
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={clash.variable} suppressHydrationWarning>
       <head>
