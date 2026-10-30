@@ -78,22 +78,34 @@ Skill tags: Angular, JavaScript
 ---
 
 ## Projects
-_You'll add these after everything else is finished. Until then the site shows placeholders._
+_For now the site shows one project, Battuta. More can be added later in `content/projects.ts`._
 
-**Placeholders in the meantime** (PRD PRJ-12): the four Muvi projects, using only facts already in the Experience section above — no invented metrics, links or results. Each has `placeholder: true`, a small visible "Placeholder" note, and placeholder screenshots drawn as title cards at the real ratios until the real ones are added.
+### Battuta — personal project
+Web and mobile app · [battuta-travel.web.app](https://battuta-travel.web.app) · [github.com/AhmadAlmudhi/Battuta](https://github.com/AhmadAlmudhi/Battuta)
 
-| Placeholder | Type | Facts used (from Experience) |
-|---|---|---|
-| Muvi booking app | mobile | Rebuilt in Flutter from scratch, replacing two native apps with one cross-platform product |
-| Muvi IT dashboard | dashboard | Used by the IT department to monitor transactions and catch data errors across all 23 branches |
-| In-seat ordering | mobile | Suite guests order end to end, from menu to seat |
-| Customer feedback platform | web | Captures post-visit ratings from guests |
+Everything below is taken from the Battuta README and `docs/Battuta_PRD.md` in that repo. **Please confirm**, especially "What I did" (it assumes you wrote the requirements document and built everything yourself).
 
-Paws, Battuta, baloot-calculator and tv-shows get no placeholder: there are no facts about them yet.
+**Card line:** Explore 249 countries, record the ones you've visited, and plan the next trip.
 
-**Candidates:** Muvi booking app, Muvi IT dashboard, in-seat ordering, customer feedback platform, Paws, Battuta, baloot-calculator, tv-shows.
+**Overview:** An app for exploring every country in the world, keeping track of the ones you've visited, and planning the next trip, named after Ibn Battuta, the 14th-century traveler from Tangier. It runs in any modern browser, on a phone or a computer, with no account and no install; Android and iOS build from the same Flutter code.
 
-**For each project:** a one-line description, type (mobile / web / dashboard), the problem, your role, key features, results, technologies, 3–6 screenshots, links (live, GitHub, video) if any, and whether it's confidential. Pick your top 2–3 to feature first.
+**The problem:** People who travel keep track of their trips in notes, photos, or memory. They have no quick, private way to see which countries they have visited, how much of the world they have covered, and where they want to go next. Most tools that do this require an account up front, need a connection, or are not available in Arabic.
+
+**What I did**
+- Wrote the product requirements document: every feature as numbered requirements with priorities and testable acceptance criteria, kept current through 22 revisions as the app grew.
+- Built the app in Flutter from one codebase for the web, Android and iOS, with Riverpod and go_router.
+- Made it local-first: travels are saved on the device first (Drift, SQLite, also on the web), so the app works without an account or a connection.
+- Added optional accounts with Firebase Authentication and sync through Cloud Firestore, with security rules that enforce last write wins and the shape of each entry.
+- Drew the world map in the app itself from bundled Natural Earth data, with no map service.
+- Set up CI and delivery with GitHub Actions: formatting, analysis, tests and web, Android and iOS builds on every pull request, a preview site per pull request, deploys from version tags, and a weekly redeploy with fresh country data.
+
+**Key features:** Explore with search in English or Arabic, filters and sorting · country details with neighbors and Open in Maps · visits with date, rating and notes, wishlist with priority and target year, the passport stamp · Quick select with one Undo · Stats on the world map with zoom, region focus, Replay and Share · English and Arabic (right to left), light and dark themes.
+
+**Results:** Live at battuta-travel.web.app, released in four versions so far (1.0.0 to 1.3.0) · covered by 45 test files; sync is tested against the Firebase emulators.
+
+**Built with:** Flutter, Dart, Riverpod, go_router, Drift (SQLite), Firebase Authentication, Cloud Firestore, Firebase Hosting, GitHub Actions.
+
+**Screenshots** (`public/projects/battuta/`): taken on 30 Oct 2026 in the live web app as a guest, six at phone size (390 × 844 at 3×: Explore, Turkey's details, My travels, Stats, My travels in Arabic, Welcome) and three at laptop size (1440 × 900 at 2×: Explore, Turkey's details, Stats). The travels in them are demo data entered for the screenshots (14 visited countries, 4 on the wishlist), not your real trips; they were saved only in that test browser.
 
 ---
 
@@ -141,11 +153,12 @@ Images: `public/certificates/pspo-i.webp` and `public/certificates/psm-i.webp`, 
 - No custom domain.
 - Email only on the site; phone only in the PDF. The phone stays in the PDF (recruiters need it); it never appears in the site's HTML, and `robots.txt` keeps the PDF out of search engines.
 - Identity: your theme image (`docs/content_files/my_theme.png`) decides colours, type and ornament (30 Oct 2026, PRD v1.4); the design skill decides the rest. One theme, no light/dark.
-- Projects: placeholders until you add the real ones, after everything else is finished.
+- Projects: Battuta only for now (30 Oct 2026); the four Muvi placeholders were removed.
 
 ---
 
 ## Still to add
-- [ ] Projects and their screenshots (placeholders until then; launch blocker)
+- [x] Battuta with phone and desktop screenshots (the only project for now)
+- [ ] More projects, if you want them
 - [x] PSPO I and PSM I certificate images
 - [x] Resume PDF

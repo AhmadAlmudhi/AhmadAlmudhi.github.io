@@ -4,25 +4,26 @@ import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { projects, type Project } from "@/content";
 import { SectionHead } from "@/components/ui/Ornament";
-import { PhoneFrame } from "@/components/ui/PhoneFrame";
-import { ProjectShot } from "@/components/ui/ProjectShot";
+import { ShotFrame, shotDevice } from "@/components/ui/ProjectShot";
 import { useOpenProject } from "@/components/overlays/useOpenProject";
 
 const ordered = [...projects].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
-const KIND: Record<Project["kind"], string> = { mobile: "Mobile app", web: "Web app", dashboard: "Dashboard", other: "Project" };
-
-function Frame({ project, index = 0 }: { project: Project; index?: number }) {
-  const shot = <ProjectShot project={project} shot={project.screenshots[index]} index={index} />;
-  return project.kind === "mobile" ? <PhoneFrame>{shot}</PhoneFrame> : <div className="wide-frame">{shot}</div>;
-}
+const KIND: Record<Project["kind"], string> = {
+  mobile: "Mobile app",
+  web: "Web app",
+  dashboard: "Dashboard",
+  multiplatform: "Web and mobile app",
+  other: "Project",
+};
 
 /** PRJ-3: a card's screenshots cycle in place on tap, with a plain count. */
 function CardShots({ project }: { project: Project }) {
   const [i, setI] = useState(0);
   const n = project.screenshots.length;
   return (
-    <div className="card__shots" data-vt={`shot-${project.slug}`}>
-      <Frame project={project} index={i} />
+    // the panel's shape follows the first screenshot, so cycling never changes the card's height
+    <div className="card__shots" data-vt={`shot-${project.slug}`} data-cover={shotDevice(project, project.screenshots[0])}>
+      <ShotFrame project={project} index={i} />
       {n > 1 && (
         <button
           type="button"
@@ -37,8 +38,8 @@ function CardShots({ project }: { project: Project }) {
   );
 }
 
-// PRJ-1/3/5/11/12: featured first. Two columns of cards on wide screens, a swipe row on phones;
-// each opens its detail, the picture morphing into it. Placeholders say so until the real ones come.
+// PRJ-1/3/5/11/12: featured first. One column of cards below 64em, two from there; each opens its
+// detail, the picture morphing into it. Placeholders say so until the real ones come.
 export function Projects() {
   const open = useOpenProject();
   return (
@@ -52,8 +53,7 @@ export function Projects() {
               <h3 className="card__title">{p.title}</h3>
               <p className="card__tagline">{p.tagline}</p>
               <p className="card__meta">
-                {KIND[p.kind]}
-                {p.company ? `, ${p.company}` : ""}
+                {KIND[p.kind]}, {p.company ?? p.role.toLowerCase()}
                 {p.placeholder ? ". Placeholder, details to come." : ""}
               </p>
               <button

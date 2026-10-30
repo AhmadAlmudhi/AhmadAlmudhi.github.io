@@ -26,7 +26,6 @@ export const experience: Experience[] = [
       "Backlog management",
       "Stakeholder management",
     ],
-    relatedProjects: ["muvi-booking-app", "muvi-it-dashboard", "in-seat-ordering", "customer-feedback-platform"],
   },
   {
     id: "vega",

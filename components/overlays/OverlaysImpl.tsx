@@ -2,8 +2,7 @@
 
 import { certifications, projects } from "@/content";
 import { useNav } from "@/lib/nav";
-import { ProjectShot } from "@/components/ui/ProjectShot";
-import { PhoneFrame } from "@/components/ui/PhoneFrame";
+import { ShotFrame } from "@/components/ui/ProjectShot";
 import { ProjectDialog } from "./ProjectDialog";
 import { Lightbox, type LightboxItem } from "./Lightbox";
 
@@ -21,16 +20,8 @@ export default function OverlaysImpl() {
     if (!project) return null;
     const items: LightboxItem[] = project.screenshots.map((s, i) => ({
       key: `${project.slug}-${i}`,
-      image: s.src && s.width && s.height ? { src: s.src, width: s.width, height: s.height, alt: s.alt } : undefined,
-      node: s.src ? undefined : project.kind === "mobile" ? (
-        <PhoneFrame>
-          <ProjectShot project={project} shot={s} index={i} />
-        </PhoneFrame>
-      ) : (
-        <div className="wide-frame">
-          <ProjectShot project={project} shot={s} index={i} />
-        </div>
-      ),
+      image: s.src && s.width && s.height ? { src: s.src, width: s.width, height: s.height, alt: s.alt, tone: s.tone } : undefined,
+      node: s.src ? undefined : <ShotFrame project={project} index={i} />,
       caption: s.caption ?? `${project.title}${s.src ? "" : ", placeholder"}`,
     }));
     return (

@@ -61,18 +61,18 @@ test.describe("project overlays (PRJ-5..7, NAV-6)", () => {
   test("opens a project, its lightbox, and Back steps out one level at a time", async ({ page }) => {
     await page.goto("/#projects");
     await page.getByRole("button", { name: "View project" }).first().click();
-    const detail = page.getByRole("dialog", { name: "Muvi booking app" });
+    const detail = page.getByRole("dialog", { name: "Battuta" });
     await expect(detail).toBeVisible();
-    await expect(page).toHaveURL(/#projects\/muvi-booking-app$/);
-    await expect(detail.getByText(/Placeholder\. The real project/)).toBeVisible();
+    await expect(page).toHaveURL(/#projects\/battuta$/);
+    await expect(detail.getByText(/Placeholder/)).toHaveCount(0);
 
-    await detail.getByRole("button", { name: /Open screenshot 1 of 3/ }).click();
-    const lightbox = page.getByRole("dialog", { name: "Muvi booking app screenshots" });
+    await detail.getByRole("button", { name: /Open screenshot 1 of 9/ }).click();
+    const lightbox = page.getByRole("dialog", { name: "Battuta screenshots" });
     await expect(lightbox).toBeVisible();
-    await expect(lightbox.getByText("1 of 3")).toBeVisible();
+    await expect(lightbox.getByText("1 of 9")).toBeVisible();
     await page.keyboard.press("ArrowRight");
-    await expect(lightbox.getByText("2 of 3")).toBeVisible();
-    await expect(page).toHaveURL(/#projects\/muvi-booking-app\/2$/);
+    await expect(lightbox.getByText("2 of 9")).toBeVisible();
+    await expect(page).toHaveURL(/#projects\/battuta\/2$/);
 
     await page.goBack();
     await expect(lightbox).toBeHidden();
@@ -83,12 +83,26 @@ test.describe("project overlays (PRJ-5..7, NAV-6)", () => {
   });
 
   test("a project deep link opens on first load, and closing stays on the site", async ({ page }) => {
-    await page.goto("/#projects/muvi-it-dashboard");
-    const detail = page.getByRole("dialog", { name: "Muvi IT dashboard" });
+    await page.goto("/#projects/battuta");
+    const detail = page.getByRole("dialog", { name: "Battuta" });
     await expect(detail).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(detail).toBeHidden();
     await expect(page).toHaveURL(/#projects$/);
+  });
+
+  test("Battuta shows phone and desktop screenshots, and they load (PRJ-2)", async ({ page }) => {
+    await page.goto("/#projects/battuta");
+    const detail = page.getByRole("dialog", { name: "Battuta" });
+    await expect(detail.locator(".detail__item--phone .phone")).toHaveCount(6);
+    await expect(detail.locator(".detail__item--desktop .wide-frame")).toHaveCount(3);
+    await expect(detail.getByRole("link", { name: "Live demo" })).toHaveAttribute("href", "https://battuta-travel.web.app");
+    const shots = detail.locator("img.shot");
+    await expect(shots).toHaveCount(9);
+    for (const img of await shots.all()) {
+      await img.scrollIntoViewIfNeeded();
+      await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+    }
   });
 
   test("certificates open full screen and close with Esc (CRT-2)", async ({ page }) => {

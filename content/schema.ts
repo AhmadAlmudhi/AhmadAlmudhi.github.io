@@ -69,10 +69,15 @@ export const Screenshot = z.object({
   height: z.number().int().positive().optional(),
   alt: z.string(),
   caption: z.string().optional(),
+  /** Which frame it sits in: a phone, or unframed like a desktop window. Defaults from the project's kind. */
+  device: z.enum(["phone", "desktop"]).optional(),
+  /** Ground colour while it loads (the app's background). */
+  tone: z.string().optional(),
 });
 export type Screenshot = z.infer<typeof Screenshot>;
 
-export const ProjectKind = z.enum(["mobile", "web", "dashboard", "other"]);
+/** `multiplatform`: one codebase on phones and the web, shown with both phone and desktop screenshots. */
+export const ProjectKind = z.enum(["mobile", "web", "dashboard", "multiplatform", "other"]);
 export type ProjectKind = z.infer<typeof ProjectKind>;
 
 export const Project = z.object({
