@@ -7,7 +7,7 @@
   inset: 0 0 auto;
   z-index: 40;
   height: var(--header-h);
-  background: var(--paper) url("/theme/paper.webp") repeat;
+  background: var(--paper) var(--paper-texture);
   box-shadow: 0 1px 0 rgb(138 95 24 / 0.35); /* taste-skill-ignore: the header's gold edge */
 }
 
@@ -77,6 +77,12 @@
 
 main {
   padding-top: var(--header-h);
+}
+
+/* parts waiting to slide in from the side sit past the edge; they must never widen the page */
+main,
+.footer {
+  overflow-x: clip;
 }
 
 /* ---------- section links in the header (NAV-2), wide screens ---------- */
@@ -216,7 +222,7 @@ body {
   margin: auto 0 0;
   padding: 0;
   border: 0;
-  background: var(--paper) url("/theme/paper.webp") repeat;
+  background: var(--paper) var(--paper-texture);
   color: var(--ink);
   box-shadow: 0 -1.5rem 4rem rgb(19 33 26 / 0.35); /* taste-skill-ignore: floating sheet */
   overscroll-behavior: contain;
@@ -312,6 +318,13 @@ body {
 
   .sheet__inner {
     padding: 1.25rem 1.75rem 1.75rem;
+  }
+
+  /* the section list opens under the header's Sections button; the QR code is a dialog of its own,
+     centred on the screen */
+  .qr-sheet {
+    width: min(28rem, 100vw - 2 * var(--margin));
+    margin: auto;
   }
 }
 

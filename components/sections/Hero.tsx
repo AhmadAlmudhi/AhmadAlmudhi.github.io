@@ -3,6 +3,7 @@ import { profile } from "@/content";
 import { Divider } from "@/components/ui/Ornament";
 import { Email } from "@/components/ui/Email";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/BrandIcons";
+import { Landscape, Tower } from "@/components/ui/ThemePictures";
 
 // The identity's banner (Ahmad's theme image) as the first screen: the name in gold between the two
 // dividers, the Najdi towers at both edges, the palm groves below, and the green band carrying the
@@ -11,11 +12,9 @@ export function Hero() {
   return (
     <section id="summary" className="hero" aria-labelledby="summary-title">
       <div className="hero__scene">
-        {/* eslint-disable @next/next/no-img-element -- static export; the theme's own pictures */}
-        <img className="hero__tower hero__tower--left" src="/theme/tower-left.webp" width={320} height={397} alt="" fetchPriority="high" />
-        <img className="hero__tower hero__tower--right" src="/theme/tower-right.webp" width={320} height={397} alt="" fetchPriority="high" />
-        <img className="hero__land" src="/theme/landscape.webp" width={1396} height={141} alt="" />
-        {/* eslint-enable @next/next/no-img-element */}
+        <Tower side="left" className="hero__tower" priority />
+        <Tower side="right" className="hero__tower" priority />
+        <Landscape className="hero__land" priority />
         <div className="hero__body">
           <Divider className="hero__divider" />
           <h1 id="summary-title" className="hero__name">

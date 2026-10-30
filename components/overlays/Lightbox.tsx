@@ -186,7 +186,13 @@ export function Lightbox({
           }}
         >
           {item?.image ? (
-            <Picture {...item.image} sizes="100vw" priority style={{ viewTransitionName: "overlay-shot" }} />
+            // zooming in asks for a bigger file, so the picture sharpens instead of blurring
+            <Picture
+              {...item.image}
+              sizes={`${Math.round(100 * Math.max(1, view.scale))}vw`}
+              priority
+              style={{ viewTransitionName: "overlay-shot" }}
+            />
           ) : (
             <div className="lightbox__node" style={{ viewTransitionName: "overlay-shot" }}>
               {item?.node}

@@ -65,20 +65,28 @@
   line-height: 1.6;
 }
 
-.hero__tower {
+/* the theme's tower: one picture, clipped to its traced outline (a vector edge at any zoom), and
+   mirrored for the right-hand side */
+.tower {
   position: absolute;
   bottom: 0;
   z-index: 1;
   width: auto;
-  height: clamp(7.5rem, 30vw, 13rem);
+  max-width: none;
+  clip-path: var(--tower-outline);
 }
 
-.hero__tower--left {
+.tower--left {
   left: 0;
 }
 
-.hero__tower--right {
+.tower--right {
   right: 0;
+  scale: -1 1;
+}
+
+.hero__tower {
+  height: clamp(7.5rem, 30vw, 13rem);
 }
 
 .hero__land {
@@ -90,7 +98,7 @@
   height: clamp(4.5rem, 14vw, 9.5rem);
   object-fit: cover;
   object-position: 50% 100%;
-  transform: translateX(-50%);
+  translate: -50% 0;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%); /* taste-skill-ignore: the landscape fades into the paper */
   mask-image: linear-gradient(to bottom, transparent 0%, #000 45%); /* taste-skill-ignore: the landscape fades into the paper */
 }
@@ -351,9 +359,16 @@
   min-height: 0; /* the ratio decides the height, never the frame inside */
   aspect-ratio: 4 / 5;
   padding: 1.5rem;
-  background: var(--green) url("/theme/band.webp") center / cover;
+  background: var(--green) var(--band-texture) 0 0 / var(--band-tile);
   outline: 1.5px solid var(--gold-light); /* taste-skill-ignore: the panel's gold fillet */
   outline-offset: -9px;
+  overflow: clip;
+  touch-action: pan-y; /* a sideways swipe steps through the screenshots; up and down still scroll */
+}
+
+.card__media {
+  display: grid;
+  gap: 0.35rem;
 }
 
 /* one column below desktop: on a phone a card that opens on a wide screenshot needs a wider panel
@@ -383,25 +398,51 @@
   width: 100%;
 }
 
-.card__cycle {
-  position: absolute;
-  right: 0.85rem;
-  bottom: 0.85rem;
-  min-width: var(--tap);
-  min-height: var(--tap);
-  padding: 0 0.75rem;
-  border: 0;
-  border-radius: var(--radius);
-  background: var(--gold-bright);
-  color: var(--green-deep);
-  font: inherit;
-  font-size: var(--step-small);
-  cursor: pointer;
-  transition: transform var(--t-press) var(--ease-out);
+/* Previous · 2 of 9 · Next, under the picture */
+.card__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
 }
 
-.card__cycle:active {
-  transform: scale(0.95);
+.card__step {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--gold-ink);
+  cursor: pointer;
+  transition:
+    transform var(--t-press) var(--ease-out),
+    background-color var(--t-hover) ease,
+    opacity var(--t-hover) ease;
+}
+
+.card__step:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.card__step:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card__step:hover:not(:disabled) {
+    background: rgb(138 95 24 / 0.12);
+  }
+}
+
+.card__count {
+  min-width: 4.5rem;
+  color: var(--ink-soft);
+  font-size: var(--step-small);
+  text-align: center;
 }
 
 .card__text {
@@ -501,7 +542,7 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 1.25rem 1rem 1.25rem;
-  background: var(--paper) url("/theme/paper.webp") repeat;
+  background: var(--paper) var(--paper-texture);
   color: var(--ink);
   container-type: inline-size;
 }
@@ -630,7 +671,7 @@
   padding: 12px;
   border: 0;
   border-radius: 0;
-  background: var(--green) url("/theme/band.webp") center / cover;
+  background: var(--green) var(--band-texture) 0 0 / var(--band-tile);
   cursor: zoom-in;
   transition: transform var(--t-ui) var(--ease-out);
 }
@@ -658,7 +699,7 @@
   padding: 3px;
   background: var(--green);
   color: var(--gold-light);
-  transform: translateX(-50%);
+  translate: -50% 0;
 }
 
 .frame__zoom {
@@ -867,19 +908,7 @@
 }
 
 .footer__tower {
-  position: absolute;
-  bottom: 0;
-  z-index: 1;
-  width: auto;
   height: clamp(7rem, 24vw, 12rem);
-}
-
-.footer__tower--left {
-  left: 0;
-}
-
-.footer__tower--right {
-  right: 0;
 }
 
 .footer__land {
@@ -891,7 +920,7 @@
   height: clamp(4rem, 12vw, 8rem);
   object-fit: cover;
   object-position: 50% 100%;
-  transform: translateX(-50%);
+  translate: -50% 0;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%); /* taste-skill-ignore: the landscape fades into the paper */
   mask-image: linear-gradient(to bottom, transparent 0%, #000 45%); /* taste-skill-ignore: the landscape fades into the paper */
 }

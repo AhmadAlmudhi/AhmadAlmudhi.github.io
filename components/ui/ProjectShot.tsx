@@ -11,10 +11,11 @@ export function shotDevice(project: Pick<Project, "kind">, shot: Screenshot): De
   return shot.device ?? (project.kind === "mobile" ? "phone" : "desktop");
 }
 
-// what the frames measure across, roughly: a phone frame stays narrow, a desktop one runs wide
+// twice what the frames measure across, so the screenshot stays sharp when the page is zoomed: a
+// phone frame stays narrow, a desktop one runs wide
 const SIZES: Record<Device, string> = {
-  phone: "(min-width: 64em) 14rem, 45vw",
-  desktop: "(min-width: 64em) 40rem, 92vw",
+  phone: "(min-width: 64em) 28rem, 90vw",
+  desktop: "(min-width: 64em) 80rem, 184vw",
 };
 
 /** A project screenshot, or its placeholder title card while the real one is still to come. */
@@ -52,25 +53,27 @@ export function ShotFrame({
   project,
   index,
   style,
+  className = "",
 }: {
   project: Pick<Project, "title" | "kind" | "company" | "screenshots">;
   index: number;
   style?: CSSProperties;
+  className?: string;
 }) {
   const shot = project.screenshots[index];
   const inner = <ProjectShot project={project} shot={shot} index={index} />;
   if (shotDevice(project, shot) === "phone") {
     // the morph name rides on a wrapper; without one the frame sizes straight from its panel
     return style ? (
-      <div style={style}>
+      <div className={className} style={style}>
         <PhoneFrame>{inner}</PhoneFrame>
       </div>
     ) : (
-      <PhoneFrame>{inner}</PhoneFrame>
+      <PhoneFrame className={className}>{inner}</PhoneFrame>
     );
   }
   return (
-    <div className="wide-frame" style={style}>
+    <div className={`wide-frame ${className}`} style={style}>
       {inner}
     </div>
   );

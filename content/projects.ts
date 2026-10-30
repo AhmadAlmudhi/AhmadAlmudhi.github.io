@@ -3,14 +3,15 @@ import type { Project } from "./schema";
 // The projects (PRJ-1..12). For now only Battuta, Ahmad's own app; more come later. Every word is
 // taken from the project's README and requirements document (github.com/AhmadAlmudhi/Battuta) and
 // listed in docs/resume-content.md for Ahmad to confirm. The screenshots were taken in the live web
-// app as a guest, at phone size (390 × 844, 3×) and laptop size (1440 × 900, 2×), with demo travels.
+// app as a guest, in its dark theme, at phone size (390 × 844 at 4×) and laptop size (1440 × 900 at
+// 3×), with demo travels; the high density keeps them sharp when zoomed.
 const BATTUTA = "/projects/battuta";
-const APP_GROUND = "#f5fafb";
+const APP_GROUND = "#0e1415";
 
 const phone = (name: string, alt: string, caption: string) => ({
   src: `${BATTUTA}/battuta-phone-${name}.png`,
-  width: 1170,
-  height: 2532,
+  width: 1560,
+  height: 3376,
   alt,
   caption,
   device: "phone" as const,
@@ -19,8 +20,8 @@ const phone = (name: string, alt: string, caption: string) => ({
 
 const desktop = (name: string, alt: string, caption: string) => ({
   src: `${BATTUTA}/battuta-desktop-${name}.png`,
-  width: 2880,
-  height: 1800,
+  width: 4320,
+  height: 2700,
   alt,
   caption,
   device: "desktop" as const,
@@ -73,22 +74,22 @@ export const projects: Project[] = [
     screenshots: [
       phone(
         "explore",
-        "Battuta on a phone: Explore, a grid of round country flags with names and regions, 249 countries, a search field and the tab bar",
+        "Battuta on a phone, dark theme: Explore, round country flags with visited ticks on France, the United States, China, Spain, Mexico and Italy",
         "Explore on a phone: every country, most visited first.",
       ),
       phone(
         "country",
-        "Battuta on a phone: Turkey's details, its flag with a Visited 2024 stamp, the visit date, five stars and a note, and the facts",
+        "Battuta on a phone, dark theme: Brazil's details, its flag with a Visited 2023 stamp, the visit date, five stars and a note, and the facts",
         "A country's details, stamped once it's visited.",
       ),
       phone(
         "travels",
-        "Battuta on a phone: My travels, fourteen visited countries grouped by year with their flags, ratings, dates and notes",
+        "Battuta on a phone, dark theme: My travels, twenty visited countries grouped by year with their flags, ratings, dates and notes",
         "My travels: visits by year, with ratings and notes.",
       ),
       phone(
         "stats",
-        "Battuta on a phone: Stats, 14 of 249 countries visited, 5.6 percent of the world, and a world map with visited countries in amber",
+        "Battuta on a phone, dark theme: Stats, 20 of 249 countries visited, 8 percent of the world, and a world map with the Americas, Asia and Australia in amber and Russia hatched",
         "Stats and the world map the app draws itself.",
       ),
       phone(
@@ -98,22 +99,22 @@ export const projects: Project[] = [
       ),
       phone(
         "welcome",
-        "Battuta on a phone: the welcome screen, the logo among round flags, three lines on what the app does, and Continue as guest",
+        "Battuta on a phone, dark theme: the welcome screen, the logo among round flags, three lines on what the app does, and Continue as guest",
         "Welcome: no account needed.",
       ),
       desktop(
         "explore",
-        "Battuta on a laptop: Explore, six round flags to a row with visited and wishlist badges, and the navigation rail on the left",
-        "Explore on a laptop.",
+        "Battuta on a laptop, dark theme: Explore sorted by area, Russia and Greenland on the wishlist, Canada, China, the United States, Brazil, Australia and India visited",
+        "Explore on a laptop, largest countries first.",
       ),
       desktop(
         "country",
-        "Battuta on a laptop: Turkey's details in two columns, the stamped flag and visit card on the left, facts and neighboring countries on the right",
+        "Battuta on a laptop, dark theme: Brazil's details in two columns, the stamped flag and visit card on the left, facts and ten neighboring countries on the right",
         "Country details in two columns, with the neighbors' flags.",
       ),
       desktop(
         "stats",
-        "Battuta on a laptop: Stats with the world map, region filters, Replay my travels, Share my map, and visits by region",
+        "Battuta on a laptop, dark theme: Stats with the world map, visited countries in amber and the wishlist hatched, region filters, Replay my travels and Share my map",
         "Stats on a laptop: the map, Replay and Share, and visits by region.",
       ),
     ],

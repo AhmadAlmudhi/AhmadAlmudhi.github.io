@@ -1,21 +1,27 @@
 /* The motion layer (design-taste-frontend motion.md, PRD §8). Every hidden or moving state lives
    inside prefers-reduced-motion: no-preference, so reduced motion — and no script — is simply the
-   finished page. Transform, opacity and clip-path only. */
+   finished page. Transform, opacity and clip-path only.
 
-@media (prefers-reduced-motion: no-preference) {
+   Entrances play both ways (components/motion/Reveals.tsx sets data-reveal on each part: "in" on
+   screen, "below" or "above" when out of it). A part that leaves resets at once, out of sight, on
+   the side it will come back from; when it returns, it and its own pieces arrive again. Pieces move
+   with the individual transform properties (translate, rotate, scale), so they never fight a
+   transform an element already has. */
+
+@media screen and (prefers-reduced-motion: no-preference) {
   /* ---------- the signature: the dividers draw out from their star, the name rises between them ---------- */
+
+  .divider__line--start {
+    transform-origin: right;
+  }
+
+  .divider__line--end {
+    transform-origin: left;
+  }
 
   .js .hero .divider__line {
     transform: scaleX(0);
     animation: divider-draw 900ms var(--ease-expo) 120ms forwards;
-  }
-
-  .js .hero .divider__line--start {
-    transform-origin: right;
-  }
-
-  .js .hero .divider__line--end {
-    transform-origin: left;
   }
 
   .js .hero .divider__end {
@@ -46,18 +52,202 @@
     animation: load-fade 1000ms var(--ease-soft) 250ms forwards;
   }
 
-  /* ---------- section entrances: once, in reading order (components/motion/Reveals.tsx) ---------- */
+  /* ---------- entrances, both ways ---------- */
 
   html.reveal [data-reveal] {
     transition:
       opacity 700ms var(--ease-out) calc(var(--i, 0) * var(--stagger-item)),
-      translate 900ms var(--ease-expo) calc(var(--i, 0) * var(--stagger-item)),
-      transform var(--t-ui) var(--ease-out);
+      translate 900ms var(--ease-expo) calc(var(--i, 0) * var(--stagger-item));
   }
 
-  html.reveal [data-reveal]:not(.is-in) {
+  html.reveal [data-reveal="below"],
+  html.reveal [data-reveal="above"] {
     opacity: 0;
-    translate: 0 24px;
+    translate: 0 2.5rem;
+    transition: none;
+  }
+
+  html.reveal [data-reveal="above"] {
+    translate: 0 -2.5rem;
+  }
+
+  /* the pieces inside a part: shown by default, set back while the part is away */
+  html.reveal [data-reveal] :is(.divider__line, .divider .star, .divider__end, .role__mark, .highlights li, .skill-line,
+      .card__shots, .card__shots > *, .card__text > *, .skill-group__list li, .frame__star, .cert > :not(.frame), .footer__name) {
+    transition:
+      opacity 600ms var(--ease-out) var(--d, 0ms),
+      translate 800ms var(--ease-expo) var(--d, 0ms),
+      rotate 1000ms var(--ease-expo) var(--d, 0ms),
+      scale 1000ms var(--ease-expo) var(--d, 0ms),
+      transform var(--t-press) var(--ease-out),
+      background-color var(--t-hover) ease,
+      border-color var(--t-hover) ease,
+      color var(--t-hover) ease;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"])
+    :is(.divider__line, .divider .star, .divider__end, .role__mark, .highlights li, .skill-line, .card__shots,
+      .card__shots > *, .card__text > *, .skill-group__list li, .frame, .frame__star, .cert > :not(.frame), .footer__name) {
+    transition: none;
+  }
+
+  /* headings and the footer's sign: the lines draw out from the star as it turns into place */
+  html.reveal [data-reveal] .divider__line {
+    --d: 180ms;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .divider__line {
+    scale: 0 1;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .divider .star {
+    opacity: 0;
+    rotate: -135deg;
+    scale: 0.4;
+  }
+
+  html.reveal [data-reveal] .divider__end {
+    --d: 650ms;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .divider__end {
+    opacity: 0;
+    scale: 0.2;
+  }
+
+  html.reveal [data-reveal] .footer__name {
+    --d: 200ms;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .footer__name {
+    opacity: 0;
+    translate: 0 0.5em;
+  }
+
+  /* experience: the role's star spins onto the spine, then its points arrive one after another */
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .role__mark {
+    opacity: 0;
+    rotate: -180deg;
+    scale: 0.3;
+  }
+
+  html.reveal [data-reveal] .highlights li {
+    --d: calc(160ms + var(--n, 0) * 70ms);
+  }
+
+  .highlights li:nth-child(2) { --n: 1; }
+  .highlights li:nth-child(3) { --n: 2; }
+  .highlights li:nth-child(4) { --n: 3; }
+  .highlights li:nth-child(5) { --n: 4; }
+  .highlights li:nth-child(n + 6) { --n: 5; }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .highlights li {
+    opacity: 0;
+    translate: 1.5rem 0;
+  }
+
+  html.reveal [data-reveal] .skill-line {
+    --d: 560ms;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .skill-line {
+    opacity: 0;
+  }
+
+  /* projects: the panel opens out, the screenshot rises into it, the words follow */
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .card__shots {
+    scale: 0.94;
+  }
+
+  html.reveal [data-reveal] .card__shots > * {
+    --d: 180ms;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .card__shots > * {
+    opacity: 0;
+    translate: 0 3rem;
+  }
+
+  html.reveal [data-reveal] .card__text > * {
+    --d: calc(120ms + var(--n, 0) * 80ms);
+  }
+
+  .card__text > :nth-child(2) { --n: 1; }
+  .card__text > :nth-child(3) { --n: 2; }
+  .card__text > :nth-child(4) { --n: 3; }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .card__text > * {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+
+  /* skills: the names pop in along the line, a few at a time */
+  html.reveal [data-reveal] .skill-group__list li {
+    --d: calc(120ms + var(--n, 0) * 45ms);
+  }
+
+  .skill-group__list li:nth-child(2) { --n: 1; }
+  .skill-group__list li:nth-child(3) { --n: 2; }
+  .skill-group__list li:nth-child(4) { --n: 3; }
+  .skill-group__list li:nth-child(5) { --n: 4; }
+  .skill-group__list li:nth-child(6) { --n: 5; }
+  .skill-group__list li:nth-child(7) { --n: 6; }
+  .skill-group__list li:nth-child(n + 8) { --n: 7; }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .skill-group__list li {
+    opacity: 0;
+    scale: 0.8;
+  }
+
+  /* education: the two entries slide in from either side */
+  html.reveal .school:is([data-reveal="below"], [data-reveal="above"]) {
+    translate: -3rem 0;
+  }
+
+  html.reveal .school:nth-child(even):is([data-reveal="below"], [data-reveal="above"]) {
+    translate: 3rem 0;
+  }
+
+  /* certifications: the frame swings level, its star spins into place, the details follow */
+  html.reveal [data-reveal] .frame {
+    transition:
+      transform var(--t-ui) var(--ease-out),
+      rotate 1100ms var(--ease-expo) 80ms,
+      scale 1100ms var(--ease-expo) 80ms;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .frame {
+    rotate: -4deg;
+    scale: 0.9;
+  }
+
+  html.reveal [data-reveal] .frame__star {
+    --d: 380ms;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .frame__star {
+    opacity: 0;
+    rotate: -180deg;
+    scale: 0.3;
+  }
+
+  html.reveal [data-reveal] .cert > :not(.frame) {
+    --d: 260ms;
+  }
+
+  html.reveal :is([data-reveal="below"], [data-reveal="above"]) .cert > :not(.frame) {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+
+  /* ---------- a project's screenshots: each slides in from the side it comes from ---------- */
+
+  .shot-in--next {
+    animation: shot-in-next 460ms var(--ease-out) both;
+  }
+
+  .shot-in--prev {
+    animation: shot-in-prev 460ms var(--ease-out) both;
   }
 
   /* ---------- the details elements open to their height ---------- */
@@ -79,10 +269,40 @@
   }
 }
 
-/* ---------- scroll-linked: the experience spine draws as the record is read (EXP-4) ---------- */
+/* ---------- scroll-linked: things that follow the scrollbar, up and down ---------- */
 
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media screen and (prefers-reduced-motion: no-preference) {
+    /* the banner opens up as the page leaves it: the towers step out, the hills sink, the name lifts away */
+    .js .hero__tower {
+      animation:
+        load-fade 1000ms var(--ease-soft) 250ms forwards,
+        tower-out linear both;
+      animation-timeline: auto, scroll(root);
+      animation-range: normal, 0 90vh;
+    }
+
+    .js .hero__land {
+      animation:
+        load-fade 1000ms var(--ease-soft) 250ms forwards,
+        land-sink linear both;
+      animation-timeline: auto, scroll(root);
+      animation-range: normal, 0 90vh;
+    }
+
+    .hero__body {
+      animation: lift-away linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 75vh;
+    }
+
+    /* every heading's star turns as its section passes */
+    .section-head .divider .star {
+      animation: star-turn linear both;
+      animation-timeline: view();
+    }
+
+    /* the experience spine draws as the record is read (EXP-4) */
     .roles {
       view-timeline-name: --roles;
     }
@@ -91,6 +311,18 @@
       animation: spine-draw linear both;
       animation-timeline: --roles;
       animation-range: entry 15% cover 65%;
+    }
+
+    /* the closing banner: its towers rise from the ground as it comes into view */
+    .footer__scene {
+      view-timeline-name: --footer;
+    }
+
+    .footer__tower,
+    .footer__land {
+      animation: rise linear both;
+      animation-timeline: --footer;
+      animation-range: entry 10% cover 50%;
     }
   }
 }
@@ -134,5 +366,55 @@
 
   to {
     transform: scaleY(1);
+  }
+}
+
+@keyframes shot-in-next {
+  from {
+    opacity: 0;
+    transform: translateX(16%);
+  }
+}
+
+@keyframes shot-in-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-16%);
+  }
+}
+
+/* in the tower's own (mirrored, for the right one) space: outward and down */
+@keyframes tower-out {
+  to {
+    transform: translate(-18%, 8%);
+  }
+}
+
+@keyframes land-sink {
+  to {
+    transform: translateY(22%);
+  }
+}
+
+@keyframes lift-away {
+  to {
+    opacity: 0.2;
+    transform: translateY(-10vh) scale(0.96);
+  }
+}
+
+@keyframes star-turn {
+  from {
+    transform: rotate(-90deg);
+  }
+
+  to {
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(40%);
   }
 }

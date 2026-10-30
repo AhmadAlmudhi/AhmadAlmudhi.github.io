@@ -37,9 +37,18 @@ PR descriptions.
 - **Font:** Castoro (OFL, regular + italic), the identity's face, loaded with `next/font/google` in
   `app/layout.tsx`: downloaded at build and served from the site. One face only.
 - **Theme assets:** `npm run theme` (`scripts/cut-theme.mjs` + `scripts/make-icons.mjs`) cuts
-  `public/theme/` (towers, landscape, band texture, paper grain), `public/og.jpg` and the star icons
-  (`public/favicon.png`, `apple-touch-icon.png`, `icon-*.png`) from `my_theme.png`. The outputs are
-  committed; rerun only if the theme image changes.
+  `public/theme/` (the tower and the landscape, enlarged with a sharpening kernel to 2× and 3× of the
+  source as AVIF/WebP; the paper's grain as an SVG filter), `styles/theme-shapes.css` (the tower's
+  traced outline as a `clip-path` polygon), `public/og.jpg` and the star icons (`public/favicon.png`,
+  `apple-touch-icon.png`, `icon-*.png`) from `my_theme.png`. The outputs are committed; rerun only if
+  the theme image changes.
+- **Sharp at any zoom (decided 31 Oct 2026):** the theme image is only 2056 px wide, so nothing on
+  the page may be a stretched bitmap of it. The tower is one picture served at 2× its display size
+  and clipped to a vector outline (the right one is the same picture mirrored with `scale: -1 1`,
+  `components/ui/ThemePictures.tsx`); the band's star lattice is an inline SVG (`--band-texture` in
+  `styles/tokens.css`); the paper is `public/theme/paper.svg`. Screenshots and certificates ask for
+  twice their display width (`sizes`), and the lightbox asks for more as it zooms. Real-ESRGAN was
+  tried for a learned upscale and blocked as code from outside; the sharpened resize is the fallback.
 - Installed: `zod` (build-time only), `lucide-react`, `qrcode.react` (lazy), and dev: `@playwright/test`,
   `workbox-cli`, `@lhci/cli`. Overlays are native `<dialog>` (no Radix); the lightbox's swipe, pinch and
   double-tap zoom are plain pointer events; the card → detail morph uses `document.startViewTransition`
@@ -126,10 +135,15 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
   2026). Its copy comes from that repo's README and PRD and is listed in `resume-content.md` for him to
   confirm. Screenshots live in `public/projects/<slug>/`, named `<slug>-<device>-<screen>.png` (the
   optimizer names its outputs by file name), each with `width`, `height`, `device` ("phone" puts it in
-  the CSS phone frame, "desktop" unframed) and `tone`. Battuta's were taken in the live web app as a
-  guest with Playwright (390 × 844 at 3×, 1440 × 900 at 2×) using demo travels; Flutter web needs its
+  the CSS phone frame, "desktop" unframed) and `tone` (the app's ground, `#0e1415` for Battuta's dark
+  theme). Battuta's were taken in the live web app as a guest in its dark theme with Playwright
+  (390 × 844 at 4×, 1440 × 900 at 3×, `colorScheme: "dark"`) using demo travels (20 visited, mostly
+  large countries, 8 on the wishlist; Explore on a laptop sorted by area). Flutter web needs its
   accessibility tree switched on (click `flt-semantics-placeholder`) before Playwright can find its
-  controls. A future project may start as a placeholder (`placeholder: true`, screenshots without
+  controls, and its text fields drop typed keys: use `fill()` on an empty field.
+- A project card steps through its screenshots with Previous and Next (and a sideways swipe on the
+  picture), with a plain "2 of 9" count (`components/sections/ProjectCard.tsx`, the only client part
+  of the Projects section). A future project may start as a placeholder (`placeholder: true`, screenshots without
   `src` draw a title card, PRJ-12); the build logs any that remain.
 - No phone on the site (`profile.phone` omitted). The email must not appear as plain text in the static
   HTML; assemble it client-side.
@@ -165,12 +179,15 @@ Working files land in `.taste-skill/` (gitignored).
 - Gate on what ships: `node <skill>/scripts/lint.mjs app components styles`, then after `npm run build`
   serve `out/` at its root (`python3 -m http.server 4321 --directory out`; passing `out/index.html`
   breaks the absolute `/_next/` paths) and run `node <skill>/scripts/inspect.mjs http://127.0.0.1:4321/
-  --allow gradient-text,font-not-dealt,palette-cream,covered-text` (the gold name, Castoro, cream text on
-  green, and text passing under the fixed dock mid-scroll). Overlay shadows carry `/* taste-skill-ignore */`. Aim for 0 FAIL at
+  --allow gradient-text,font-not-dealt,palette-cream,covered-text,blank-gap` (the gold name, Castoro,
+  cream text on green, text passing under the fixed dock mid-scroll, and the inspector's whole-page
+  measurement after scrolling back to the top, when the replaying entrances below have reset; the
+  Playwright test "at every scroll position…" checks the real thing instead). Overlay shadows carry `/* taste-skill-ignore */`. Aim for 0 FAIL at
   1440/768/390, then open every screenshot it saves. Until real projects arrive, the picture-floor
   check may still fail; say so instead of padding with unrelated pictures.
-- The service worker precaches AVIF widths under 2000 px only (`workbox-config.cjs`); larger widths
-  serve big desktop screens and are cached when seen.
+- The service worker precaches the theme's pictures and the AVIF widths from 1024 to 2499 px
+  (`workbox-config.cjs`); 640 px serves low-density screens and 2500 px and up big desktop ones, both
+  cached when seen.
 - House rules apply everywhere: headlines ≤ 2 lines at every width; one `h1` saying who and what; a
   heading on every section; equal outer margins; no eyebrows or tiny tracked-caps labels; no monospace
   (drop the boilerplate Geist Mono); no 01/02/03 numbering; no gradients or shadows beyond the
@@ -181,15 +198,25 @@ Working files land in `.taste-skill/` (gitignored).
   The motion layer is CSS (`styles/motion.css`, the skill's tokens and recipes) plus one small script:
   - the signature move: the hero's dividers draw out from their stars as the name rises from its mask
     (pure CSS under `.js`, settled by 1.2s);
-  - section entrances are choreographed in `components/motion/Reveals.tsx` (`GROUPS` lists what
-    arrives together, 70ms apart, four steps at most). It marks what is already on screen as shown,
-    then sets `html.reveal`, which alone lets CSS hide the rest — so nothing is ever hidden before
-    hydration. To add an entrance, add a selector to `GROUPS`; don't put `data-reveal` in markup;
-  - scroll-linked (CSS scroll timelines in `@supports`): the experience spine draws; `<details>` open
-    with `interpolate-size`.
-- Content must be visible without JS. Hidden start states apply only under JS and
-  `prefers-reduced-motion: no-preference`. A Motion `initial={{ opacity: 0 }}` on server-rendered content
-  breaks this. Reveals play once; no preloader; the first screen is readable on first paint.
+  - section entrances play every time a part comes into view, scrolling down or up (Ahmad asked for
+    more motion, 31 Oct 2026). `components/motion/Reveals.tsx` sets `data-reveal` to "in", "below" or
+    "above" (watching the screen with a 48px margin, so nothing is left blank at the edge); `GROUPS`
+    lists what arrives together, 70ms apart. Each section has its own choreography in
+    `styles/motion.css`: heading stars turn as their lines draw, role stars spin onto the spine and
+    the points arrive one by one, the project panel opens out, skills pop in along the line, schools
+    slide in from either side, certificate frames swing level. Pieces move with `translate`,
+    `rotate` and `scale`, never `transform`, so they don't fight an element's own transform. It
+    marks what is already on screen first, then sets `html.reveal`, which alone lets CSS hide the
+    rest — so nothing is ever hidden before hydration. To add an entrance, add a selector to
+    `GROUPS`; don't put `data-reveal` in markup. `main` and the footer clip sideways overflow, so
+    parts waiting at the side never widen the page;
+  - scroll-linked (CSS scroll timelines in `@supports`): the banner opens up as the page leaves it
+    (towers step out, hills sink, the name lifts away), heading stars turn as their section passes,
+    the experience spine draws, the footer's towers rise; `<details>` open with `interpolate-size`;
+  - a project's screenshots slide in from the side they come from.
+- Content must be visible without JS. Hidden start states apply only under JS, on screens, with
+  `prefers-reduced-motion: no-preference` (printing shows everything). A Motion `initial={{ opacity: 0 }}`
+  on server-rendered content breaks this. No preloader; the first screen is readable on first paint.
 
 ## Done means (PRD §15)
 

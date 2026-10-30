@@ -4,9 +4,10 @@
 |---|---|
 | **Product** | Personal interactive resume website |
 | **Owner** | Ahmad Almudhi |
-| **Version** | 1.4 — live at ahmadalmudhi.github.io; English only; not indexed by search engines |
-| **Date** | 30 October 2026 |
+| **Version** | 1.5 — live at ahmadalmudhi.github.io; English only; not indexed by search engines |
+| **Date** | 31 October 2026 |
 | **Status** | Built (phases 1–5 merged and live, 30 Oct 2026); first real project (Battuta) added, more may follow |
+| **Changes in 1.5** | Sharp at any zoom: the theme's tower is served at 2× and clipped to a vector outline, the band's pattern and the paper's grain are vectors, screenshots and certificates load at twice their display size (NFR §10.1). Project cards step through screenshots with Previous and Next (PRJ-3). Entrances replay whenever a part comes into view, scrolling down or up, with a choreography per section, plus scroll-linked motion on the banner (§8). The QR dialog is centred on desktop (CON-5). Battuta's screenshots retaken in its dark theme with larger countries |
 | **Changes in 1.4** | Ahmad's own identity (`docs/content_files/my_theme.png`) replaces the dealt palette and type: Castoro in gold on parchment, a green band with gold rules, the eight-point star ornament, Najdi mud-brick towers and palm groves, one theme only (no light/dark). Removed at his request: the tagline, the "In numbers" stats, the "read as" lens, "Show more" on roles, "Next: …" links, the side rail, the theme toggle and the found photographs. Experience and Education follow the CV (MM/YYYY dates; durations in full words, end month minus start month, none for the current role); Skills are the CV's two groups; certificates sit in frames; the dock is always on screen |
 | **Changes in 1.3** | Visual and motion rules aligned with the `design-taste-frontend` skill, which now decides every visual question (§7, §8 and the affected requirements); projects start as placeholders; resume PDF and certificate images added; robots.txt keeps the PDF out of search |
 
@@ -134,7 +135,7 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 |---|---|---|
 | PRJ-1 | Project card: title, one-line pitch, my role, skill tags, cover screenshot. No resting shadow; separated from the ground by a tone step | Must |
 | PRJ-2 | **Screenshots by project type**: each project declares its type (mobile app / web / dashboard / web and mobile app), and each screenshot may name its device (phone or desktop), so one project can show both. Mobile-app screenshots sit in a plain rounded-rectangle phone frame drawn in CSS (no notch, buttons or glare). Web and dashboard screenshots are shown unframed: no browser chrome, square corners, on a surface tone. No shadows, no image mock-ups | Must |
-| PRJ-3 | **Layout:** one column of cards below 1024 px (a sideways row read as clipped), two columns from there; each card's screenshots sit on a green panel with a gold fillet and cycle in place on tap with a plain "2 of 5" count. No tilted or fanned stacks | Must |
+| PRJ-3 | **Layout:** one column of cards below 1024 px (a sideways row read as clipped), two columns from there; each card's screenshots sit on a green panel with a gold fillet; **Previous and Next** buttons under the panel (and a sideways swipe on it) step through them with a plain "2 of 9" count, each one sliding in from the side it comes from. No tilted or fanned stacks | Must |
 | PRJ-4 | ~~Desktop scroll-driven showcase~~ — dropped in 1.4 with the split stage; the card grid serves every width | — |
 | PRJ-5 | Tapping a card opens a **Project Detail overlay** via shared-element transition (the card morphs into the overlay). Full-screen sheet on mobile, centered modal on desktop | Must |
 | PRJ-6 | Detail content: overview, problem, my role & contributions, key features, tech stack, impact/results, screenshot gallery, links (Live demo, GitHub, Case study) — each link optional | Must |
@@ -143,7 +144,7 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 | PRJ-9 | Filter projects by technology (tags); also triggered from Skills section | Could |
 | PRJ-10 | "Confidential (NDA)" note, set as plain text in the text face (not a pill badge), for projects where code/links can't be shared | Should |
 | PRJ-11 | Featured flag to pin top projects first | Should |
-| PRJ-12 | **Done for now (30 Oct 2026):** the four Muvi placeholders were replaced by Battuta, Ahmad's own app, with six phone and three laptop screenshots taken in the live app. The placeholder mechanism stays for later projects. **Placeholders until real projects arrive:** placeholder entries carry `placeholder: true`, show a small visible "Placeholder" note, use only facts already in the Experience section (no invented metrics, links or results), and show placeholder screenshots: a screenshot entry without `src` is drawn as a title card in HTML/CSS at the real ratio (phone ≈ 9:19.5, desktop ≈ 16:10), in the page's palette and type, saying the screenshot is to come — never a grey box. The build lists every remaining placeholder; none may remain at launch | Must |
+| PRJ-12 | **Done for now (30 Oct 2026):** the four Muvi placeholders were replaced by Battuta, Ahmad's own app, with six phone and three laptop screenshots taken in the live app (retaken 31 Oct 2026 in its dark theme, at 4× and 3× density, with 20 visited and 8 wishlist countries, mostly large ones, so the map is full of colour). The placeholder mechanism stays for later projects. **Placeholders until real projects arrive:** placeholder entries carry `placeholder: true`, show a small visible "Placeholder" note, use only facts already in the Experience section (no invented metrics, links or results), and show placeholder screenshots: a screenshot entry without `src` is drawn as a title card in HTML/CSS at the real ratio (phone ≈ 9:19.5, desktop ≈ 16:10), in the page's palette and type, saying the screenshot is to come — never a grey box. The build lists every remaining placeholder; none may remain at launch | Must |
 
 ### 6.4 Skills
 | ID | Requirement | Priority |
@@ -176,7 +177,7 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 | CON-2 | **Copy** button for email (and phone, if shown) with animated checkmark + toast "Copied" | Must |
 | CON-3 | Resume PDF at `public/resume/Ahmad-Almudhi-Resume.pdf`: opens in a new tab and offers download (`download="Ahmad-Almudhi-Resume.pdf"`) | Must |
 | CON-4 | **Save contact (vCard)** button — adds me to the interviewer's phone contacts in one tap | Should |
-| CON-5 | **Share / QR mode:** button that shows a large QR code of the site URL + "Copy link" — so an in-person interviewer can open it on their own phone | Should |
+| CON-5 | **Share / QR mode:** button that shows a large QR code of the site URL + "Copy link" — so an in-person interviewer can open it on their own phone. A bottom sheet on phones, a dialog centred on the screen on desktop | Should |
 | CON-6 | WhatsApp quick-chat link | Could |
 | CON-7 | Footer as a designed close: the banner again (name between star dividers, towers and palm groves), then a green band with © year and the last-updated date. The Contact section opens with "Feel free to contact me at any time." (no role or product named) | Should |
 
@@ -232,12 +233,12 @@ Follows the design skill's `references/motion.md`; its tokens are the source of 
 | **Easing** | Tokens: `--ease-out` (under 600 ms), `--ease-expo` (reveals of 800 ms or more), `--ease-in-out` (things that travel, wipes), `--ease-exit` (leaving for good), `linear` for scroll-linked motion, plain `ease` for colour. Gesture-driven motion (drag, swipe-to-close) may use springs, critically damped — no overshoot, bounce or elastic anywhere |
 | **Stagger** | Lines 80–110 ms · list items 50–90 ms · characters 20–40 ms only in a heading of one to three words · four steps at most per sequence |
 | **Choreographed, not uniform** | Each section's parts arrive in reading order (heading, text, picture, details), rising 12–32 px or from a line mask. Never the same fade-up on every block |
-| **Once** | Scroll reveals play **once** per session, firing when the element's top is 85–90 % down the viewport — re-scrolling must not re-animate everything |
+| **Both ways** | Changed in 1.5 at Ahmad's request (more motion, scrolling down and up): entrances play every time a part comes into view, from below when scrolling down and from above when scrolling up. A part resets only when it is well out of sight, so nothing ever vanishes on screen, and nothing on screen waits more than a second (tested at every scroll position). Each section has its own choreography: heading stars turn as their lines draw, role stars spin onto the spine and the points follow one by one, the project panel opens and its screenshot rises, skills pop in along the line, schools slide in from either side, certificate frames swing level and their star spins into place |
 | **Never block reading** | The first screen (name, title, summary, primary button) is in the HTML and readable on first paint; the load sequence is settled by 1.2 s with four elements at most. Nothing in view stays hidden for more than 900 ms. Content stays visible without JavaScript: hidden start states apply only when JS runs and reduced motion is off. No preloader, no gate |
 | **No scroll-jacking** | Native scroll speed; scroll-linked effects only *react* to scroll. Optional Lenis smoothing on desktop only (lerp 0.1–0.14), off for touch and reduced motion. No custom cursor |
 | **Performance** | Animate only `transform`, `opacity` and `clip-path`. Target 60 fps on mid-range Android. Loops pause off screen |
 | **Reduced motion** | If `prefers-reduced-motion` is on: the finished state is shown; keep opacity/colour changes, drop travel, scale, parallax and roll-ups |
-| **Signature moments** | One signature move: the hero's dividers drawing out from their stars as the name rises. Supporting moments: the project card → detail morph (a UI transition) and the experience timeline drawing with the scrollbar. Nothing moves across text being read |
+| **Signature moments** | One signature move: the hero's dividers drawing out from their stars as the name rises. Supporting moments: the project card → detail morph (a UI transition); with the scrollbar, the banner opening up as the page leaves it (towers step out, hills sink, the name lifts away), heading stars turning, the experience timeline drawing and the footer's towers rising. Nothing moves across text being read |
 
 ---
 
@@ -267,7 +268,7 @@ Follows the design skill's `references/motion.md`; its tokens are the source of 
 | Interaction to Next Paint | < 200 ms |
 | Lighthouse (mobile) | Performance ≥ 95; Accessibility & Best Practices = 100; SEO passes every audit except the intentional "blocked from indexing" one |
 | Initial JS (gzipped) | ≤ 150 KB |
-| Images | AVIF/WebP, responsive sizes, lazy-loaded below the fold, blur placeholders |
+| Images | AVIF/WebP, responsive sizes at **twice** the display width so the page stays sharp when zoomed (the lightbox asks for more as it zooms), lazy-loaded below the fold, on their own ground colour while loading. Nothing on the page is a stretched bitmap: the tower is clipped to a vector outline, the band's pattern and the paper's grain are SVG |
 | Fonts | Self-hosted, subset, `font-display: swap`, no layout shift |
 
 ### 10.2 Accessibility (WCAG 2.2 AA)

@@ -3,22 +3,23 @@
 import { useEffect } from "react";
 
 /**
- * Section entrances (design-taste-frontend motion.md §6, PRD §8): the parts of each section arrive in
- * reading order, rising once as they enter, 70ms apart, four steps at most per sequence.
+ * Section entrances (PRD §8): the parts of each section arrive in reading order, 70ms apart, every
+ * time they come into view, from below when scrolling down and from above when scrolling up. Once
+ * a part has left the screen it resets, out of sight, ready to arrive again. styles/motion.css says
+ * how each part moves; this only says when.
  *
- * The choreography lives here, not in the markup: GROUPS lists what arrives together. Nothing is
- * hidden before this runs — first it marks everything already on screen as shown, then it sets
- * `html.reveal`, which is what lets the CSS hide the rest until it scrolls in. No script, reduced
- * motion, or a missed observer: the content is simply there.
+ * GROUPS lists what arrives together. Nothing is hidden before this runs: everything already on
+ * screen is marked as arrived first, then `html.reveal` is set, which is what lets the CSS hide the
+ * rest. No script or reduced motion: the content is simply there.
  */
 const GROUPS = [
   ".section-head",
   ".role",
-  ".card",
+  ".card__media, .card__text",
   ".skill-group",
   ".school",
   ".cert",
-  ".contact__lead, .contact__email, .contact__actions li",
+  ".contact__lead, .contact__email, .contact__actions li, .contact__links li",
   ".footer__sign",
 ];
 
@@ -38,50 +39,26 @@ export function Reveals() {
       });
     }
 
-    const done = (el: HTMLElement) => {
-      el.removeAttribute("data-reveal");
-      el.classList.remove("is-in");
-      el.style.removeProperty("--i");
-    };
-    const show = (el: HTMLElement) => {
-      el.classList.add("is-in");
-      el.addEventListener("transitionend", (e) => e.target === el && e.propertyName === "translate" && done(el));
-      window.setTimeout(() => done(el), 2400); // never leave a reveal half-finished
-    };
-
-    // Whatever the visitor can already see stays as it is; only what lies below waits.
-    const fold = window.innerHeight * 0.92;
+    // what the visitor can already see has arrived; only the rest waits
     for (const el of targets) {
-      if (el.getBoundingClientRect().top < fold) continue;
-      el.setAttribute("data-reveal", "");
+      const r = el.getBoundingClientRect();
+      el.dataset.reveal = r.top < window.innerHeight && r.bottom > 0 ? "in" : "below";
     }
     document.documentElement.classList.add("reveal");
 
+    // A part waiting off screen sits 2.5rem further out, so the screen is watched with a 3rem margin:
+    // a part starts arriving as it reaches the edge (never leaving a blank strip there), and resets
+    // only once it is well out of sight.
     const io = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          io.unobserve(entry.target);
-          show(entry.target as HTMLElement);
+        for (const { target, isIntersecting, boundingClientRect } of entries) {
+          (target as HTMLElement).dataset.reveal = isIntersecting ? "in" : boundingClientRect.top < 0 ? "above" : "below";
         }
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.05 },
+      { rootMargin: "48px 0px" },
     );
-    document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => io.observe(el));
-
-    // Deep links and overlays jump; anything that ends up in view without crossing the band shows.
-    const sweep = () =>
-      document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-in)").forEach((el) => {
-        const r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) show(el);
-      });
-    const late = window.setTimeout(sweep, 1500);
-    window.addEventListener("hashchange", sweep);
-    return () => {
-      io.disconnect();
-      window.clearTimeout(late);
-      window.removeEventListener("hashchange", sweep);
-    };
+    for (const el of targets) io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   return null;

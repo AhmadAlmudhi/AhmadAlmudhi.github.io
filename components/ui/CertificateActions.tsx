@@ -25,7 +25,7 @@ export function CertificateFrame({ cert }: { cert: Certification }) {
     >
       <span className="frame__mat">
         <span className="frame__picture" ref={picture}>
-          <Picture {...cert.image} sizes="(min-width: 64em) 24rem, 90vw" />
+          <Picture {...cert.image} sizes="(min-width: 64em) 48rem, 180vw" />
         </span>
       </span>
       <Star className="frame__star" size={22} />

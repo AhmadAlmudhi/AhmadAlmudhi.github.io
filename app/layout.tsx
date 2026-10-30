@@ -85,10 +85,9 @@ export const viewport: Viewport = {
 const bootScript = `document.documentElement.classList.add('js');`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // The paper and the band are CSS backgrounds, found only once the stylesheet is parsed; the hero's
-  // band is the first screen's largest paint, so both start loading with the HTML.
-  preload("/theme/band.webp", { as: "image", fetchPriority: "high" });
-  preload("/theme/paper.webp", { as: "image" });
+  // The paper's grain is a CSS background, found only once the stylesheet is parsed: start it with
+  // the HTML. (The band's pattern is inline in the CSS.)
+  preload("/theme/paper.svg", { as: "image" });
   return (
     <html lang="en" className={castoro.variable}>
       <head>

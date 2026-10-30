@@ -105,7 +105,7 @@ Everything below is taken from the Battuta README and `docs/Battuta_PRD.md` in t
 
 **Built with:** Flutter, Dart, Riverpod, go_router, Drift (SQLite), Firebase Authentication, Cloud Firestore, Firebase Hosting, GitHub Actions.
 
-**Screenshots** (`public/projects/battuta/`): taken on 30 Oct 2026 in the live web app as a guest, six at phone size (390 × 844 at 3×: Explore, Turkey's details, My travels, Stats, My travels in Arabic, Welcome) and three at laptop size (1440 × 900 at 2×: Explore, Turkey's details, Stats). The travels in them are demo data entered for the screenshots (14 visited countries, 4 on the wishlist), not your real trips; they were saved only in that test browser.
+**Screenshots** (`public/projects/battuta/`): retaken on 31 Oct 2026 in the live web app as a guest, in its **dark theme**: six at phone size (390 × 844 at 4×: Explore, Brazil's details, My travels, Stats, My travels in Arabic, Welcome) and three at laptop size (1440 × 900 at 3×: Explore sorted by area, Brazil's details, Stats). The travels in them are demo data entered for the screenshots, not your real trips: 20 visited countries, mostly large ones so the map fills with colour (the United States, Canada, Brazil, Argentina, Mexico, China, India, Kazakhstan, Saudi Arabia, Japan, Indonesia, Malaysia, Egypt, Morocco, South Africa, Australia, the United Kingdom, France, Italy, Spain), and 8 on the wishlist (Russia, Greenland, Mongolia, Peru, Chile, Tanzania, New Zealand, Norway). They were saved only in a test browser.
 
 ---
 
