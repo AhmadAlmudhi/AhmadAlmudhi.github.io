@@ -147,8 +147,15 @@ Working files land in `.taste-skill/` (gitignored).
 - Don't copy the resume PDF's look: its spaced-caps section labels ("S U M M A R Y") and hairline rules
   are exactly what the house rules ban.
 - No scroll scenes: the skill ships no `library/scenes.json`, and its scenes load GSAP from a CDN.
-  Build motion with Motion for React (`LazyMotion`) and CSS scroll timelines, using the skill's tokens
-  (`references/motion.md` §4; PRD §8 follows them).
+  The motion layer is CSS (`styles/motion.css`, the skill's tokens and recipes) plus one small script:
+  - the signature move is the hero's masked name rise on load (pure CSS under `.js`, settled by 1.2s);
+  - section entrances are choreographed in `components/motion/Reveals.tsx` (`GROUPS` lists what
+    arrives together, 70ms apart, four steps at most). It marks what is already on screen as shown,
+    then sets `html.reveal`, which alone lets CSS hide the rest — so nothing is ever hidden before
+    hydration. To add an entrance, add a selector to `GROUPS`; don't put `data-reveal` in markup;
+  - stats roll up digit by digit (digits drawn by CSS `content`, real figure in `sr-only` text);
+  - scroll-linked (CSS scroll timelines in `@supports`): the experience spine draws, the footer
+    photo drifts; the stage wipes in each new picture; `<details>` open with `interpolate-size`.
 - Content must be visible without JS. Hidden start states apply only under JS and
   `prefers-reduced-motion: no-preference`. A Motion `initial={{ opacity: 0 }}` on server-rendered content
   breaks this. Reveals play once; no preloader; the first screen is readable on first paint.

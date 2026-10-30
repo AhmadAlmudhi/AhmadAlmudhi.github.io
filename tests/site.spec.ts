@@ -111,3 +111,21 @@ test.describe("the read-as lens", () => {
     await expect(product).not.toHaveCSS("color", ink);
   });
 });
+
+test.describe("motion (PRD §8)", () => {
+  test("reduced motion is the finished page: nothing waits to be revealed", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await expect(page.locator("[data-reveal]")).toHaveCount(0);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    const lineTransform = await page.locator(".hero__name [data-line]").first().evaluate((el) => getComputedStyle(el).transform);
+    expect(lineTransform).toBe("none");
+  });
+
+  test("content below the fold arrives when scrolled to", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("heading", { name: "Certifications", level: 2 }).scrollIntoViewIfNeeded();
+    const heading = page.getByRole("heading", { name: "Certifications", level: 2 });
+    await expect(heading).toHaveCSS("opacity", "1");
+  });
+});
