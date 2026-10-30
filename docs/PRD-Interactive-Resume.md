@@ -6,7 +6,7 @@
 | **Owner** | Ahmad Almudhi |
 | **Version** | 1.3 — live at ahmadalmudhi.github.io; English only; not indexed by search engines |
 | **Date** | 30 October 2026 |
-| **Status** | Approved for build |
+| **Status** | Built (phases 1–5 merged and live, 30 Oct 2026); waiting for the real projects (phase 6) |
 | **Changes in 1.3** | Visual and motion rules aligned with the `design-taste-frontend` skill, which now decides every visual question (§7, §8 and the affected requirements); projects start as placeholders; resume PDF and certificate images added; robots.txt keeps the PDF out of search |
 
 ---
@@ -519,8 +519,8 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 | **3. Showcases** | Projects (with placeholders): phone frames, mobile swipe row, desktop scroll showcase, detail overlay, lightbox. Certifications + lightbox |
 | **4. Motion polish** | Signature animations, micro-interactions for all elements, reduced-motion variants |
 | **5. Hardening** | Done 30 Oct 2026: Lighthouse mobile performance 0.97, accessibility 1, best practices 1, CLS 0 (LCP 2.6 s simulated, bound by the web font; kept `font-display: swap`); initial JS 149 KB gz; OG image and monogram icons; designed 404; PWA with offline after one visit (tested); CSP and referrer policy via `<meta>`; analytics built and off until a provider is chosen. Still to do by Ahmad: real-device testing on his phone |
-| **6. Real projects** | Replace every placeholder project and screenshot with the real content and redacted screenshots; re-run the design gate with `--have product-ui` |
-| **7. Launch** | Final URL `https://ahmadalmudhi.github.io` with HTTPS enforced, QR code ready on my phone, link added to LinkedIn/GitHub/PDF resume, repo README polished (the repo is public) |
+| **6. Real projects** | **Next, with Ahmad's material.** Replace every placeholder project and screenshot with the real content and redacted screenshots; re-run the design gate with `--have product-ui` |
+| **7. Launch** | Done: live at `https://ahmadalmudhi.github.io`, HTTPS enforced, repo README written. Left for Ahmad: open the site once on his phone (offline cache) and keep the QR one tap away; add the link to LinkedIn, GitHub and the PDF resume once the real projects are in |
 
 ---
 
