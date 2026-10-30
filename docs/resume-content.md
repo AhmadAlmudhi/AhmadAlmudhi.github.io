@@ -78,7 +78,7 @@ Skill tags: Angular, JavaScript
 ## Projects
 _You'll add these after everything else is finished. Until then the site shows placeholders._
 
-**Placeholders in the meantime** (PRD PRJ-12): the four Muvi projects, using only facts already in the Experience section above — no invented metrics, links or results. Each has `placeholder: true`, a small visible "Placeholder" note, and placeholder screenshots named `placeholder-*` at the real ratios.
+**Placeholders in the meantime** (PRD PRJ-12): the four Muvi projects, using only facts already in the Experience section above — no invented metrics, links or results. Each has `placeholder: true`, a small visible "Placeholder" note, and placeholder screenshots drawn as title cards at the real ratios until the real ones are added.
 
 | Placeholder | Type | Facts used (from Experience) |
 |---|---|---|

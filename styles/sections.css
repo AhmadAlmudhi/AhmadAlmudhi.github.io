@@ -1,0 +1,376 @@
+/* Section and component styles. Geometry follows the dealt blueprints; colour and type come from
+   the tokens only. */
+
+/* ---------- theme toggle: sun/moon morph ---------- */
+
+.theme-toggle {
+  position: relative;
+}
+
+.theme-toggle__icon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition:
+    opacity var(--t-ui) ease,
+    transform var(--t-ui) var(--ease-out);
+}
+
+.theme-toggle__icon[data-show="false"] {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+/* ---------- the email: halves joined after hydration (PRD §10.4) ---------- */
+
+.email__at::before {
+  content: "@";
+}
+
+/* ---------- hero sheet ---------- */
+
+.hero__top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.hero__top > :first-child {
+  justify-self: start;
+}
+
+.hero__top > :last-child {
+  justify-self: end;
+}
+
+.hero__top a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+}
+
+.monogram {
+  display: inline-grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  background: var(--sheet-ink);
+  color: var(--sheet);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hero__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-block: auto;
+  padding-top: clamp(2rem, 5vh, 4rem);
+}
+
+.hero__name {
+  margin-left: -0.04em;
+}
+
+.hero__name .line {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.hero__name [data-line] {
+  display: block;
+}
+
+.hero__title {
+  margin-top: clamp(1rem, 0.5rem + 1.5vw, 1.75rem);
+  font-weight: 500;
+}
+
+.hero__summary {
+  margin-top: 1rem;
+  max-width: 40ch;
+  color: var(--sheet-ink);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 1.75rem;
+  margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+}
+
+.hero__sheet .button {
+  background: var(--sheet-ink);
+  color: var(--sheet);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero__sheet .button:hover {
+    background: var(--accent-ink);
+    color: var(--accent);
+  }
+}
+
+/* ---------- stage pictures ---------- */
+
+.stage-figure {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin: 0;
+  max-height: 100%;
+}
+
+.stage-caption {
+  max-width: 34ch;
+  color: var(--stage-muted);
+  font-size: var(--step-small);
+  text-align: center;
+}
+
+.phone {
+  height: min(64vh, 40rem);
+  max-height: 100%;
+  aspect-ratio: 9 / 19.5;
+  padding: 0.6rem;
+  border-radius: 2.6rem;
+  background: var(--stage-surface);
+}
+
+.hero__stage .phone {
+  height: min(30svh, 40rem);
+}
+
+@media (min-width: 64em) {
+  .hero__stage .phone {
+    height: min(58vh, 40rem);
+  }
+}
+
+.phone__screen {
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+  border-radius: 2rem;
+  background: var(--bg);
+}
+
+.phone__screen .shot,
+.phone__screen .placeholder-shot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wide-frame {
+  width: min(100%, 44rem);
+  aspect-ratio: 16 / 10;
+  background: var(--bg);
+}
+
+.wide-frame .shot,
+.wide-frame .placeholder-shot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.stage-figure--certificate img {
+  width: min(100%, 44rem);
+  height: auto;
+}
+
+/* The placeholder title card (PRJ-12): designed, never a grey box. */
+.placeholder-shot {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.25rem 1.1rem 1.4rem;
+  background: var(--bg);
+  color: var(--ink);
+  container-type: inline-size;
+}
+
+.placeholder-shot__kind {
+  font-size: max(0.8125rem, 6cqi);
+  line-height: 1.25;
+}
+
+.placeholder-shot__title {
+  font-size: max(1.75rem, 15cqi);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.placeholder-shot--dashboard .placeholder-shot__title,
+.placeholder-shot--web .placeholder-shot__title {
+  font-size: max(1.75rem, 8cqi);
+}
+
+.placeholder-shot--dashboard .placeholder-shot__kind,
+.placeholder-shot--web .placeholder-shot__kind,
+.placeholder-shot--dashboard .placeholder-shot__note,
+.placeholder-shot--web .placeholder-shot__note {
+  font-size: max(0.8125rem, 2.4cqi);
+}
+
+.placeholder-shot__note {
+  font-size: max(0.8125rem, 5cqi);
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.stage-card {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 36rem);
+}
+
+.stage-card__figure {
+  font-size: clamp(3rem, 1rem + 4.5vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  max-width: none;
+}
+
+.stage-card__caption {
+  font-size: var(--step-lead);
+  line-height: 1.3;
+}
+
+.stage-card__detail {
+  color: var(--stage-muted);
+  max-width: 40ch;
+}
+
+/* ---------- reading-half sections (phase 1 structure; blueprints in phase 2) ---------- */
+
+.roles,
+.project-list,
+.schools,
+.certs {
+  display: grid;
+  gap: clamp(3rem, 2rem + 4vw, 6rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.role__title,
+.project__title,
+.school__name,
+.cert__name {
+  font-size: var(--step-lead);
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.role__company {
+  display: block;
+  font-weight: 400;
+}
+
+.role__when {
+  margin-top: 0.4rem;
+  color: var(--muted);
+}
+
+.role__duration::before {
+  content: ", ";
+}
+
+.role__highlights {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1rem 0 1.25rem;
+  padding-left: 1.1em;
+}
+
+.project {
+  min-height: 70svh;
+}
+
+.project__tagline {
+  margin-top: 0.5rem;
+}
+
+.project__meta {
+  margin: 0.75rem 0 1rem;
+  color: var(--muted);
+}
+
+.skill-groups {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.skill-groups dt {
+  font-weight: 500;
+}
+
+.skill-groups dd {
+  margin: 0.2rem 0 0;
+}
+
+.school p,
+.cert p {
+  margin-top: 0.4rem;
+}
+
+/* ---------- contact and footer ---------- */
+
+.contact {
+  min-height: 100svh;
+  padding: var(--section) var(--margin) calc(var(--section) / 2);
+  background: var(--stage);
+  color: var(--stage-ink);
+}
+
+.contact__email {
+  margin-top: 2rem;
+  font-size: clamp(2rem, 0.5rem + 5.5vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  max-width: none;
+  overflow-wrap: anywhere;
+}
+
+.contact__email a {
+  text-decoration: none;
+}
+
+.contact__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 2rem 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.footer {
+  padding: clamp(3rem, 2rem + 4vw, 6rem) var(--margin) var(--margin);
+  overflow: clip;
+}
+
+.footer__name {
+  font-size: clamp(3rem, 0.5rem + 11.5vw, 15rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  max-width: none;
+}
+
+.footer__legal {
+  margin-top: 1.5rem;
+  max-width: none;
+}

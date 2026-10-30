@@ -30,12 +30,17 @@ to match. Cite PRD requirement IDs in commit messages and PR descriptions.
 - Next.js 16.4.3 (App Router, Turbopack), React 19.3, TypeScript strict, Tailwind CSS v4 (CSS-first
   `@theme`; wired through the `@tailwindcss/turbopack` loader rule in `next.config.ts`, no PostCSS
   config), ESLint 9 flat config (ignores `.agents/`, `.claude/`, `.taste-skill/`). Path alias `@/*` → repo root.
-- `npm run dev` · `npm run build` (writes `out/`) · `npm run lint` · `npx tsc --noEmit`
-- `next start` does not serve a static export. Preview production with `npx serve out` after a build.
-- Planned dependencies (PRD §13.1), added when a milestone needs them: `motion`, `@radix-ui/react-dialog`,
-  `lucide-react`, `zod`, `qrcode.react`, `workbox-cli`, `@playwright/test`, `@lhci/cli`;
-  `embla-carousel-react` only if native scroll snap falls short. `sharp` is already present through
-  Next. Initial JS budget is ≤ 150 KB gzipped, so check before adding anything else.
+- `npm run dev` · `npm run build` (writes `out/`) · `npm run lint` · `npm run typecheck` · `npm start`
+  (serves `out/`; `next start` does not serve a static export).
+- **Fonts:** Clash Grotesk's licence (ITF FFL) allows self-hosting but forbids distribution through a
+  repository, so `app/fonts/` is gitignored and `scripts/fetch-fonts.mjs` downloads the official files
+  from Fontshare (`predev`/`prebuild` hooks; CI caches them). Never commit font files.
+- Installed: `motion`, `zod`, `lucide-react`, `qrcode.react`. Planned (PRD §13.1), added when a milestone
+  needs them: `workbox-cli`, `@playwright/test`, `@lhci/cli`; `embla-carousel-react` only if native
+  scroll snap falls short. Overlays are native `<dialog>` (no Radix). `sharp` comes with Next.
+  Initial JS budget is ≤ 150 KB gzipped, so check before adding anything else.
+- CI (`.github/workflows/deploy.yml`): every PR runs lint, typecheck, the design lint and the build; a
+  push to `main` also deploys `out/` to Pages. Wait for green checks before merging.
 
 ## Static export: hard constraints
 
@@ -57,11 +62,17 @@ to match. Cite PRD requirement IDs in commit messages and PR descriptions.
 
 ## Architecture (PRD §13.3)
 
-`app/` (layout, page composing sections in configured order, `opengraph-image.tsx`, `not-found.tsx`) ·
-`components/{nav,sections,ui,motion}` · `content/*.ts` + `content/schema.ts` (Zod, validated at build:
-bad content fails the build) · `lib/` (dates/durations, active-section hook, hash/history sync) ·
-`public/{projects/<slug>,certificates,resume}` · `scripts/` · `tests/` (Playwright) ·
-`.github/workflows/deploy.yml`.
+`app/` (layout with the boot script, page composing sections in configured order) ·
+`components/{nav,sections,stage,ui}` · `content/*.ts` + `content/schema.ts` (Zod, parsed on import:
+bad content fails the build) · `lib/nav.tsx` (active section, hash/history store, overlays, shortcuts),
+`lib/dates.ts`, `lib/client.ts` (`useHydrated`, `useClientValue` — use these, not setState-in-effect,
+which the React lint rules reject) · `styles/` (`tokens.css` roles, `base.css`, `frame.css`,
+`sections.css`, imported by `app/globals.css`) · `public/{projects/<slug>,certificates,resume}` ·
+`scripts/` · `.github/workflows/deploy.yml`.
+
+The page is the dealt split stage: `components/stage/Stage.tsx` is the fixed half on desktop (≥ 64em).
+Blocks in the reading half carry `data-stage="<key>"`; the stage crossfades to the layer with that key
+(layers are built in `app/page.tsx`). The stage also carries the desktop rail and the section bar.
 
 Navigation behaviour (PRD §5.2) is the core of the interview use case:
 - Scrolling updates the hash with `replaceState`. Tapping a nav item uses `pushState`, so Back returns to
@@ -79,10 +90,11 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
   compute it in the browser after hydration (with the build value as fallback) or schedule a rebuild.
 - **Projects are placeholders until Ahmad adds the real ones, after everything else is finished**
   (PRJ-12). Placeholders are the four Muvi projects listed in `resume-content.md`, using only facts from
-  the Experience section. Each has `placeholder: true` and a small visible "Placeholder" note. Their
-  screenshots are `public/projects/<slug>/placeholder-*.png` at the real ratios (phone ≈ 9:19.5,
-  desktop ≈ 16:10), designed as title cards in the page's palette and type, never grey boxes. The build
-  must list the remaining placeholders; none may remain at launch.
+  the Experience section. Each has `placeholder: true` and a small visible "Placeholder" note. A
+  screenshot without `src` renders as `PlaceholderShot`: a title card drawn in HTML at the real ratio
+  (phone ≈ 9:19.5, desktop ≈ 16:10) in the page's type and colours, never a grey box. To add a real one,
+  put the redacted image in `public/projects/<slug>/` and give the entry `src`, `width`, `height`. The
+  build logs the remaining placeholders; none may remain at launch.
 - No phone on the site (`profile.phone` omitted). The email must not appear as plain text in the static
   HTML; assemble it client-side.
 - Resume PDF: `public/resume/Ahmad-Almudhi-Resume.pdf` (copy of `docs/content_files/Ahmad_Almudhi-Resume.pdf`),
@@ -108,8 +120,11 @@ Working files land in `.taste-skill/` (gitignored).
   live thing → full copy deck → build still → gate → look/critique (≤ 3 rounds) → motion → report.
 - The draw deals the accent colour and fonts. Self-host the dealt faces with `next/font/google` or
   `next/font/local` (Fontshare faces). Never use CDN `<link>` tags: they break offline/PWA and the CSP.
-- Gate on what ships: `node <skill>/scripts/lint.mjs app components` and
-  `node <skill>/scripts/inspect.mjs out/index.html` after `npm run build`. Aim for 0 FAIL at
+- Gate on what ships: `node <skill>/scripts/lint.mjs app components styles`, then after `npm run build`
+  serve `out/` at its root (`python3 -m http.server 4321 --directory out`; passing `out/index.html`
+  breaks the absolute `/_next/` paths) and run `node <skill>/scripts/inspect.mjs http://127.0.0.1:4321/`.
+  Headless Chrome follows the OS theme, so inspect both: append `?theme=light` or `?theme=dark` (the boot
+  script honours it for that view only). Overlay shadows carry `/* taste-skill-ignore */`. Aim for 0 FAIL at
   1440/768/390, then open every screenshot it saves. Until real projects arrive, the picture-floor
   check may still fail; say so instead of padding with unrelated pictures.
 - House rules apply everywhere: headlines ≤ 2 lines at every width; one `h1` saying who and what; a

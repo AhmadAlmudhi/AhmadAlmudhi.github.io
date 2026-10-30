@@ -1,0 +1,508 @@
+/* The frame: header, mobile dock, section index sheet, and the split stage that carries the page.
+   Desktop (≥ 64em): the reading half on the left, the fixed stage on the right (45/55).
+   Phone and tablet: one column; the dock replaces the stage's rail. */
+
+/* ---------- header (NAV-3) ---------- */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  height: var(--header-h);
+  background: var(--bg);
+  transition: background-color var(--t-ui) ease;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 100%;
+  padding-inline: var(--margin);
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.header__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  min-height: var(--tap);
+  padding-inline: 0.75rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.header__link span {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.07em;
+  transition: text-decoration-color var(--t-hover) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .header__link:hover span {
+    text-decoration-color: currentColor;
+  }
+}
+
+.header__sections {
+  display: none;
+}
+
+@media (min-width: 64em) {
+  .header__sections {
+    display: inline-flex;
+  }
+}
+
+main {
+  padding-top: var(--header-h);
+}
+
+/* ---------- dock (NAV-1), phone and tablet ---------- */
+
+.dock {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: var(--dock-h) 1fr var(--dock-h);
+  align-items: stretch;
+  height: calc(var(--dock-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--stage);
+  color: var(--stage-ink);
+}
+
+.dock__step {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform var(--t-press) var(--ease-out),
+    opacity var(--t-hover) ease;
+}
+
+.dock__step:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.dock__step:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.dock__current {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out);
+}
+
+.dock__current:active {
+  transform: scale(0.97);
+}
+
+.dock__name {
+  font-size: var(--step-lead);
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+.dock__count {
+  font-size: var(--step-small);
+  color: var(--stage-muted);
+}
+
+body {
+  padding-bottom: calc(var(--dock-h) + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 64em) {
+  .dock {
+    display: none;
+  }
+
+  body {
+    padding-bottom: 0;
+  }
+}
+
+/* ---------- section index sheet ---------- */
+
+.sheet {
+  width: 100%;
+  max-width: 100%;
+  max-height: 88svh;
+  margin: auto 0 0;
+  padding: 0;
+  border: 0;
+  background: var(--sheet);
+  color: var(--sheet-ink);
+  box-shadow: 0 -1.5rem 4rem rgb(5 15 22 / 0.35); /* taste-skill-ignore: floating sheet */
+  overscroll-behavior: contain;
+}
+
+.sheet::backdrop {
+  background: rgb(5 15 22 / 0.55);
+}
+
+.sheet__inner {
+  padding: 1rem var(--margin) calc(1.5rem + env(safe-area-inset-bottom));
+}
+
+.sheet__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.sheet__title {
+  font-size: var(--step-lead);
+  font-weight: 500;
+}
+
+.sheet__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sheet__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.6rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--t-hover) ease;
+}
+
+.sheet__item[aria-current="true"] {
+  font-weight: 500;
+}
+
+.sheet__here {
+  font-size: var(--step-small);
+  letter-spacing: 0;
+  color: var(--sheet-muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sheet__item:hover {
+    color: var(--sheet-muted);
+  }
+}
+
+.sheet__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 64em) {
+  .sheet {
+    width: min(34rem, 100vw - 2 * var(--margin));
+    max-height: calc(100svh - 2 * var(--margin));
+    margin: var(--margin) var(--margin) auto auto;
+    box-shadow: 0 2rem 5rem rgb(5 15 22 / 0.35); /* taste-skill-ignore: floating sheet */
+  }
+
+  .sheet__inner {
+    padding: 1.25rem 1.75rem 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet[open] {
+    animation: sheet-in var(--t-ui) var(--ease-out);
+  }
+
+  .sheet[open]::backdrop {
+    animation: fade-in var(--t-ui) ease;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- the stage (the fixed half) ---------- */
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr auto;
+  min-height: 0;
+  background: var(--stage);
+  color: var(--stage-ink);
+  overflow: clip;
+}
+
+.stage__view {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 0;
+}
+
+.stage__layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 3vw, 3rem);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 700ms var(--ease-soft),
+    visibility 0s linear 700ms;
+}
+
+.stage__layer[data-on="true"] {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 700ms var(--ease-soft),
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage__layer,
+  .stage__layer[data-on="true"] {
+    transition: none;
+  }
+}
+
+/* The rail (NAV-2): every section, the current one marked by ink weight and a 4px bar. */
+.rail {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  padding: clamp(1.25rem, 2vw, 2rem) clamp(1.25rem, 2vw, 2rem) 0 0;
+}
+
+.rail__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rail__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0 0 0 1rem;
+  border: 0;
+  background: none;
+  color: var(--stage-muted);
+  font: inherit;
+  font-size: var(--step-small);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--t-hover) ease;
+}
+
+.rail__item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 1.1rem;
+  background: currentColor;
+  transform: translateY(-50%) scaleY(0);
+  transition: transform var(--t-ui) var(--ease-out);
+}
+
+.rail__item[aria-current="true"] {
+  color: var(--stage-ink);
+  font-weight: 500;
+}
+
+.rail__item[aria-current="true"]::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rail__item:hover {
+    color: var(--stage-ink);
+  }
+}
+
+/* The bar across the stage's foot: where you are, and the way on. */
+.stage__bar {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.5rem;
+  padding: 0 0.5rem 0 clamp(1.25rem, 2vw, 2rem);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.stage__where {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.stage__where strong {
+  font-weight: 500;
+}
+
+.stage__steps {
+  display: flex;
+}
+
+/* ---------- hero: two panels, the sheet and the stage ---------- */
+
+.hero {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: var(--margin);
+  padding: 0 var(--margin);
+}
+
+.hero__stage {
+  height: 40svh;
+  min-height: 17rem;
+}
+
+.hero__stage .rail {
+  display: none;
+}
+
+.hero__stage .stage__bar {
+  display: none;
+}
+
+.hero__sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 3rem) clamp(2rem, 4vw, 3.5rem);
+  background: var(--sheet);
+  color: var(--sheet-ink);
+  text-align: center;
+}
+
+@media (min-width: 64em) {
+  .hero {
+    grid-template-columns: 45fr 55fr;
+    grid-template-rows: none;
+    height: calc(100svh - var(--header-h));
+    min-height: 40rem;
+    padding-bottom: var(--margin);
+  }
+
+  .hero__sheet {
+    order: -1;
+  }
+
+  .hero__stage {
+    height: auto;
+  }
+
+  .hero__stage .rail,
+  .hero__stage .stage__bar {
+    display: flex;
+  }
+
+  .hero__stage .rail {
+    display: block;
+  }
+}
+
+/* ---------- the split: reading half and sticky stage ---------- */
+
+.split {
+  display: block;
+}
+
+.split__stage {
+  display: none;
+}
+
+.read {
+  padding-inline: var(--margin);
+}
+
+@media (min-width: 64em) {
+  .split {
+    display: grid;
+    grid-template-columns: 45fr 55fr;
+    gap: var(--margin);
+    padding-inline: var(--margin);
+  }
+
+  .read {
+    padding-inline: clamp(1.5rem, 3vw, 3.5rem);
+    min-width: 0;
+  }
+
+  .split__stage {
+    display: grid;
+    position: sticky;
+    top: calc(var(--header-h) + var(--margin));
+    height: calc(100svh - var(--header-h) - 2 * var(--margin));
+    margin-block: var(--margin);
+  }
+}
