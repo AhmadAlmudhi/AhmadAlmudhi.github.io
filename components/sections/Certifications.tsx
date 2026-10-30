@@ -13,7 +13,7 @@ export function Certifications() {
       </h2>
       <ul className="certs">
         {certifications.map((c) => (
-          <li key={c.id} className="cert" data-stage={`cert-${c.id}`} data-side={c.side}>
+          <li key={c.id} className="cert" data-stage={`cert-${c.id}`} data-side={c.side} data-cert={c.id}>
             <figure className="mobile-picture cert__picture">
               {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
               <img

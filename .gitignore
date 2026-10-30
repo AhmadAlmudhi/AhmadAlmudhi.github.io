@@ -48,3 +48,7 @@ next-env.d.ts
 
 # Clash Grotesk (ITF Free Font License: self-host only, no repository distribution); fetched by scripts/fetch-fonts.mjs
 /app/fonts/
+
+# playwright
+/test-results/
+/playwright-report/

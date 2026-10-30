@@ -32,7 +32,15 @@ const reading: Partial<Record<SectionId, () => ReactNode>> = {
 
 function shotFrame(project: (typeof projects)[number]) {
   const shot = <ProjectShot project={project} shot={project.screenshots[0]} />;
-  return project.kind === "mobile" ? <PhoneFrame>{shot}</PhoneFrame> : <div className="wide-frame">{shot}</div>;
+  return project.kind === "mobile" ? (
+    <div data-stage-shot={project.slug}>
+      <PhoneFrame>{shot}</PhoneFrame>
+    </div>
+  ) : (
+    <div className="wide-frame" data-stage-shot={project.slug}>
+      {shot}
+    </div>
+  );
 }
 
 function stageLayers(): StageLayer[] {
@@ -99,6 +107,7 @@ function stageLayers(): StageLayer[] {
         <figure className="stage-figure stage-figure--certificate">
           {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
           <img
+            data-stage-cert={cert.id}
             src={cert.image.src}
             width={cert.image.width}
             height={cert.image.height}
