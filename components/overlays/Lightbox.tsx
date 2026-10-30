@@ -2,11 +2,12 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Picture } from "@/components/ui/Picture";
 
 export type LightboxItem = {
   key: string;
   /** A real image can be zoomed; a placeholder card cannot. */
-  image?: { src: string; width: number; height: number; alt: string };
+  image?: { src: string; width: number; height: number; alt: string; tone?: string };
   node?: ReactNode;
   caption?: string;
 };
@@ -185,15 +186,7 @@ export function Lightbox({
           }}
         >
           {item?.image ? (
-            // eslint-disable-next-line @next/next/no-img-element -- static export
-            <img
-              src={item.image.src}
-              width={item.image.width}
-              height={item.image.height}
-              alt={item.image.alt}
-              draggable={false}
-              style={{ viewTransitionName: "overlay-shot" }}
-            />
+            <Picture {...item.image} sizes="100vw" priority style={{ viewTransitionName: "overlay-shot" }} />
           ) : (
             <div className="lightbox__node" style={{ viewTransitionName: "overlay-shot" }}>
               {item?.node}

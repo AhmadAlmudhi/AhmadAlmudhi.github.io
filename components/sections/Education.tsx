@@ -2,6 +2,7 @@ import { certifications, education, profile } from "@/content";
 import { pictures } from "@/content/pictures";
 import { formatMonth } from "@/lib/dates";
 import { NextLink } from "@/components/nav/NextLink";
+import { Picture } from "@/components/ui/Picture";
 
 const year = (d: string) => d.slice(0, 4);
 
@@ -18,15 +19,7 @@ export function Education() {
         Education
       </h2>
       <figure className="mobile-picture">
-        {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
-        <img
-          src={pictures.ksu.src}
-          width={pictures.ksu.width}
-          height={pictures.ksu.height}
-          alt={pictures.ksu.alt}
-          loading="lazy"
-          decoding="async"
-        />
+        <Picture {...pictures.ksu} sizes="100vw" />
       </figure>
       <div className="letter">
         <span className="letter__mark" aria-hidden="true">

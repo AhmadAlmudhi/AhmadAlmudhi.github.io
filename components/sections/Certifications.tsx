@@ -2,6 +2,7 @@ import { certifications } from "@/content";
 import { formatDay, isoMonth } from "@/lib/dates";
 import { NextLink } from "@/components/nav/NextLink";
 import { CertificateActions } from "@/components/ui/CertificateActions";
+import { Picture } from "@/components/ui/Picture";
 
 // Blueprint "Plain names in columns": the names set as type, no logos or boxes. On desktop the stage
 // holds each certificate as its name passes; on phones the image sits with the name (CRT-1..4).
@@ -15,15 +16,7 @@ export function Certifications() {
         {certifications.map((c) => (
           <li key={c.id} className="cert" data-stage={`cert-${c.id}`} data-side={c.side} data-cert={c.id}>
             <figure className="mobile-picture cert__picture">
-              {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
-              <img
-                src={c.image.src}
-                width={c.image.width}
-                height={c.image.height}
-                alt={c.image.alt}
-                loading="lazy"
-                decoding="async"
-              />
+              <Picture {...c.image} sizes="100vw" />
             </figure>
             <h3 className="cert__name">
               {c.name}

@@ -411,14 +411,14 @@ type SkillGroup = {
 | **Icons** | **Lucide** for controls (+ Simple Icons for tech/brand logos where they inform) | Consistent, tree-shakeable |
 | **Fonts** | Clash Grotesk (dealt by the design skill), self-hosted with `next/font/local`. Its licence (ITF FFL) allows self-hosting but not distribution through a repository, so `scripts/fetch-fonts.mjs` downloads it from Fontshare before `dev` and `build` and `app/fonts/` is gitignored | Zero layout shift, no external requests at runtime, works offline and under the CSP |
 | **Art direction & design QA** | **`design-taste-frontend` skill** (vendored in `.agents/skills/`, MIT): `draw.mjs` deals the direction, `lint.mjs` scans source, `inspect.mjs` renders the built `out/` in Chrome at 1440 / 768 / 390 and measures the house rules | Decisions instead of defaults; rules checked rather than hoped for |
-| **Images** | Build-time optimization script with **sharp** + `next/image` (`unoptimized`) | Next.js's on-demand image optimizer needs a server, so a script converts screenshots and certificates to AVIF/WebP at several widths and generates blur placeholders before the build |
+| **Images** | Build-time optimization script with **sharp** (`scripts/optimize-images.mjs`) and a `<Picture>` component | Next.js's on-demand image optimizer needs a server, so a script writes AVIF/WebP at several widths before the build; each picture loads on a ground of its own average colour |
 | **Content validation** | **Zod** | Fails the build on invalid/missing content |
 | **OG images** | `next/og` (rendered at build) or a designed static `og-image.png` | Branded link-preview image |
 | **Offline / PWA** | **Workbox** (`generateSW` run on the exported `out` folder) + web app manifest | Precache pages, images and PDF for offline interviews; works with any static host |
 | **QR code** | `qrcode.react` | Share/QR mode |
 | **Quality** | ESLint + Prettier (or Biome), **Playwright** (e2e + mobile viewports), **Lighthouse CI**, the design skill's `lint.mjs` | Guard performance, accessibility and design budgets on every push |
 | **Hosting** | **GitHub Pages** (free, public repo) at `https://ahmadalmudhi.github.io` — no custom domain | Code and site in one place; the repo doubles as a portfolio piece; free HTTPS; limits far above a resume site's needs (see §13.4) |
-| **Analytics** | Plausible, Umami or GoatCounter (script tag) | Cookie-free, privacy-friendly; work on any static host |
+| **Analytics** | GoatCounter (script tag), built in and switched off until a site code is set in `content/profile.ts` | Cookie-free, privacy-friendly; works on any static host; free for personal sites |
 | **Source control / CI/CD** | GitHub + **GitHub Actions** | Every push to `main` runs checks, builds and deploys to Pages automatically |
 
 ### 13.2 Alternatives considered
@@ -518,7 +518,7 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 | **2. Core sections** | Hero, Experience timeline, Skills, Education, Contact (copy buttons, vCard, PDF), each from its dealt blueprint and passing the skill's gate |
 | **3. Showcases** | Projects (with placeholders): phone frames, mobile swipe row, desktop scroll showcase, detail overlay, lightbox. Certifications + lightbox |
 | **4. Motion polish** | Signature animations, micro-interactions for all elements, reduced-motion variants |
-| **5. Hardening** | Performance & accessibility budgets met, OG image, SEO, PWA/offline, analytics, CSP & referrer policy via `<meta>` tags, real-device testing |
+| **5. Hardening** | Done 30 Oct 2026: Lighthouse mobile performance 0.97, accessibility 1, best practices 1, CLS 0 (LCP 2.6 s simulated, bound by the web font; kept `font-display: swap`); initial JS 149 KB gz; OG image and monogram icons; designed 404; PWA with offline after one visit (tested); CSP and referrer policy via `<meta>`; analytics built and off until a provider is chosen. Still to do by Ahmad: real-device testing on his phone |
 | **6. Real projects** | Replace every placeholder project and screenshot with the real content and redacted screenshots; re-run the design gate with `--have product-ui` |
 | **7. Launch** | Final URL `https://ahmadalmudhi.github.io` with HTTPS enforced, QR code ready on my phone, link added to LinkedIn/GitHub/PDF resume, repo README polished (the repo is public) |
 

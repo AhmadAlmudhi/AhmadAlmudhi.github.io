@@ -1,9 +1,8 @@
-import { z } from "zod";
-import { SkillGroup } from "./schema";
+import type { SkillGroup } from "./schema";
 
 // The two groups from resume-content.md (Product, Technical), each split into the categories
 // the skills section lists. No levels: none are stated, so none are shown.
-export const skillGroups = z.array(SkillGroup).parse([
+export const skillGroups: SkillGroup[] = [
   {
     id: "mobile",
     category: "Mobile",
@@ -55,4 +54,4 @@ export const skillGroups = z.array(SkillGroup).parse([
       { id: "scrum", name: "Agile & Scrum" },
     ],
   },
-]);
+];

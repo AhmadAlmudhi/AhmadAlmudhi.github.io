@@ -1,8 +1,7 @@
-import { z } from "zod";
-import { Experience } from "./schema";
+import type { Experience } from "./schema";
 
 // Newest first. `side` tags each highlight for the "read as" lens: engineering work or product work.
-export const experience = z.array(Experience).parse([
+export const experience: Experience[] = [
   {
     id: "muvi",
     company: "Muvi Cinemas",
@@ -78,4 +77,4 @@ export const experience = z.array(Experience).parse([
     ],
     skills: ["Angular", "JavaScript"],
   },
-]);
+];

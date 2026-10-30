@@ -52,3 +52,9 @@ next-env.d.ts
 # playwright
 /test-results/
 /playwright-report/
+
+# responsive image variants, written by scripts/optimize-images.mjs before dev and build
+/public/opt/
+
+# lighthouse ci
+/.lighthouseci/

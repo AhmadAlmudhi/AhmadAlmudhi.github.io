@@ -8,6 +8,8 @@ import { IndexSheet } from "@/components/nav/IndexSheet";
 import { Toaster } from "@/components/ui/Toast";
 import { Overlays } from "@/components/overlays/Overlays";
 import { Reveals } from "@/components/motion/Reveals";
+import { ServiceWorker } from "@/components/pwa/ServiceWorker";
+import { Analytics } from "@/components/pwa/Analytics";
 import "./globals.css";
 
 // Clash Grotesk, self-hosted (fetched by scripts/fetch-fonts.mjs; see .gitignore for why).
@@ -21,6 +23,26 @@ const clash = localFont({
 });
 
 const description = `${profile.title} in ${profile.location}. Flutter apps, web development and product ownership (PSPO I, PSM I).`;
+const ogImage = { url: "/og.png", width: 1200, height: 630, alt: `${profile.fullName}, ${profile.title}` };
+
+// PRD §10.4: GitHub Pages sends no custom headers, so the policy rides in a <meta> tag. Next's static
+// export inlines its bootstrap scripts, hence 'unsafe-inline' for scripts; everything loads from
+// this origin. Production only: the dev server needs eval and a websocket.
+const counter = profile.analytics ? ` https://gc.zgo.at https://${profile.analytics.code}.goatcounter.com` : "";
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${counter}`,
+  "style-src 'self' 'unsafe-inline'",
+  `img-src 'self' data: blob:${counter}`,
+  "font-src 'self'",
+  `connect-src 'self'${counter}`,
+  "manifest-src 'self'",
+  "worker-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
@@ -29,8 +51,17 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   // Link-only site: never indexed, but crawlable so link previews work (PRD §10.3).
   robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  referrer: "strict-origin-when-cross-origin",
+  icons: {
+    icon: [
+      { url: "/favicon.png", type: "image/png", sizes: "48x48" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+  },
   openGraph: {
     type: "profile",
+    images: [ogImage],
     url: "/",
     siteName: profile.fullName,
     title: `${profile.fullName} — ${profile.title}`,
@@ -38,7 +69,7 @@ export const metadata: Metadata = {
     firstName: profile.firstName,
     lastName: profile.lastName,
   },
-  twitter: { card: "summary_large_image", title: `${profile.fullName} — ${profile.title}`, description },
+  twitter: { card: "summary_large_image", title: `${profile.fullName} — ${profile.title}`, description, images: [ogImage] },
   formatDetection: { telephone: false, email: false, address: false },
 };
 
@@ -60,6 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={clash.variable} suppressHydrationWarning>
       <head>
+        {process.env.NODE_ENV === "production" && <meta httpEquiv="Content-Security-Policy" content={csp} />}
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
       <body>
@@ -73,6 +105,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <IndexSheet />
           <Overlays />
           <Reveals />
+          <ServiceWorker />
+          <Analytics />
           <Toaster />
         </NavProvider>
       </body>

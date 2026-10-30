@@ -1,22 +1,11 @@
-import { z } from "zod";
+import type { Picture } from "./schema";
 
 // Pictures of Ahmad's world found in open collections (design-taste-frontend `assets.mjs`;
 // raw records in public/pictures/credits.json). They show the places around him — never his own
 // work — and every one is credited in the footer.
-const Picture = z.object({
-  src: z.string().startsWith("/"),
-  width: z.number().int(),
-  height: z.number().int(),
-  alt: z.string(),
-  title: z.string(),
-  creator: z.string(),
-  licence: z.string(),
-  licenceUrl: z.url(),
-  page: z.url(),
-});
-export type Picture = z.infer<typeof Picture>;
 
-export const pictures = z.record(z.string(), Picture).parse({
+
+export const pictures: Record<"riyadh" | "ksu", Picture> = {
   riyadh: {
     src: "/pictures/riyadh-skyline-dusk.jpg",
     width: 2560,
@@ -27,6 +16,7 @@ export const pictures = z.record(z.string(), Picture).parse({
     licence: "CC BY-SA 4.0",
     licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0",
     page: "https://commons.wikimedia.org/wiki/File:Riyadh_Skyline_showing_the_King_Abdullah_Financial_District_(KAFD)_and_the_famous_Kingdom_Tower_.jpg",
+    tone: "#a6714c",
   },
   ksu: {
     src: "/pictures/ksu-entrance-gate.jpg",
@@ -38,5 +28,6 @@ export const pictures = z.record(z.string(), Picture).parse({
     licence: "CC0",
     licenceUrl: "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
     page: "https://commons.wikimedia.org/wiki/File:King_Saud_University_Entrance_Gate,_Riyadh.jpg",
+    tone: "#9aa3a6",
   },
-});
+};

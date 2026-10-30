@@ -252,3 +252,8 @@ img {
   margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
   font-size: var(--step-lead);
 }
+
+/* <Picture> wraps an <img> in <picture>; the wrapper takes no box, so layouts style the img. */
+.picture {
+  display: contents;
+}

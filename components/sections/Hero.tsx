@@ -5,6 +5,7 @@ import { PhoneFrame } from "@/components/ui/PhoneFrame";
 import { ProjectShot } from "@/components/ui/ProjectShot";
 import { Email } from "@/components/ui/Email";
 import { pictures } from "@/content/pictures";
+import { Picture } from "@/components/ui/Picture";
 
 // Hero blueprint "Menu column, sticky photograph": a paper sheet set like a card on the left, the
 // stage on the right holding the one app that replaced two. HERO-1/2/3/6.
@@ -52,7 +53,7 @@ export function Hero({ children }: { children?: React.ReactNode }) {
               </a>
             </li>
             <li>
-              <Email className="link" />
+              <Email className="link" label="Email" />
             </li>
             <li>
               <a className="link" href={profile.links.github} target="_blank" rel="noopener noreferrer">
@@ -69,15 +70,11 @@ export function Hero({ children }: { children?: React.ReactNode }) {
               key: "hero",
               content: (
                 <figure className="hero-picture">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
-                  <img
+                  <Picture
                     className="hero-picture__photo"
-                    src={pictures.riyadh.src}
-                    width={pictures.riyadh.width}
-                    height={pictures.riyadh.height}
-                    alt={pictures.riyadh.alt}
-                    fetchPriority="high"
-                    decoding="async"
+                    {...pictures.riyadh}
+                    sizes="(min-width: 64em) 50vw, 100vw"
+                    priority
                   />
                   <PhoneFrame>
                     <ProjectShot project={lead} shot={lead.screenshots[0]} priority />
