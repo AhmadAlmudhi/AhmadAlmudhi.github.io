@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# design-taste-frontend skill working files (draws, inspector screenshots)
+/.taste-skill/
+
+# claude code local settings
+/.claude/settings.local.json

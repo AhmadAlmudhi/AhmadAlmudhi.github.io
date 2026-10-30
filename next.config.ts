@@ -1,12 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // GitHub Pages serves the static `out/` folder (PRD §13.4).
+  // Don't add cacheComponents / partialPrefetching: PPR fails in export mode.
+  output: "export",
+  trailingSlash: true,
+  images: { unoptimized: true }, // pre-optimized by scripts/optimize-images.mjs
   experimental: {
     agentFeedback: true,
   },
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {

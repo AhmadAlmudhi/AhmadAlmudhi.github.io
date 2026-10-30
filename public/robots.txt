@@ -1,0 +1,5 @@
+# Pages carry <meta name="robots" content="noindex, nofollow">, so crawlers must be able to read them
+# (link previews in LinkedIn, WhatsApp and Slack need them too). Only the resume PDF is kept out of
+# search: it holds the phone number, and a PDF can't carry a noindex tag on GitHub Pages.
+User-agent: *
+Disallow: /resume/
