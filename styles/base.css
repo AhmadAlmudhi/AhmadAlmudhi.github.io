@@ -9,7 +9,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper) url("/theme/paper.webp") repeat;
+  background: var(--paper) var(--paper-texture);
   color: var(--ink);
   font-family: var(--font-text);
   font-size: var(--step-body);
@@ -146,7 +146,7 @@ img {
 
 .band {
   position: relative;
-  background: var(--green) url("/theme/band.webp") center / cover;
+  background: var(--green) var(--band-texture) 0 0 / var(--band-tile);
   color: var(--cream);
 }
 

@@ -38,7 +38,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background: var(--paper) url("/theme/paper.webp") repeat;
+  background: var(--paper) var(--paper-texture);
   color: var(--ink);
   overscroll-behavior: contain;
 }
@@ -59,7 +59,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 3.5rem;
-  background: var(--paper) url("/theme/paper.webp") repeat;
+  background: var(--paper) var(--paper-texture);
 }
 
 .detail__crumb {
@@ -165,7 +165,7 @@
   width: 100%;
   padding: clamp(1.25rem, 3vw, 2.5rem);
   border: 0;
-  background: var(--green) url("/theme/band.webp") center / cover;
+  background: var(--green) var(--band-texture) 0 0 / var(--band-tile);
   color: var(--gold-light);
   cursor: zoom-in;
   transition: transform var(--t-press) var(--ease-out);

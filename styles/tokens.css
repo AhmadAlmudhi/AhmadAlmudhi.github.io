@@ -22,6 +22,12 @@
 
   /* the green band */
   --green: #1c2c23;
+
+  /* textures, both vectors so they stay sharp at any zoom: the paper's grain (an SVG filter,
+     public/theme/paper.svg) and the band's eight-point star lattice, as in the theme image */
+  --paper-texture: url("/theme/paper.svg");
+  --band-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' fill='none' stroke='%23e9dcc1' stroke-opacity='.09' stroke-width='1'%3E%3Cpath d='M32 6 38 26 58 32 38 38 32 58 26 38 6 32 26 26zM32 0v6M32 58v6M0 32h6M58 32h6M26 26 0 0M38 26 64 0M38 38l26 26M26 38 0 64'/%3E%3C/svg%3E");
+  --band-tile: 44px;
   --green-deep: #13211a;
   --cream: #efe4d2; /* text on the band (10:1) */
   --cream-soft: #c4b596; /* secondary text on the band (6.6:1) */

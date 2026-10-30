@@ -1,8 +1,14 @@
 // Cuts the identity's pictures out of Ahmad's theme image (docs/content_files/my_theme.png) into
-// public/theme/: the two Najdi mud-brick towers on transparent ground, the landscape strip and the
-// green band's texture, plus the link-preview image. Run once when the theme image changes: `node scripts/cut-theme.mjs`.
+// public/theme/: the Najdi mud-brick tower, the landscape strip and the paper, plus the link-preview
+// image. Run once when the theme image changes: `node scripts/cut-theme.mjs`.
+//
+// Zoom stays sharp: the theme image is small (2056 × 765), so the pictures are enlarged here with a
+// sharpening kernel and served at 2× and more; the tower's outline is not baked into the picture but
+// traced as a polygon and written to styles/theme-shapes.css, where CSS clips the picture to it, so
+// the edge is drawn as a vector at any zoom. The paper's grain is an SVG filter, drawn at whatever
+// resolution the screen asks for. (The green band's pattern lives in styles/base.css, also a vector.)
 
-import { mkdirSync, rmSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import sharp from "sharp";
 
@@ -18,88 +24,104 @@ const lum = ([r, g, b]) => 0.299 * r + 0.587 * g + 0.114 * b;
 // measured: brick has luminance 123–161 and red − blue 71–82; the lattice and paper are lighter and greyer
 const brick = (p) => p[0] - p[2] > 64 && lum(p) < 172;
 
-// The tower's top, traced by hand (image px): parapet blocks, then the spire whose sunlit right face
-// slants from (124, 228) to (142, 389). Below that row the computed edge below takes over.
-const TRACED_UNTIL = 392;
-const spireEdge = (y) => Math.round(124 + ((142 - 124) * (y - 228)) / (389 - 228));
-// [from x, to x, top y]: the parapet blocks left to right, then the spire
+/** Enlarges a region with a sharpening kernel and writes it as AVIF and WebP at each width. */
+async function enlarge(region, name, widths) {
+  for (const width of widths) {
+    const height = Math.round((region.height * width) / region.width);
+    const base = sharp(SRC).extract(region).resize(width, height, { kernel: "mks2021" }).sharpen({ sigma: 0.9, m1: 0.4, m2: 1.2 });
+    await base.clone().avif({ quality: 58, effort: 6 }).toFile(join(OUT, `${name}-${width}.avif`));
+    await base.clone().webp({ quality: 84 }).toFile(join(OUT, `${name}-${width}.webp`));
+  }
+}
+
+// ---------- the tower (left; the right one is the same picture mirrored in CSS) ----------
+
+const TOWER = { left: 0, top: 222, width: 320, height: 397 };
+
+// Its top, traced by hand (tower px): the parapet blocks [from x, to x, top y], then the spire, whose
+// sunlit face slants from (124, 6) to (142, 168).
 const BLOCKS = [
-  [0, 20, 278],
-  [20, 52, 290],
-  [52, 76, 276],
-  [76, 98, 251],
+  [0, 20, 56],
+  [20, 52, 68],
+  [52, 76, 54],
+  [76, 98, 29],
 ];
-function tracedOpaque(x, y) {
-  if (x >= 98) return y >= 228 && x <= spireEdge(y);
-  return BLOCKS.some(([from, to, top]) => x >= from && x < to && y >= top);
-}
+const SPIRE = { top: 6, from: 124, to: 142, until: 168 };
 
-// A tower's silhouette, row by row: out to its furthest brick run, then across the sunlit step face
-// (luminance ≥ 203, the paper beside it is ≤ 200). outward = +1 when the steps descend to the right.
-async function tower(name, xFrom, xTo, top, bottom, outward) {
-  const width = xTo - xFrom, height = bottom - top;
-  const at = (i, y) => px(outward > 0 ? xFrom + i : xTo - 1 - i, top + y);
-  // a row's edge: the furthest brick pixel with the row mostly brick up to it (windows and vents
-  // don't break it; stray lattice pixels out in the paper can't reach it)
-  const raw = [];
-  for (let y = 0; y < height; y++) {
+// Below the spire the tower steps out five times. Each step's sunlit face is in shadow under its
+// ledge, so a row's own edge wobbles; the step's edge is where its lit rows end (their 85th
+// percentile). A step starts where the brick edge jumps out by 20 px or more.
+function steps() {
+  const brickEdge = [], litEdge = [];
+  for (let y = SPIRE.until; y < TOWER.height; y++) {
     let count = 0, edge = -1;
-    for (let i = 0; i < width; i++) {
-      if (brick(at(i, y))) { count++; if (count / (i + 1) >= 0.55 && count >= 8) edge = i; }
+    for (let x = 0; x < TOWER.width; x++) {
+      if (brick(px(TOWER.left + x, TOWER.top + y))) { count++; if (count / (x + 1) >= 0.55 && count >= 8) edge = x; }
     }
-    raw.push(edge);
+    brickEdge.push(edge);
   }
-  // smooth single-row noise with a vertical median of nine rows
-  const edges = raw.map((_, y) => {
-    const win = raw.slice(Math.max(0, y - 4), y + 5).sort((a, b) => a - b);
-    return win[Math.floor(win.length / 2)];
+  const smooth = brickEdge.map((_, i) => {
+    const win = brickEdge.slice(Math.max(0, i - 4), i + 5).sort((a, b) => a - b);
+    return win[win.length >> 1];
   });
-  for (let y = 0; y < height; y++) {
-    if (edges[y] < 0) continue;
-    let lit = edges[y], gap = 0;
-    for (let i = edges[y] + 1; i < Math.min(width, edges[y] + 26); i++) {
-      if (lum(at(i, y)) >= 203) { lit = i; gap = 0; } else if (++gap > 2) break;
+  smooth.forEach((edge, i) => {
+    let lit = edge, gap = 0;
+    for (let x = edge + 1; x < Math.min(TOWER.width, edge + 26); x++) {
+      if (lum(px(TOWER.left + x, TOWER.top + SPIRE.until + i)) >= 203) { lit = x; gap = 0; } else if (++gap > 2) break;
     }
-    edges[y] = lit;
-  }
-  const out = Buffer.alloc(width * height * 4);
-  for (let y = 0; y < height; y++) for (let j = 0; j < width; j++) {
-    const i = outward > 0 ? j : width - 1 - j, o = (y * width + j) * 4;
-    const [r, g, b] = px(xFrom + j, top + y);
-    out[o] = r; out[o + 1] = g; out[o + 2] = b;
-    if (top + y < TRACED_UNTIL) {
-      out[o + 3] = tracedOpaque(xFrom + j, top + y) ? 255 : 0;
-      continue;
+    litEdge.push(lit);
+  });
+  const runs = [];
+  let start = 0;
+  for (let i = 1; i <= smooth.length; i++) {
+    if (i === smooth.length || smooth[i] - smooth[i - 1] >= 20) {
+      const lit = litEdge.slice(start, i).sort((a, b) => a - b);
+      runs.push({ top: SPIRE.until + start, edge: lit[Math.floor(lit.length * 0.85)] + 1 });
+      start = i;
     }
-    const beyond = edges[y] < 0 ? 1e9 : i - edges[y];
-    out[o + 3] = beyond <= 0 ? 255 : beyond >= 2 ? 0 : 128;
   }
-  await sharp(out, { raw: { width, height, channels: 4 } }).png({ compressionLevel: 9 }).toFile(join(OUT, `${name}.png`));
+  return runs;
 }
 
-await tower("tower-left", 0, 320, 222, 619, +1);
-// the composition is symmetrical: the right tower is the left one mirrored; both as WebP with alpha
-const left = await sharp(join(OUT, "tower-left.png")).toBuffer();
-await sharp(left).webp({ quality: 84, alphaQuality: 90 }).toFile(join(OUT, "tower-left.webp"));
-await sharp(left).flop().webp({ quality: 84, alphaQuality: 90 }).toFile(join(OUT, "tower-right.webp"));
-rmSync(join(OUT, "tower-left.png"));
+const outline = [[98, SPIRE.top], [SPIRE.from, SPIRE.top], [SPIRE.to, SPIRE.until]];
+const runs = steps();
+runs.forEach((run, i) => {
+  outline.push([run.edge, run.top], [run.edge, i + 1 < runs.length ? runs[i + 1].top : TOWER.height]);
+});
+outline.push([0, TOWER.height]);
+for (const [from, to, top] of BLOCKS) outline.push([from, top], [to, top]);
+const pct = (v, of) => `${+((v / of) * 100).toFixed(2)}%`;
+const polygon = outline.map(([x, y]) => `${pct(x, TOWER.width)} ${pct(y, TOWER.height)}`).join(", ");
+writeFileSync(
+  join(ROOT, "styles", "theme-shapes.css"),
+  `/* Generated by scripts/cut-theme.mjs: the tower's outline, traced from the theme image, as a clip
+   path over its picture, so the edge stays sharp at any zoom. Don't edit; rerun the script. */
 
-// the link-preview image: the centre of the theme image itself, name and all (1200 × 630)
+:root {
+  --tower-outline: polygon(${polygon});
+}
+`,
+);
+await enlarge(TOWER, "tower", [640, 1280]);
+console.log(`Tower: ${runs.length} steps, outline of ${outline.length} points`);
+
+// ---------- the mountains and palm groves between the towers ----------
+
+await enlarge({ left: 330, top: 478, width: 1396, height: 141 }, "landscape", [2792, 4188]);
+
+// ---------- the link-preview image: the centre of the theme image itself, name and all ----------
+
 await sharp(SRC).extract({ left: 330, top: 18, width: 1396, height: 731 }).resize({ width: 1200, height: 630, fit: "cover" }).jpeg({ quality: 84, mozjpeg: true }).toFile(join(ROOT, "public", "og.jpg"));
-// the mountains and palm groves between the towers, and the green band's own texture
-await sharp(SRC).extract({ left: 330, top: 478, width: 1396, height: 141 }).webp({ quality: 82 }).toFile(join(OUT, "landscape.webp"));
-await sharp(SRC).extract({ left: 0, top: 636, width: 2056, height: 66 }).webp({ quality: 80 }).toFile(join(OUT, "band.webp"));
-console.log("Cut the theme pictures into public/theme/");
 
-// The page's paper: a seamless grain tile in the theme's parchment (#dfcdb7), ±a few levels, softened.
-{
-  const size = 320, paper = [0xdf, 0xcd, 0xb7];
-  const raw = Buffer.alloc(size * size * 3);
-  let seed = 7;
-  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  for (let i = 0; i < size * size; i++) {
-    const n = (rand() + rand() + rand() - 1.5) * 9; // roughly gaussian
-    for (let c = 0; c < 3; c++) raw[i * 3 + c] = Math.max(0, Math.min(255, Math.round(paper[c] + n)));
-  }
-  await sharp(raw, { raw: { width: size, height: size, channels: 3 } }).blur(0.45).webp({ quality: 70 }).toFile(join(OUT, "paper.webp"));
-}
+// ---------- the paper: fine grain in the parchment's own browns, light and dark ----------
+
+writeFileSync(
+  join(OUT, "paper.svg"),
+  `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240">
+<filter id="d" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="2" seed="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .36 0 0 0 0 .27 0 0 0 0 .16 .62 0 0 0 -.3"/></filter>
+<filter id="l" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1" numOctaves="2" seed="9" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .97 0 0 0 0 .93 0 0 0 0 .86 .62 0 0 0 -.3"/></filter>
+<rect width="240" height="240" filter="url(#d)"/><rect width="240" height="240" filter="url(#l)"/>
+</svg>
+`,
+);
+console.log("Cut the theme pictures into public/theme/ and the tower's outline into styles/theme-shapes.css");

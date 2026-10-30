@@ -91,6 +91,24 @@ test.describe("project overlays (PRJ-5..7, NAV-6)", () => {
     await expect(page).toHaveURL(/#projects$/);
   });
 
+  test("a card steps through its screenshots with Previous and Next (PRJ-3)", async ({ page }) => {
+    await page.goto("/#projects");
+    const nav = page.getByRole("group", { name: "Battuta screenshots" });
+    const prev = nav.getByRole("button", { name: "Previous screenshot" });
+    const next = nav.getByRole("button", { name: "Next screenshot" });
+    await expect(nav.getByText("1 of 9")).toBeVisible();
+    await expect(prev).toBeDisabled();
+    await next.click();
+    await next.click();
+    await expect(nav.getByText("3 of 9")).toBeVisible();
+    await prev.click();
+    await expect(nav.getByText("2 of 9")).toBeVisible();
+    for (let i = 0; i < 8; i++) if (await next.isEnabled()) await next.click();
+    await expect(nav.getByText("9 of 9")).toBeVisible();
+    await expect(next).toBeDisabled();
+    await expect(page.locator(".card__shots .wide-frame img.shot")).toHaveCount(1);
+  });
+
   test("Battuta shows phone and desktop screenshots, and they load (PRJ-2)", async ({ page }) => {
     await page.goto("/#projects/battuta");
     const detail = page.getByRole("dialog", { name: "Battuta" });
@@ -103,6 +121,19 @@ test.describe("project overlays (PRJ-5..7, NAV-6)", () => {
       await img.scrollIntoViewIfNeeded();
       await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
     }
+  });
+
+  test("the QR code opens centred on desktop (CON-5)", async ({ page }, info) => {
+    test.skip(isPhone(info.project.name), "desktop only");
+    await page.goto("/#contact");
+    await page.getByRole("button", { name: "QR code" }).click();
+    const sheet = page.getByRole("dialog", { name: "Open this on your phone" });
+    await expect(sheet).toBeVisible();
+    await page.waitForTimeout(400);
+    const box = (await sheet.boundingBox())!;
+    const vw = page.viewportSize()!;
+    expect(Math.abs(box.x + box.width / 2 - vw.width / 2)).toBeLessThan(4);
+    expect(Math.abs(box.y + box.height / 2 - vw.height / 2)).toBeLessThan(4);
   });
 
   test("certificates open full screen and close with Esc (CRT-2)", async ({ page }) => {
@@ -149,6 +180,71 @@ test.describe("motion (PRD §8)", () => {
     await page.getByRole("heading", { name: "Certifications", level: 2 }).scrollIntoViewIfNeeded();
     const heading = page.getByRole("heading", { name: "Certifications", level: 2 });
     await expect(heading).toHaveCSS("opacity", "1");
+  });
+
+  test("entrances play again on the way back up, and from above", async ({ page }) => {
+    await page.goto("/");
+    const head = page.locator("#education .section-head");
+    await expect(head).toHaveAttribute("data-reveal", "below");
+    await head.scrollIntoViewIfNeeded();
+    await expect(head).toHaveAttribute("data-reveal", "in");
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await expect(head).toHaveAttribute("data-reveal", "above");
+    await head.scrollIntoViewIfNeeded();
+    await expect(head).toHaveAttribute("data-reveal", "in");
+    await expect(head).toHaveCSS("opacity", "1");
+  });
+
+  test("at every scroll position, down and back up, what is on screen has arrived within a second", async ({ page }) => {
+    await page.goto("/");
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    const vh = page.viewportSize()!.height;
+    const stops: number[] = [];
+    for (let y = 0; y < height; y += Math.round(vh * 0.8)) stops.push(y);
+    for (const y of [...stops, ...stops.slice(0, -1).reverse()]) {
+      await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), y);
+      await page.waitForTimeout(1000);
+      const waiting = await page.evaluate(() =>
+        [...document.querySelectorAll<HTMLElement>("[data-reveal]")]
+          .filter((el) => {
+            const r = el.getBoundingClientRect();
+            return r.top < innerHeight - 4 && r.bottom > 4 && (el.dataset.reveal !== "in" || +getComputedStyle(el).opacity < 0.99);
+          })
+          .map((el) => el.className),
+      );
+      expect(waiting, `still waiting at ${y}px`).toEqual([]);
+    }
+  });
+
+  test("printing shows everything", async ({ page }) => {
+    await page.goto("/");
+    await page.emulateMedia({ media: "print" });
+    const hidden = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("[data-reveal]")].filter((el) => +getComputedStyle(el).opacity < 1).length);
+    expect(hidden).toBe(0);
+  });
+
+  test("nothing waiting to slide in widens the page", async ({ page }) => {
+    await page.goto("/");
+    for (const id of ["experience", "education", "contact"]) {
+      await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+      const wide = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(wide).toBeLessThanOrEqual(0);
+    }
+  });
+});
+
+test.describe("sharp at any zoom", () => {
+  test("the towers are one picture at 2× and 4×, clipped to a vector outline", async ({ page }) => {
+    await page.goto("/");
+    const towers = page.locator(".hero .tower");
+    await expect(towers).toHaveCount(2);
+    for (const tower of await towers.all()) {
+      expect(await tower.evaluate((el) => getComputedStyle(el).clipPath)).toMatch(/^polygon\(/);
+      expect(await tower.evaluate((el: HTMLImageElement) => el.currentSrc)).toMatch(/\/theme\/tower-(640|1280)\.(avif|webp)$/);
+    }
+    await expect(page.locator(".hero .tower--right")).toHaveCSS("scale", "-1 1");
+    const band = await page.locator(".hero__band").evaluate((el) => getComputedStyle(el).backgroundImage);
+    expect(band).toContain("data:image/svg+xml");
   });
 });
 
