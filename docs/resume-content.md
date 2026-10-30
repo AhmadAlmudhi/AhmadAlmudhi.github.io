@@ -12,7 +12,7 @@ Content for the interactive resume site.
 |---|---|---|
 | Profile & summary | ✅ Done | — |
 | Experience | ✅ Done (3 roles) | — |
-| Projects | ⏳ Placeholders on the site until you add them (after everything else is finished) | ⏳ Placeholder screenshots until you add the real ones |
+| Projects | ⏳ Placeholders on the site until you add them (everything else is finished and live) | ⏳ Placeholder screenshots until you add the real ones |
 | Skills | ✅ Done (2 groups, 16 skills) | — |
 | Education | ✅ Done (2 entries) | — |
 | Certifications | ✅ Done (2, with verification links) | ✅ `public/certificates/pspo-i.webp`, `psm-i.webp` (from the PDFs in `docs/content_files/`) |
