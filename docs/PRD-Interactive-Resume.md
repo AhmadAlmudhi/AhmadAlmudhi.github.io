@@ -142,7 +142,7 @@ Single page with anchored sections (`/#experience`, `/#projects`, …). Project 
 | PRJ-9 | Filter projects by technology (tags); also triggered from Skills section | Could |
 | PRJ-10 | "Confidential (NDA)" note, set as plain text in the text face (not a pill badge), for projects where code/links can't be shared | Should |
 | PRJ-11 | Featured flag to pin top projects first | Should |
-| PRJ-12 | **Placeholders until real projects arrive:** placeholder entries carry `placeholder: true`, show a small visible "Placeholder" note, use only facts already in the Experience section (no invented metrics, links or results), and use placeholder screenshots named `placeholder-*` at the real ratios (phone ≈ 9:19.5, desktop ≈ 16:10), designed as title cards in the page's palette and type, not grey boxes. The build lists every remaining placeholder; none may remain at launch | Must |
+| PRJ-12 | **Placeholders until real projects arrive:** placeholder entries carry `placeholder: true`, show a small visible "Placeholder" note, use only facts already in the Experience section (no invented metrics, links or results), and show placeholder screenshots: a screenshot entry without `src` is drawn as a title card in HTML/CSS at the real ratio (phone ≈ 9:19.5, desktop ≈ 16:10), in the page's palette and type, saying the screenshot is to come — never a grey box. The build lists every remaining placeholder; none may remain at launch | Must |
 
 ### 6.4 Skills
 | ID | Requirement | Priority |
@@ -389,7 +389,7 @@ type SkillGroup = {
 | **Project screenshots** | PNG source at 2× resolution; consistent aspect ratio per project type (phone ≈ 9:19.5, desktop ≈ 16:10); clean demo data; sensitive info redacted; 3–6 per project; the build pipeline converts to AVIF/WebP |
 | **Certificate images** | High-res export (≤ 2400 px long edge), cropped to the certificate edges, straight (not a photo at an angle); PNG or JPG. Done: `public/certificates/pspo-i.png` and `psm-i.png` (≈ 2250 × 1711), rendered from the PDFs in `docs/content_files/` |
 | **Resume PDF** | < 1 MB, text-selectable (not scanned), content consistent with the site, named `FirstName-LastName-Resume.pdf`. Done: `public/resume/Ahmad-Almudhi-Resume.pdf` (24 KB), copied from `docs/content_files/Ahmad_Almudhi-Resume.pdf` |
-| **Placeholder screenshots** | Until real screenshots exist (PRJ-12): `public/projects/<slug>/placeholder-*.png` at the real ratios, designed as title cards in the page's palette and type. Replaced one-for-one by real, redacted screenshots |
+| **Placeholder screenshots** | Until real screenshots exist (PRJ-12): screenshot entries without `src`, drawn as HTML title cards at the real ratios in the page's palette and type. Replaced by adding `src`, `width` and `height` for each real, redacted screenshot in `public/projects/<slug>/` |
 | **Logos (optional)** | SVG company/issuer logos, used monochrome to keep the design consistent |
 
 ---
@@ -405,11 +405,11 @@ type SkillGroup = {
 | **Styling** | **Tailwind CSS v4** | CSS-first `@theme` tokens map directly to the design system; fast to build responsive mobile-first layouts |
 | **Animation** | **Motion for React** (`motion/react`, formerly Framer Motion) | Shared-element/layout animations (card → detail morph, sliding nav indicator), scroll-linked effects (`useScroll` for timeline & progress), gestures (swipe/drag), `AnimatePresence` exits, built-in reduced-motion support; `LazyMotion` to keep bundle small |
 | **Carousels** | Native `overflow-x` + scroll snap first; **Embla Carousel** only where native snap falls short | Native rows work with touch, trackpad and keyboard at zero JS; Embla is tiny and touch-first |
-| **Overlays** | **Radix UI Dialog** (headless) | Accessible modals out of the box: focus trap, Esc, ARIA, scroll lock |
+| **Overlays** | Native **`<dialog>`** with `showModal()` | Focus trap (the rest of the page goes inert), Esc to close, focus returned to the opener, top layer — with zero added JavaScript |
 | **Lightbox zoom** | Custom Motion lightbox, or **Yet Another React Lightbox** (zoom plugin) if pinch-zoom takes too long to build | Pinch/double-tap zoom on screenshots and certificates |
 | **Smooth scrolling** | **Lenis** — desktop only, optional | Polished wheel scrolling on laptops; mobile keeps native scrolling |
 | **Icons** | **Lucide** for controls (+ Simple Icons for tech/brand logos where they inform) | Consistent, tree-shakeable |
-| **Fonts** | The faces dealt by the design skill, self-hosted with `next/font` (`next/font/google`, or `next/font/local` for Fontshare faces) | Zero layout shift, no external requests, works offline and under the CSP |
+| **Fonts** | Clash Grotesk (dealt by the design skill), self-hosted with `next/font/local`. Its licence (ITF FFL) allows self-hosting but not distribution through a repository, so `scripts/fetch-fonts.mjs` downloads it from Fontshare before `dev` and `build` and `app/fonts/` is gitignored | Zero layout shift, no external requests at runtime, works offline and under the CSP |
 | **Art direction & design QA** | **`design-taste-frontend` skill** (vendored in `.agents/skills/`, MIT): `draw.mjs` deals the direction, `lint.mjs` scans source, `inspect.mjs` renders the built `out/` in Chrome at 1440 / 768 / 390 and measures the house rules | Decisions instead of defaults; rules checked rather than hoped for |
 | **Images** | Build-time optimization script with **sharp** + `next/image` (`unoptimized`) | Next.js's on-demand image optimizer needs a server, so a script converts screenshots and certificates to AVIF/WebP at several widths and generates blur placeholders before the build |
 | **Content validation** | **Zod** | Fails the build on invalid/missing content |
@@ -453,7 +453,7 @@ next.config.ts          # output: 'export'
   profile.ts experience.ts projects.ts skills.ts education.ts certifications.ts
   schema.ts             # Zod schemas
 /public
-  /projects/<slug>/*.png        # placeholder-*.png until real screenshots arrive
+  /projects/<slug>/*.png        # real screenshots; placeholders are drawn in HTML until then
   /certificates/pspo-i.png psm-i.png
   /resume/Ahmad-Almudhi-Resume.pdf
   robots.txt                    # Disallow: /resume/ only

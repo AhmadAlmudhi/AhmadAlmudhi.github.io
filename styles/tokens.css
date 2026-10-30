@@ -1,0 +1,143 @@
+/* Design tokens. Palette "Orange and black", type system "Clash Grotesk", direction "The split stage"
+   (design-taste-frontend draw, seed 1974037253). Components use these roles only — never a raw hex.
+
+   Light: hot orange is the page and the blue-black stage holds the work.
+   Dark: the same two colours with the proportions swapped — blue-black page, orange stage. */
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ff7a1f;
+  --surface: #ff8633;
+  --ink: #050f16;
+  --muted: #5a2306;
+  --accent: #050f16;
+  --accent-ink: #ff7a1f;
+
+  /* The paper sheet of the hero and the quiet panels. */
+  --sheet: #ffffff;
+  --sheet-ink: #050f16;
+  --sheet-muted: #5a2306;
+
+  /* The fixed half of the split stage. */
+  --stage: #050f16;
+  --stage-ink: #ff7a1f;
+  --stage-muted: #d9a07a;
+  --stage-surface: #0e1c26;
+
+  /* The three figure tiles: unequal lightness so neighbours never vibrate. */
+  --tile-1: #050f16;
+  --tile-1-ink: #ff7a1f;
+  --tile-2: #ffffff;
+  --tile-2-ink: #050f16;
+  --tile-3: #5a2306;
+  --tile-3-ink: #ffffff;
+
+  --theme-color: #ff7a1f;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #050f16;
+  --surface: #0e1c26;
+  --ink: #f3ece4;
+  --muted: #b9aa9c;
+  --accent: #ff7a1f;
+  --accent-ink: #050f16;
+
+  --sheet: #0e1c26;
+  --sheet-ink: #f3ece4;
+  --sheet-muted: #b9aa9c;
+
+  --stage: #ff7a1f;
+  --stage-ink: #050f16;
+  --stage-muted: #5a2306;
+  --stage-surface: #ff8633;
+
+  --tile-1: #ff7a1f;
+  --tile-1-ink: #050f16;
+  --tile-2: #0e1c26;
+  --tile-2-ink: #f3ece4;
+  --tile-3: #5a2306;
+  --tile-3-ink: #ffffff;
+
+  --theme-color: #050f16;
+}
+
+/* Without JavaScript the theme still follows the system. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #050f16;
+    --surface: #0e1c26;
+    --ink: #f3ece4;
+    --muted: #b9aa9c;
+    --accent: #ff7a1f;
+    --accent-ink: #050f16;
+    --sheet: #0e1c26;
+    --sheet-ink: #f3ece4;
+    --sheet-muted: #b9aa9c;
+    --stage: #ff7a1f;
+    --stage-ink: #050f16;
+    --stage-muted: #5a2306;
+    --stage-surface: #ff8633;
+    --tile-1: #ff7a1f;
+    --tile-1-ink: #050f16;
+    --tile-2: #0e1c26;
+    --tile-2-ink: #f3ece4;
+    --tile-3: #5a2306;
+    --tile-3-ink: #ffffff;
+    --theme-color: #050f16;
+  }
+}
+
+:root {
+  /* Type: one family, five steps. */
+  --font-text: var(--font-clash), "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-clash), "Helvetica Neue", Arial, sans-serif;
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem); /* 13–14px */
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem); /* 17–19px */
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem); /* 20–26px */
+  --step-head: clamp(2rem, 1.4rem + 1.6vw, 2.75rem); /* 32–44px: modest headings in the reading half */
+  --step-display: clamp(3.25rem, 0.6rem + 8vw, 9rem); /* the name, the email, the figures */
+
+  /* Space: one pair of tight margins, one grid. */
+  --margin: clamp(1rem, 2.2vw, 2rem);
+  --gutter: clamp(0.75rem, 1.4vw, 1.5rem);
+  --section: clamp(4.5rem, 2.5rem + 8vw, 12rem);
+  --measure: 46ch;
+  --header-h: 3.5rem;
+  --dock-h: 4rem;
+  --radius: 0px;
+  --tap: 2.75rem; /* 44px */
+
+  /* Motion (references/motion.md §4). */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-exit: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --t-press: 140ms;
+  --t-hover: 180ms;
+  --t-ui: 240ms;
+  --t-reveal: 800ms;
+  --t-open: 1200ms;
+  --stagger-line: 90ms;
+  --stagger-item: 70ms;
+}
+
+@media (min-width: 64em) {
+  :root {
+    --header-h: 4rem;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --font-sans: var(--font-text);
+}
