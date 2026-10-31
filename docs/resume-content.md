@@ -30,7 +30,7 @@ Content for the interactive resume site.
 | Location | Riyadh, Saudi Arabia |
 | Email | a.almudhi1419@gmail.com |
 | Phone | Not shown on the site (only in the PDF) |
-| LinkedIn | https://www.linkedin.com/in/ahmad-almudhi-pspo%E2%84%A2-psm%E2%84%A2%E2%80%8F-a25a20181/ |
+| LinkedIn | https://www.linkedin.com/in/ahmad-almudhi |
 | GitHub | https://github.com/AhmadAlmudhi |
 
 ### Summary
