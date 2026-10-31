@@ -13,7 +13,7 @@ export const profile: Profile = {
   // phone: omitted on purpose — it lives in the resume PDF only (PRD CON-1).
   siteUrl: "https://ahmadalmudhi.github.io",
   links: {
-    linkedin: "https://www.linkedin.com/in/ahmad-almudhi-pspo%E2%84%A2-psm%E2%84%A2%E2%80%8F-a25a20181/",
+    linkedin: "https://www.linkedin.com/in/ahmad-almudhi",
     github: "https://github.com/AhmadAlmudhi",
     resumePdf: "/resume/Ahmad-Almudhi-Resume.pdf",
   },
