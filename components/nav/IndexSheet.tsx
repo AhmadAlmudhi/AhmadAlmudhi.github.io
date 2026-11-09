@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import { profile, sections } from "@/content";
+import { profile } from "@/content/profile";
+import { sections } from "@/content/sections";
 import { useNav } from "@/lib/nav";
 
 // The section index: a bottom sheet on phones, a panel on desktop. A native modal <dialog> traps

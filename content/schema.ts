@@ -76,8 +76,9 @@ export const Screenshot = z.object({
 });
 export type Screenshot = z.infer<typeof Screenshot>;
 
-/** `multiplatform`: one codebase on phones and the web, shown with both phone and desktop screenshots. */
-export const ProjectKind = z.enum(["mobile", "web", "dashboard", "multiplatform", "other"]);
+/** `multiplatform`: one codebase on phones and the web, shown with both phone and desktop screenshots.
+ *  `game`: a multiplayer game. */
+export const ProjectKind = z.enum(["mobile", "web", "dashboard", "multiplatform", "game", "other"]);
 export type ProjectKind = z.infer<typeof ProjectKind>;
 
 export const Project = z.object({

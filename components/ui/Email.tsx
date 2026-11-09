@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { profile } from "@/content";
+import { profile } from "@/content/profile";
 import { useHydrated } from "@/lib/client";
 
 export const emailAddress = () => `${profile.email.user}@${profile.email.domain}`;

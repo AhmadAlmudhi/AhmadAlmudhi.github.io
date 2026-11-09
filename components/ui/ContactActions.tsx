@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ArrowDownToLine, QrCode, UserPlus, X } from "lucide-react";
-import { profile } from "@/content";
+import { profile } from "@/content/profile";
 import { CopyButton } from "./CopyButton";
 import { emailAddress } from "./Email";
 import { toast } from "./Toast";

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { profile, sections } from "@/content";
+import { profile } from "@/content/profile";
+import { sections } from "@/content/sections";
 
 type Counter = { count: (e: { path: string; title?: string; event?: boolean }) => void };
 

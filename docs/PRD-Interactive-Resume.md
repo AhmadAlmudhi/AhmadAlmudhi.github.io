@@ -6,7 +6,7 @@
 | **Owner** | Ahmad Almudhi |
 | **Version** | 1.5 — live at ahmadalmudhi.github.io; English only; not indexed by search engines |
 | **Date** | 31 October 2026 |
-| **Status** | Built (phases 1–5 merged and live, 30 Oct 2026); first real project (Battuta) added, more may follow |
+| **Status** | Built (phases 1–5 merged and live, 30 Oct 2026); real projects: Battuta (30 Oct 2026) and The Seventh Card (9 Nov 2026) |
 | **Changes in 1.5** | Sharp at any zoom: the theme's tower is served at 2× and clipped to a vector outline, the band's pattern and the paper's grain are vectors, screenshots and certificates load at twice their display size (NFR §10.1). Project cards step through screenshots with Previous and Next (PRJ-3). Entrances replay whenever a part comes into view, scrolling down or up, with a choreography per section, plus scroll-linked motion on the banner (§8). The QR dialog is centred on desktop (CON-5). Battuta's screenshots retaken in its dark theme with larger countries |
 | **Changes in 1.4** | Ahmad's own identity (`docs/content_files/my_theme.png`) replaces the dealt palette and type: Castoro in gold on parchment, a green band with gold rules, the eight-point star ornament, Najdi mud-brick towers and palm groves, one theme only (no light/dark). Removed at his request: the tagline, the "In numbers" stats, the "read as" lens, "Show more" on roles, "Next: …" links, the side rail, the theme toggle and the found photographs. Experience and Education follow the CV (MM/YYYY dates; durations in full words, end month minus start month, none for the current role); Skills are the CV's two groups; certificates sit in frames; the dock is always on screen |
 | **Changes in 1.3** | Visual and motion rules aligned with the `design-taste-frontend` skill, which now decides every visual question (§7, §8 and the affected requirements); projects start as placeholders; resume PDF and certificate images added; robots.txt keeps the PDF out of search |
@@ -333,7 +333,7 @@ type Project = {
   slug: string;
   title: string;
   tagline: string;
-  kind: "mobile" | "web" | "dashboard" | "multiplatform" | "other"; // mobile = plain CSS phone frame; others unframed
+  kind: "mobile" | "web" | "dashboard" | "multiplatform" | "game" | "other"; // label only; each screenshot's device picks its frame
   role: string;
   featured?: boolean;
   confidential?: boolean;
@@ -521,7 +521,7 @@ Repository setting: **Settings → Pages → Build and deployment → Source: Gi
 | **4. Motion polish** | Signature animations, micro-interactions for all elements, reduced-motion variants |
 | **5. Hardening** | Done 30 Oct 2026: Lighthouse mobile performance 0.97, accessibility 1, best practices 1, CLS 0 (LCP 2.6 s simulated, bound by the web font; kept `font-display: swap`); initial JS 149 KB gz; OG image and monogram icons; designed 404; PWA with offline after one visit (tested); CSP and referrer policy via `<meta>`; analytics built and off until a provider is chosen. Still to do by Ahmad: real-device testing on his phone |
 | **5b. Identity (1.4)** | Done 30 Oct 2026: redesign to Ahmad's theme image and his list of changes (see the 1.4 change note); Lighthouse mobile performance 0.96, accessibility 1, best practices 1, CLS 0 (LCP 2.8 s simulated: the JS bundle's download and evaluation under throttling; observed LCP is the first paint); initial JS 147 KB gz; design gate 0 FAIL at 1440/768/390 with the identity allow-list |
-| **6. Real projects** | Started 30 Oct 2026: Battuta (github.com/AhmadAlmudhi/Battuta) replaces all four placeholders, with six phone and three laptop screenshots taken in the live app using demo travels; no placeholder remains. More projects can follow the same way |
+| **6. Real projects** | Started 30 Oct 2026: Battuta (github.com/AhmadAlmudhi/Battuta) replaces all four placeholders, with six phone and three laptop screenshots taken in the live app using demo travels; no placeholder remains. The Seventh Card (github.com/AhmadAlmudhi/seventh-card-game) added 9 Nov 2026, with six phone and three laptop screenshots from one real four-player game on its live server (English and Arabic). More projects can follow the same way |
 | **7. Launch** | Done: live at `https://ahmadalmudhi.github.io`, HTTPS enforced, repo README written. Left for Ahmad: open the site once on his phone (offline cache) and keep the QR one tap away; add the link to LinkedIn, GitHub and the PDF resume once the real projects are in |
 
 ---

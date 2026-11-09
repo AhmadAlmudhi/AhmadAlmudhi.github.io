@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowDownToLine } from "lucide-react";
-import { profile, sections } from "@/content";
+import { profile } from "@/content/profile";
+import { sections } from "@/content/sections";
 import { useNav } from "@/lib/nav";
 
 // NAV-2/3: the full name in the identity's gold (back to the top), every section as a link on wide

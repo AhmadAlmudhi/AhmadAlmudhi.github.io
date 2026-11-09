@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { SectionId } from "@/content/schema";
-import { sections } from "@/content";
+import { sections } from "@/content/sections";
 
 // Navigation and history for the interview use case (PRD §5.2):
 // - scrolling updates the hash with replaceState (no history spam, NAV-5);

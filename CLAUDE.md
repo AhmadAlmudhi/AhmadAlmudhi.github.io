@@ -60,7 +60,7 @@ PR descriptions.
   (`scripts/optimize-images.mjs`, gitignored); `postbuild` writes the Workbox service worker into `out/`
   (`workbox-config.cjs`).
 - CI (`.github/workflows/deploy.yml`): every PR runs lint, typecheck, the design lint, the build, the
-  Playwright tests, the initial-JS budget (`scripts/check-js-budget.mjs`, 150 KB gz, currently ~147 KB:
+  Playwright tests, the initial-JS budget (`scripts/check-js-budget.mjs`, 150 KB gz, currently ~146 KB:
   think twice before adding client code) and Lighthouse (`lighthouserc.cjs`: a11y and best practices 1,
   performance ≥ 0.9, CLS < 0.05); a push to `main` also deploys `out/` to Pages. Wait for green checks.
 
@@ -77,6 +77,9 @@ PR descriptions.
 - Deep links are hash-based (`/#projects`, `/#projects/<slug>`, `/#projects/<slug>/<shot>`), so there are no dynamic routes.
 - Content files are plain typed data; `content/validate.ts` parses them with Zod from `app/page.tsx` at
   build. Never import Zod (or call `.parse`) from anything a client component imports.
+- Client components import content from its own file (`@/content/profile`, `@/content/sections`),
+  never the `@/content` barrel: the barrel pulls every content file, the projects' text included, into
+  the first JavaScript a visitor downloads. Only the lazily loaded overlays import `@/content/projects`.
 - Brand images are static files in `public/` (`og.jpg`, the star icons), cut from the theme image.
   Don't use metadata image conventions (`opengraph-image.tsx`): they export extension-less and Pages
   would serve them as octet-stream.
@@ -131,16 +134,21 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
   full words: "4 years", "6 months"), only for past roles; the current role shows none.
 - Experience shows every highlight (no "Show more"); Education is exactly the CV's lines; Skills are the
   CV's two groups (Product, Technical) with no note of where each was used.
-- **Projects:** only Battuta for now (Ahmad's app, github.com/AhmadAlmudhi/Battuta; decided 30 Oct
-  2026). Its copy comes from that repo's README and PRD and is listed in `resume-content.md` for him to
-  confirm. Screenshots live in `public/projects/<slug>/`, named `<slug>-<device>-<screen>.png` (the
+- **Projects:** Battuta (github.com/AhmadAlmudhi/Battuta, 30 Oct 2026) and The Seventh Card
+  (github.com/AhmadAlmudhi/seventh-card-game, 9 Nov 2026; kind `game`), Ahmad's own apps. Their copy
+  comes from each repo's README, PRD and commit history and is listed in `resume-content.md` for him to
+  confirm. Screenshot entries use the `shots(slug, tone)` helper in `content/projects.ts`. Screenshots live in `public/projects/<slug>/`, named `<slug>-<device>-<screen>.png` (the
   optimizer names its outputs by file name), each with `width`, `height`, `device` ("phone" puts it in
   the CSS phone frame, "desktop" unframed) and `tone` (the app's ground, `#0e1415` for Battuta's dark
   theme). Battuta's were taken in the live web app as a guest in its dark theme with Playwright
   (390 × 844 at 4×, 1440 × 900 at 3×, `colorScheme: "dark"`) using demo travels (20 visited, mostly
   large countries, 8 on the wishlist; Explore on a laptop sorted by area). Flutter web needs its
   accessibility tree switched on (click `flt-semantics-placeholder`) before Playwright can find its
-  controls, and its text fields drop typed keys: use `fill()` on an empty field.
+  controls, and its text fields drop typed keys: use `fill()` on an empty field. The Seventh Card's
+  were taken in one real four-player game on its live server, each player a separate browser
+  context (Ahmad on a phone and Sara on a laptop in English, عمر on a phone in Arabic, Noor
+  alongside), sampled every two seconds; its Flutter semantics sit at device-pixel coordinates, so
+  controls are triggered with `dispatchEvent("click")` rather than clicked.
 - A project card steps through its screenshots with Previous and Next (and a sideways swipe on the
   picture), with a plain "2 of 9" count (`components/sections/ProjectCard.tsx`, the only client part
   of the Projects section). A future project may start as a placeholder (`placeholder: true`, screenshots without
@@ -187,7 +195,8 @@ Working files land in `.taste-skill/` (gitignored).
   check may still fail; say so instead of padding with unrelated pictures.
 - The service worker precaches the theme's pictures and the AVIF widths from 1024 to 2499 px
   (`workbox-config.cjs`); 640 px serves low-density screens and 2500 px and up big desktop ones, both
-  cached when seen.
+  cached when seen. Its scope is the whole origin, which also holds The Seventh Card's web build
+  (`/seventh-card-game/`), so its runtime image cache only takes this site's own folders.
 - House rules apply everywhere: headlines ≤ 2 lines at every width; one `h1` saying who and what; a
   heading on every section; equal outer margins; no eyebrows or tiny tracked-caps labels; no monospace
   (drop the boilerplate Geist Mono); no 01/02/03 numbering; no gradients or shadows beyond the
