@@ -1,6 +1,7 @@
 "use client";
 
-import { certifications, projects } from "@/content";
+import { certifications } from "@/content/certifications";
+import { projects } from "@/content/projects";
 import { useNav } from "@/lib/nav";
 import { ShotFrame } from "@/components/ui/ProjectShot";
 import { ProjectDialog } from "./ProjectDialog";

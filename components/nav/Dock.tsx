@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { sections } from "@/content";
+import { sections } from "@/content/sections";
 import { useNav } from "@/lib/nav";
 
 // NAV-1: the thumb-zone dock on phones and tablets, on the identity's green band. Previous, the

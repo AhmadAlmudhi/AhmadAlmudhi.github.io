@@ -8,6 +8,7 @@ const KIND: Record<Project["kind"], string> = {
   web: "Web app",
   dashboard: "Dashboard",
   multiplatform: "Web and mobile app",
+  game: "Multiplayer game",
   other: "Project",
 };
 

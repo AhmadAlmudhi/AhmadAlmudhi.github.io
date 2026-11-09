@@ -19,7 +19,10 @@ module.exports = {
   sourcemap: false,
   runtimeCaching: [
     {
-      urlPattern: ({ request }) => request.destination === "image",
+      // only this site's own pictures: other apps live under this domain too (/seventh-card-game/),
+      // inside this worker's scope, and their images must never be served stale from this cache
+      urlPattern: ({ request, url }) =>
+        request.destination === "image" && url.origin === self.location.origin && /^\/(opt|theme|projects|certificates)\//.test(url.pathname),
       handler: "CacheFirst",
       options: { cacheName: "images", expiration: { maxEntries: 80 } },
     },

@@ -107,6 +107,31 @@ Everything below is taken from the Battuta README and `docs/Battuta_PRD.md` in t
 
 **Screenshots** (`public/projects/battuta/`): retaken on 31 Oct 2026 in the live web app as a guest, in its **dark theme**: six at phone size (390 × 844 at 4×: Explore, Brazil's details, My travels, Stats, My travels in Arabic, Welcome) and three at laptop size (1440 × 900 at 3×: Explore sorted by area, Brazil's details, Stats). The travels in them are demo data entered for the screenshots, not your real trips: 20 visited countries, mostly large ones so the map fills with colour (the United States, Canada, Brazil, Argentina, Mexico, China, India, Kazakhstan, Saudi Arabia, Japan, Indonesia, Malaysia, Egypt, Morocco, South Africa, Australia, the United Kingdom, France, Italy, Spain), and 8 on the wishlist (Russia, Greenland, Mongolia, Peru, Chile, Tanzania, New Zealand, Norway). They were saved only in a test browser.
 
+### The Seventh Card (الورقة السابعة) — personal project
+Multiplayer game · [ahmadalmudhi.github.io/seventh-card-game](https://ahmadalmudhi.github.io/seventh-card-game/) · [github.com/AhmadAlmudhi/seventh-card-game](https://github.com/AhmadAlmudhi/seventh-card-game)
+
+Everything below is taken from that repo's README, its in-game How to play text and its commit history (M0 to M7). **Please confirm**, especially "What I did".
+
+**Card line:** A real-time card game for 2 to 8 friends, each playing on their own phone or computer.
+
+**Overview:** The Seventh Card (الورقة السابعة) is a real-time, press-your-luck card game. Create a private room, share its code, and everyone plays from their own phone or computer, in the browser, with no install. Each turn you Hit to take a card or Stay to keep your points; a number you already have busts you for the round, and seven different numbers end the round with a 15-point bonus. Arabic is the default language, with English too, and a tutorial game against a bot teaches newcomers.
+
+**What I did**
+- Wrote the whole ruleset as a pure TypeScript engine, every action taking the game from one state to the next with the events it caused, with no network, storage or timers, so each rule can be tested on its own.
+- Built the room server on Cloudflare Workers and Durable Objects: a WebSocket protocol with every message validated by Zod, rate limits, state saved before every broadcast, one alarm for every deadline, and cleanup of empty and abandoned rooms. The server runs every rule, so players can't cheat.
+- Built the app in Flutter, in Arabic (right to left) and English: home, lobby, game table, round scores and results, with reconnecting, pausing, turn timeouts and leaving all handled.
+- Choreographed the table so every update plays one beat at a time: cards flip in the middle and fly to their row, a bust shakes the seat, Freeze frosts it, and the Seventh Card brings confetti, with sound and haptics.
+- Tested it as a whole: unit tests for every rule, integration tests in the Workers runtime including a full game over real WebSockets, and simulations where bots play 1,000 random games on every run and 10,000 every night, checking every invariant after every action.
+- Turned play-test feedback into changes: every opponent's score on screen, number colours that show risk, a tutorial, and timeouts that always Stay for you.
+
+**Key features:** private rooms with a 5-character code and a share link (2 to 8 players) · Freeze, Draw Three and Second Chance, with + and x2 bonus cards · Normal and Hard Mode, a winning score the host sets, tie-break rounds · a tutorial game against Robo · a card counter and risk colours · Arabic and English, sound and haptics, wide-screen layouts with an oval table.
+
+**Results:** Live at ahmadalmudhi.github.io/seventh-card-game, version 1.0.0 · about 200 automated tests across the rules engine, the server and the app (47 app tests and 156 server tests counted on 9 Nov 2026), plus a nightly simulation of 10,000 games.
+
+**Built with:** Flutter, Dart, TypeScript, Cloudflare Workers, Durable Objects, WebSockets, Zod, Vitest, GitHub Actions.
+
+**Screenshots** (`public/projects/seventh-card/`): taken on 9 Nov 2026 in one real game on the live server, four players to 100 points, each in their own browser: Ahmad on a phone in English and عمر on a phone in Arabic, with Sara and Noor alongside (the other names are made up for the demo). Phone screenshots only, as you asked: your turn at the table, the round 2 scores, choosing a player to Freeze (Arabic), the results (Arabic), the lobby, the home screen.
+
 ---
 
 ## Skills
@@ -153,12 +178,13 @@ Images: `public/certificates/pspo-i.webp` and `public/certificates/psm-i.webp`, 
 - No custom domain.
 - Email only on the site; phone only in the PDF. The phone stays in the PDF (recruiters need it); it never appears in the site's HTML, and `robots.txt` keeps the PDF out of search engines.
 - Identity: your theme image (`docs/content_files/my_theme.png`) decides colours, type and ornament (30 Oct 2026, PRD v1.4); the design skill decides the rest. One theme, no light/dark.
-- Projects: Battuta only for now (30 Oct 2026); the four Muvi placeholders were removed.
+- Projects: Battuta (30 Oct 2026) and The Seventh Card (9 Nov 2026); the four Muvi placeholders were removed.
 
 ---
 
 ## Still to add
 - [x] Battuta with phone and desktop screenshots (the only project for now)
+- [x] The Seventh Card (9 Nov 2026)
 - [ ] More projects, if you want them
 - [x] PSPO I and PSM I certificate images
 - [x] Resume PDF
