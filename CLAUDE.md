@@ -146,8 +146,8 @@ Navigation behaviour (PRD §5.2) is the core of the interview use case:
   accessibility tree switched on (click `flt-semantics-placeholder`) before Playwright can find its
   controls, and its text fields drop typed keys: use `fill()` on an empty field. The Seventh Card's
   were taken in one real four-player game on its live server, each player a separate browser
-  context (Ahmad on a phone and Sara on a laptop in English, عمر on a phone in Arabic, Noor
-  alongside), sampled every two seconds; its Flutter semantics sit at device-pixel coordinates, so
+  context (Ahmad on a phone in English, عمر on a phone in Arabic, two more alongside), sampled
+  every two seconds; phone screenshots only (Ahmad's choice, 9 Nov 2026); its Flutter semantics sit at device-pixel coordinates, so
   controls are triggered with `dispatchEvent("click")` rather than clicked.
 - A project card steps through its screenshots with Previous and Next (and a sideways swipe on the
   picture), with a plain "2 of 9" count (`components/sections/ProjectCard.tsx`, the only client part

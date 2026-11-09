@@ -23,7 +23,7 @@ const phone = (name: string, alt: string, caption: string) => battuta("phone", n
 const desktop = (name: string, alt: string, caption: string) => battuta("desktop", name, alt, caption);
 
 // The Seventh Card: a real game on the live server, four players, each in their own browser
-// (Ahmad on a phone and Sara on a laptop in English, عمر on a phone in Arabic, Noor alongside)
+// (Ahmad on a phone in English, عمر on a phone in Arabic); phone screenshots only, as Ahmad chose
 const seventh = shots("seventh-card", "#184838");
 
 export const projects: Project[] = [
@@ -184,24 +184,6 @@ export const projects: Project[] = [
         "home",
         "The Seventh Card on a phone: the home screen with the logo, a nickname, Create room, Join room, Tutorial game and How to play",
         "Home: create a room, join one, or learn with the tutorial.",
-      ),
-      seventh(
-        "desktop",
-        "table",
-        "The Seventh Card on a laptop: the opponents in one row above an oval table, the last card in the middle, your row and the Hit and Stay buttons",
-        "On a laptop: an oval table, the opponents in one row.",
-      ),
-      seventh(
-        "desktop",
-        "bust",
-        "The Seventh Card on a laptop: a second 8 drawn, a Bust! stamp on the card and your row turned red",
-        "A duplicate number: bust, and the round scores 0.",
-      ),
-      seventh(
-        "desktop",
-        "lobby",
-        "The Seventh Card on a laptop: the lobby seen by a player who joined, waiting for the host to start",
-        "The lobby, as a player who joined sees it.",
       ),
     ],
     links: { live: "https://ahmadalmudhi.github.io/seventh-card-game/", github: "https://github.com/AhmadAlmudhi/seventh-card-game" },

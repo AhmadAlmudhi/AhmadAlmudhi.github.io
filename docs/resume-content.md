@@ -130,7 +130,7 @@ Everything below is taken from that repo's README, its in-game How to play text 
 
 **Built with:** Flutter, Dart, TypeScript, Cloudflare Workers, Durable Objects, WebSockets, Zod, Vitest, GitHub Actions.
 
-**Screenshots** (`public/projects/seventh-card/`): taken on 9 Nov 2026 in one real game on the live server, four players to 100 points, each in their own browser: Ahmad on a phone and Sara on a laptop in English, عمر on a phone in Arabic, and Noor alongside (the other names are made up for the demo). Phone: your turn at the table, the round 2 scores, choosing a player to Freeze (Arabic), the results (Arabic), the lobby, the home screen. Laptop: the oval table, a bust, the lobby as a joining player.
+**Screenshots** (`public/projects/seventh-card/`): taken on 9 Nov 2026 in one real game on the live server, four players to 100 points, each in their own browser: Ahmad on a phone in English and عمر on a phone in Arabic, with Sara and Noor alongside (the other names are made up for the demo). Phone screenshots only, as you asked: your turn at the table, the round 2 scores, choosing a player to Freeze (Arabic), the results (Arabic), the lobby, the home screen.
 
 ---
 

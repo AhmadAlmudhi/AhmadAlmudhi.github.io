@@ -123,20 +123,20 @@ test.describe("project overlays (PRJ-5..7, NAV-6)", () => {
     }
   });
 
-  test("The Seventh Card has its card, its detail and nine screenshots that load", async ({ page }) => {
+  test("The Seventh Card has its card, its detail and six phone screenshots that load", async ({ page }) => {
     await page.goto("/#projects");
     const card = page.locator(".card").filter({ hasText: "The Seventh Card" });
     await expect(card.getByText("Multiplayer game, personal project")).toBeVisible();
-    await expect(card.getByRole("group", { name: "The Seventh Card screenshots" }).getByText("1 of 9")).toBeVisible();
+    await expect(card.getByRole("group", { name: "The Seventh Card screenshots" }).getByText("1 of 6")).toBeVisible();
     await card.getByRole("button", { name: "View project" }).click();
     const detail = page.getByRole("dialog", { name: "The Seventh Card" });
     await expect(detail).toBeVisible();
     await expect(page).toHaveURL(/#projects\/seventh-card$/);
     await expect(detail.locator(".detail__item--phone .phone")).toHaveCount(6);
-    await expect(detail.locator(".detail__item--desktop .wide-frame")).toHaveCount(3);
+    await expect(detail.locator(".detail__item--desktop")).toHaveCount(0);
     await expect(detail.getByRole("link", { name: "Live demo" })).toHaveAttribute("href", "https://ahmadalmudhi.github.io/seventh-card-game/");
     const shots = detail.locator("img.shot");
-    await expect(shots).toHaveCount(9);
+    await expect(shots).toHaveCount(6);
     for (const img of await shots.all()) {
       await img.scrollIntoViewIfNeeded();
       await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
